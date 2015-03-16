@@ -7,11 +7,17 @@
 
 //Using SDL and standard IO
 #include <SDL2/SDL.h>
+//#include <SDL2/SDL_image.h>
 #include <stdio.h>
+#include <string>
+
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 600;
-const int SCREEN_HEIGHT = 400;
+const int SCREEN_WIDTH = 900;
+const int SCREEN_HEIGHT = 800;
+
+const int GOB_WIDTH = 60;
+const int GOB_HEIGHT = 60;
 
 // function prototypes
 bool init();				//Starts up SDL and creates window
@@ -25,7 +31,13 @@ SDL_Window* gWindow = NULL;
 SDL_Surface* gScreenSurface = NULL;
 
 //The image we will load and show on the screen
-SDL_Surface* gHelloWorld = NULL;
+SDL_Surface* gMain = NULL;
+
+//THe image we ill load and show on main image
+SDL_Surface* gGoblin = NULL;
+
+//Loads individual image
+SDL_Surface* loadSurface(std::string path);
 
 int main( int argc, char* args[] )
 {
@@ -43,14 +55,59 @@ int main( int argc, char* args[] )
 		}
 		else
 		{
-			//Apply the image
-			SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
+			//Main loop flag
+			bool quit = false;
+		
+			//Event handler
+			SDL_Event e;
 			
-			//Update the surface
-			SDL_UpdateWindowSurface( gWindow );
+			//While application is running
+			while (!quit){
+			
+				//Handle event on queue
+				while( SDL_PollEvent(&e) != 0 ){
+					
+					//Aply main image stertched
+					SDL_Rect stretchRect;
+					stretchRect.x = 0;
+					stretchRect.y = 0;
+					stretchRect.w = SCREEN_WIDTH;
+					stretchRect.h = SCREEN_HEIGHT;
+					SDL_BlitScaled(gMain,NULL,gScreenSurface, &stretchRect);
 
-			//Wait two seconds
-			SDL_Delay( 10000 );
+					//User requests quit
+					if(e.type == SDL_QUIT){
+						quit = true;
+						return 0;
+					}
+					if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
+						//If mouse click occurs, place image where mouse was clicked ***NOT WORKING***
+						SDL_Point mPosition;
+ 						int x,y;
+ 						SDL_GetMouseState(&x,&y);
+						//Apply the goblin image
+						SDL_Rect shrinkRect;
+						shrinkRect.x = mPosition.x;
+						shrinkRect.y = mPosition.y;
+						shrinkRect.w = GOB_WIDTH;
+						shrinkRect.h = GOB_HEIGHT;
+						SDL_BlitScaled(gGoblin, NULL, gScreenSurface, &shrinkRect);
+					}
+
+					SDL_Point mPosition; //SDL point mouse position
+					//Apply the goblin image to path
+					SDL_Rect shrinkRect;
+					shrinkRect.x = 0;
+					shrinkRect.y = 400;
+					shrinkRect.w = GOB_WIDTH;
+					shrinkRect.h = GOB_HEIGHT;
+					SDL_BlitScaled(gGoblin, NULL, gScreenSurface, &shrinkRect);
+
+				//Update the surface
+				SDL_UpdateWindowSurface( gWindow );
+		
+				}
+			}	
 		}
 	}
 
@@ -76,7 +133,8 @@ bool init()
 	else
 	{
 		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		gWindow = SDL_CreateWindow( "Tower Defense", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+
 		if( gWindow == NULL )
 		{
 			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
@@ -86,6 +144,7 @@ bool init()
 		{
 			//Get window surface
 			gScreenSurface = SDL_GetWindowSurface( gWindow );
+
 		}
 	}
 
@@ -98,10 +157,16 @@ bool loadMedia() {
 	bool success = true;
 
 	//Load splash image
-	gHelloWorld = SDL_LoadBMP( "img/towerDefenseBackground.bmp" );
-	if( gHelloWorld == NULL )
+	gMain = SDL_LoadBMP( "img/towerDefenseBackground.bmp" );
+	if( gMain == NULL )
 	{
 		printf( "Unable to load image %s! SDL Error: %s\n", "img/towerDefenseBackground.bmp", SDL_GetError() );
+		success = false;
+	}
+	gGoblin = SDL_LoadBMP("img/goblin.bmp");
+	if( gGoblin == NULL)
+	{
+		printf( "Unable to load image %s! SDL Error: %s\n", "img/goblin.bmp", SDL_GetError() );
 		success = false;
 	}
 
@@ -111,8 +176,12 @@ bool loadMedia() {
 /* deallocate memory */
 void close() {
 	//Deallocate surface
-	SDL_FreeSurface( gHelloWorld );
-	gHelloWorld = NULL;
+	SDL_FreeSurface( gMain );
+	gMain = NULL;
+
+	//Deallocate surface
+	SDL_FreeSurface(gGoblin);
+	gGoblin = NULL;
 
 	//Destroy window
 	SDL_DestroyWindow( gWindow );
@@ -120,4 +189,26 @@ void close() {
 
 	//Quit SDL subsystems
 	SDL_Quit();
+}
+
+SDL_Surface* loadSurface(std::string path)
+{
+	//The final optimized image
+	SDL_Surface* optimizedSurface = NULL;
+	
+	//Load image at specified path
+	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str());
+	if(loadedSurface == NULL)
+	{
+		printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+	}else{
+		//convert surface to screen format
+		optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, NULL);
+		if(optimizedSurface == NULL)
+		{
+			printf("Unable to optimize image %s! SDL Error: %s\n",path.c_str(), SDL_GetError());
+		}
+	}
+
+	return optimizedSurface;
 }
