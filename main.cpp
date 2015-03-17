@@ -82,13 +82,13 @@ int main( int argc, char* args[] )
 					}
 					if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
 						//If mouse click occurs, place image where mouse was clicked ***NOT WORKING***
-						SDL_Point mPosition;
+						//SDL_Point mPosition;
  						int x,y;
  						SDL_GetMouseState(&x,&y);
 						//Apply the goblin image
 						SDL_Rect shrinkRect;
-						shrinkRect.x = mPosition.x;
-						shrinkRect.y = mPosition.y;
+						shrinkRect.x = x;
+						shrinkRect.y = y;
 						shrinkRect.w = GOB_WIDTH;
 						shrinkRect.h = GOB_HEIGHT;
 						SDL_BlitScaled(gGoblin, NULL, gScreenSurface, &shrinkRect);
