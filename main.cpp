@@ -18,13 +18,14 @@ using namespace std;
 const int SCREEN_WIDTH = 900;
 const int SCREEN_HEIGHT = 800;
 
-const int GOB_WIDTH = 60;
-const int GOB_HEIGHT = 60;
+const int ENEMY_MAX_DIMENSION = 60;
+const double MAX_DISTORTION = .57;		// decimal of max percentage
 
 // function prototypes
 bool init();				//Starts up SDL and creates window
 bool loadMedia();			//Loads media
 void close();				//Frees media and shuts down SDL
+SDL_Rect getRect(SDL_Surface* surface, int maxDimension, int x, int y);
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -69,7 +70,7 @@ int main( int argc, char* args[] )
 				//Handle event on queue. reads in every event that’s occurred since the previous frame and handle them
 				while( SDL_PollEvent(&e) != 0 ){
 					
-					//Aply main image stertched
+					//Aply background image stretched
 					SDL_Rect stretchRect;
 					stretchRect.x = 0;
 					stretchRect.y = 0;
@@ -82,29 +83,20 @@ int main( int argc, char* args[] )
 						quit = true;
 						return 0;
 					}
-					if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
+					if(e.type == SDL_MOUSEBUTTONDOWN){
 						//If mouse click occurs, place image where mouse was clicked ***NOT WORKING***
-						cout << "mouse click occured" << endl;
 						//SDL_Point mPosition;
  						int x,y;
  						SDL_GetMouseState(&x,&y);
-						//Apply the goblin image
-						SDL_Rect shrinkRect;
-						shrinkRect.x = x;
-						shrinkRect.y = y;
-						shrinkRect.w = GOB_WIDTH;
-						shrinkRect.h = GOB_HEIGHT;
-						SDL_BlitScaled(gGoblin, NULL, gScreenSurface, &shrinkRect);
+						SDL_Rect container = getRect(gGoblin, ENEMY_MAX_DIMENSION, x, y);
+						//Apply the goblin 
+						SDL_BlitScaled(gGoblin, NULL, gScreenSurface, &container);
 					}
 
 					SDL_Point mPosition; //SDL point mouse position
 					//Apply the goblin image to path
-					SDL_Rect shrinkRect;
-					shrinkRect.x = 0;
-					shrinkRect.y = 400;
-					shrinkRect.w = GOB_WIDTH;
-					shrinkRect.h = GOB_HEIGHT;
-					SDL_BlitScaled(gGoblin, NULL, gScreenSurface, &shrinkRect);
+					SDL_Rect enemyOnPathContainer = getRect(gGoblin, ENEMY_MAX_DIMENSION, ENEMY_MAX_DIMENSION/2, 435);
+					SDL_BlitScaled(gGoblin, NULL, gScreenSurface, &enemyOnPathContainer);
 
 				//Update the surface
 				SDL_UpdateWindowSurface( gWindow );
@@ -118,6 +110,44 @@ int main( int argc, char* args[] )
 	close();
 
 	return 0;
+}
+ 
+/* Return an SDL_Rect with an SDL_Surface as the background
+ * Method assumes a square image is most ideal, as long as it is not too distorted
+ * Returns an SDL_Rect that has no more than the maximum threshold of distortion
+ * x and y are the coordinates of the position of the top of the SDL_Rect
+*/
+SDL_Rect getRect(SDL_Surface* surface, int maxDimension, int x, int y) {
+	SDL_Rect container;
+	double surfaceWidth = surface->SDL_Surface::w;		// easier to reference, keep precision
+	double surfaceHeight = surface->SDL_Surface::h;
+
+	if(surfaceHeight > surfaceWidth) {					// height = maxDimesion. Distort up to MAX_DISTORTION
+		double factor = surfaceHeight / maxDimension;	// scaling factor to reduce height by
+		surfaceHeight = maxDimension;					// height cannot exceed max dimension
+		// check if factor will cause width to exceed MAX_DISTORTION			
+		if(1 - (surfaceWidth / factor / maxDimension) > MAX_DISTORTION) { 
+			surfaceWidth = surfaceWidth / factor * (1 + MAX_DISTORTION); // set width MAX_DISTORTION threshold
+		} else {
+			surfaceWidth = maxDimension;	// safe because width won't exceed MAX_DISTORTION threshold
+		}
+		
+	} else {											// width = maxDimension. Distort height as necessary
+		double factor = surfaceWidth / maxDimension;	// scaling factor to reduce height by
+		surfaceWidth = maxDimension;					// height cannot exceed max dimension
+		// check if factor will cause width to exceed MAX_DISTORTION			
+		if(1 - (surfaceHeight / factor / maxDimension) > MAX_DISTORTION) { 
+			surfaceHeight = surfaceHeight / factor * (1 + MAX_DISTORTION); // set width MAX_DISTORTION threshold
+		} else {
+			surfaceHeight = maxDimension;	// safe because width won't exceed MAX_DISTORTION threshold
+		}
+	}
+	container.x = (int)(x - (.5 * surfaceWidth));
+	container.y = (int)(y - (.5 * surfaceHeight));			
+	container.w = (int)surfaceWidth;
+	container.h = (int)surfaceHeight;
+
+	return container;
 }
 
 /* Initialize SDL and the window. Returns false if the initialization is unsuccessful
