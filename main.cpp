@@ -10,6 +10,8 @@
 //#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
+#include <iostream>
+using namespace std;
 
 
 //Screen dimension constants
@@ -64,7 +66,7 @@ int main( int argc, char* args[] )
 			//While application is running
 			while (!quit){
 			
-				//Handle event on queue
+				//Handle event on queue. reads in every event that’s occurred since the previous frame and handle them
 				while( SDL_PollEvent(&e) != 0 ){
 					
 					//Aply main image stertched
@@ -82,6 +84,7 @@ int main( int argc, char* args[] )
 					}
 					if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP){
 						//If mouse click occurs, place image where mouse was clicked ***NOT WORKING***
+						cout << "mouse click occured" << endl;
 						//SDL_Point mPosition;
  						int x,y;
  						SDL_GetMouseState(&x,&y);
@@ -157,13 +160,13 @@ bool loadMedia() {
 	bool success = true;
 
 	//Load splash image
-	gMain = SDL_LoadBMP( "img/towerDefenseBackground.bmp" );
+	gMain = loadSurface( "img/towerDefenseBackground.bmp" );
 	if( gMain == NULL )
 	{
 		printf( "Unable to load image %s! SDL Error: %s\n", "img/towerDefenseBackground.bmp", SDL_GetError() );
 		success = false;
 	}
-	gGoblin = SDL_LoadBMP("img/goblin.bmp");
+	gGoblin = loadSurface("img/goblin.bmp");
 	if( gGoblin == NULL)
 	{
 		printf( "Unable to load image %s! SDL Error: %s\n", "img/goblin.bmp", SDL_GetError() );
@@ -191,6 +194,7 @@ void close() {
 	SDL_Quit();
 }
 
+// returns an optimized surface which will load and render faster
 SDL_Surface* loadSurface(std::string path)
 {
 	//The final optimized image
