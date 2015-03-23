@@ -12,10 +12,10 @@ using namespace std;
 
 class Tower {
 public:
-        virtual void target();  //targeting function, can be implemented by subclasses for multitargeting (cannon)
-        virtual void attack();  //function to begin attacking (decreasing health) of target
+        virtual void target() = 0;  //targeting function, can be implemented by subclasses for multitargeting (cannon)
+        virtual void attack() = 0;  //function to begin attacking (decreasing health) of target
 
-        void displayTower(Image &);     //displays a tower with its specific image
+        void displayTower(Image &) = 0;     //displays a tower with its specific image
 
         virtual double getDPS() = 0;    //returns damage times attack speed (damage per second)
         virtual double getRadius() = 0; //returns distance the tower can fire
