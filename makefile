@@ -9,14 +9,19 @@ CC = g++
 COMPILER_FLAGS = -w
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2
+LINKER_FLAGS = -lSDL2 -lSDL2_image
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAME = main
+OBJ_NAMES = main
 
 #This is the target that compiles our executable
-all : $(OBJS)
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+all: main
 
+main: main.o
+	$(CC) main.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o main
+
+main.o: main.cpp
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c main.cpp
+	
 clean: 
 	-rm *.o $(OBJ_NAME) 
