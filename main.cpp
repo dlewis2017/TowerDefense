@@ -10,6 +10,7 @@ using namespace std;
 const int SCREEN_WIDTH = 900;
 const int SCREEN_HEIGHT = 800;
 
+const int TOWER_MAX_DIMENSION = 70;
 const int ENEMY_MAX_DIMENSION = 60;
 const double MAX_DISTORTION = .57;		// decimal of max percentage
 
@@ -25,6 +26,9 @@ SDL_Window* gWindow = NULL;			//The window we'll be rendering to
 SDL_Renderer* gRenderer = NULL;		//The window renderer
 SDL_Texture* gBackground = NULL;		//Current displayed texture
 SDL_Texture* gGoblin = NULL;
+SDL_Texture* gTroll = NULL;
+SDL_Texture* gWizardTower = NULL;
+SDL_Texture* gArcherTower = NULL;
 
 int main( int argc, char* args[] )
 {
@@ -42,11 +46,8 @@ int main( int argc, char* args[] )
 		return 2;
 	}
 	
-	//Main loop flag
-	bool quit = false;
-
-	//Event handler
-	SDL_Event e;
+	bool quit = false;	// Main loop flag
+	SDL_Event e;		// Event handler
 
 	//While application is running
 	while( !quit )
@@ -61,29 +62,29 @@ int main( int argc, char* args[] )
 				quit = true;
 			}
 
-
+			//If mouse click occurs, place image where mouse was clicked
 			if(e.type == SDL_MOUSEBUTTONDOWN){
-				//If mouse click occurs, place image where mouse was clicked ***NOT WORKING***
-				//SDL_Point mPosition;
-
 				SDL_GetMouseState(&x,&y);
 
 			}
 		}
 
-		SDL_Rect container = getRect(gGoblin, ENEMY_MAX_DIMENSION, x, y);
-		//Apply the goblin 
-		//		SDL_RenderCopy( gRenderer, gGoblin, NULL, &container);
-		//Update screen
-		//SDL_RenderPresent( gRenderer );
-		SDL_Rect destR = getRect(gGoblin, ENEMY_MAX_DIMENSION, 30, 435);
-		//Clear screen
-		SDL_RenderClear( gRenderer );
+		// create containers for each image which specifies its size and location
+		SDL_Rect goblinRect = getRect(gGoblin, ENEMY_MAX_DIMENSION, x, y);
+		SDL_Rect staticGoblinRect = getRect(gGoblin, ENEMY_MAX_DIMENSION, 30, 435);
+		SDL_Rect staticTrollRect = getRect(gTroll, ENEMY_MAX_DIMENSION, 151, 350);
+		SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION, 210, 390);
+		SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION, 210, 300);
 
+		//Clear screen
+		SDL_RenderClear( gRenderer );	
 		//Render texture to screen
-		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// render background
-		SDL_RenderCopy( gRenderer, gGoblin, NULL, &destR);		// render goblin to the beginning of the path
-		SDL_RenderCopy( gRenderer, gGoblin, NULL, &container);	// render goblin to the center of the mouse-click
+		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// render background, automatically fills the window
+		SDL_RenderCopy( gRenderer, gGoblin, NULL, &staticGoblinRect);	 // render goblin to the beginning of the path
+		SDL_RenderCopy( gRenderer, gGoblin, NULL, &goblinRect);	// render goblin to the center of the mouse-click
+		SDL_RenderCopy( gRenderer, gTroll, NULL, & staticTrollRect);
+		SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+		SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
 		//Update screen
 		SDL_RenderPresent( gRenderer );
 
@@ -145,11 +146,16 @@ bool loadMedia()
 	bool success = true;
 
 	//Load PNG texture
-	gGoblin = loadTexture( "img/goblin.png");
-	gBackground = loadTexture( "img/towerDefenseBackground.bmp");
-	if( gBackground == NULL )
+	gGoblin = loadTexture("img/goblin.png");
+	gTroll = loadTexture("img/troll.png");
+	gBackground = loadTexture("img/towerDefenseBackground.bmp");
+	gWizardTower = loadTexture("img/wizardTower.png");
+	gArcherTower = loadTexture("img/archerTower.png");
+
+	if(gBackground==NULL || gWizardTower==NULL || gArcherTower==NULL 
+		|| gGoblin==NULL || gTroll == NULL)
 	{
-		printf( "Failed to load texture image!\n" );
+		printf( "Failed to a load texture image!\n" );
 		success = false;
 	}
 
