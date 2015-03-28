@@ -1,9 +1,12 @@
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <stdio.h>
 #include <string>
 #include <iostream>
+#include <vector>
+
+#include "Enemy.h"
+#include "MapDirections.h"
 using namespace std;
 
 //Screen dimension constants
@@ -19,6 +22,9 @@ bool init();		//Starts up SDL and creates window
 bool loadMedia();	//Loads media
 void close();		//Frees media and shuts down SDL
 SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);
+void moveEnemies();	// moves all enemies in the enemies vector
+void renderEnemies(); 	// render all enemies in the enemies vector
+//void addEnemies(int);
 
 // global vars
 SDL_Texture* loadTexture( std::string path );	//Loads individual image as texture
@@ -29,6 +35,7 @@ SDL_Texture* gGoblin = NULL;
 SDL_Texture* gTroll = NULL;
 SDL_Texture* gWizardTower = NULL;
 SDL_Texture* gArcherTower = NULL;
+vector<Enemy> enemies;				// stores all enemies
 
 int main( int argc, char* args[] )
 {
@@ -48,6 +55,14 @@ int main( int argc, char* args[] )
 	
 	bool quit = false;	// Main loop flag
 	SDL_Event e;		// Event handler
+	int nEnemies = 2;
+	//addEnemies(nEnemies);
+	Enemy enemy(&gRenderer);
+	//Enemy enemy2(&gRenderer);
+	
+	enemies.push_back(enemy);
+	//enemies.push_back(enemy2);
+
 
 	//While application is running
 	while( !quit )
@@ -69,22 +84,27 @@ int main( int argc, char* args[] )
 			}
 		}
 
+
 		// create containers for each image which specifies its size and location
 		SDL_Rect goblinRect = getRect(gGoblin, ENEMY_MAX_DIMENSION, x, y);
-		SDL_Rect staticGoblinRect = getRect(gGoblin, ENEMY_MAX_DIMENSION, 30, 435);
 		SDL_Rect staticTrollRect = getRect(gTroll, ENEMY_MAX_DIMENSION, 151, 350);
 		SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION, 210, 390);
 		SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION, 210, 300);
 
+		moveEnemies();	// moves all enemies in enemies vector (updates position)
+
 		//Clear screen
-		SDL_RenderClear( gRenderer );	
+		SDL_RenderClear( gRenderer );
+
 		//Render texture to screen
-		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// render background, automatically fills the window
-		SDL_RenderCopy( gRenderer, gGoblin, NULL, &staticGoblinRect);	 // render goblin to the beginning of the path
+		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
 		SDL_RenderCopy( gRenderer, gGoblin, NULL, &goblinRect);	// render goblin to the center of the mouse-click
-		SDL_RenderCopy( gRenderer, gTroll, NULL, & staticTrollRect);
+		SDL_RenderCopy( gRenderer, gTroll, NULL, &staticTrollRect);
 		SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
 		SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+
+		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
+
 		//Update screen
 		SDL_RenderPresent( gRenderer );
 
@@ -94,6 +114,32 @@ int main( int argc, char* args[] )
 	close();
 
 	return 0;
+}
+
+void addEnemies(int nEnemies) {
+
+
+}
+
+/* Move all enemies in the enemies vector
+ * Check return status of enemy.move(). If false, then the enemy has
+ * reached the end of the path, and should be removed from the enemies vector
+ */
+void moveEnemies() {
+	for(int i = 0; i < enemies.size(); i++) {
+		if(enemies[i].move() == false) {
+			enemies.erase(enemies.begin() + i);
+		}
+	}
+}
+
+
+/* Render all enemies in the enemies vector
+*/
+void renderEnemies() {
+	for(int i = 0; i < enemies.size(); i++) {
+		enemies[i].render();
+	}
 }
 
 /* Return an SDL_Rect with an SDL_Surface as the background
@@ -243,7 +289,7 @@ bool init()
 		else
 		{
 			//Create renderer for window
-			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
+			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( gRenderer == NULL )
 			{
 				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );

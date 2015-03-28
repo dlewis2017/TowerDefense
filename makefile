@@ -17,8 +17,14 @@ OBJ_NAMES = main
 #This is the target that compiles our executable
 all: main
 
-main: main.o
-	$(CC) main.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o main
+main: main.o Enemy.o MapDirections.o
+	$(CC) main.o Enemy.o MapDirections.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o main
+
+Enemy.o: Enemy.cpp Enemy.h MapDirections.cpp MapDirections.h
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Enemy.cpp
+
+MapDirections.o: MapDirections.cpp MapDirections.h
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c MapDirections.cpp
 
 main.o: main.cpp
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c main.cpp
