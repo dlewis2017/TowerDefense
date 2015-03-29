@@ -23,11 +23,11 @@ main: main.o Enemy.o MapDirections.o
 main.o: main.cpp
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c main.cpp
 
-Enemy.o: Enemy.cpp Enemy.h MapDirections.cpp MapDirections.h
-	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Enemy.cpp
+Enemy.o: Enemies/Enemy.cpp Enemies/Enemy.h MapDirections.cpp MapDirections.h
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Enemies/Enemy.cpp
 
 MapDirections.o: MapDirections.cpp MapDirections.h
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c MapDirections.cpp
 
 clean: 
-	-rm *.o $(OBJ_NAME) 
+	-rm *.o $(OBJ_NAMES)

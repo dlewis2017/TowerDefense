@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Enemy.h"
+#include "Enemies/Enemy.h"
 #include "MapDirections.h"
 using namespace std;
 
@@ -55,9 +55,20 @@ int main( int argc, char* args[] )
 	
 	bool quit = false;	// Main loop flag
 	SDL_Event e;		// Event handler
+
+	MapDirections mapDirections;	// stores turning instructions for the map's path
+    // add directions for the specific map (must be hard-coded for each map)
+    mapDirections.setNext("right", 127);
+    mapDirections.setNext("up", 170);
+    mapDirections.setNext("right", 310);
+    mapDirections.setNext("down", 489);
+    mapDirections.setNext("right", 547);
+    mapDirections.setNext("up", 330);
+    mapDirections.setNext("right", SCREEN_WIDTH);
+
 	int nEnemies = 2;
 	//addEnemies(nEnemies);
-	Enemy enemy(&gRenderer);
+	Enemy enemy(&gRenderer, mapDirections);
 	//Enemy enemy2(&gRenderer);
 	
 	enemies.push_back(enemy);
