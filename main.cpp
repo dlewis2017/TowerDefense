@@ -4,7 +4,6 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
 #include "Enemies/Enemy.h"
 #include "MapDirections.h"
 using namespace std;
@@ -24,7 +23,6 @@ void close();		//Frees media and shuts down SDL
 SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);
 void moveEnemies();	// moves all enemies in the enemies vector
 void renderEnemies(); 	// render all enemies in the enemies vector
-//void addEnemies(int);
 
 // global vars
 SDL_Texture* loadTexture( std::string path );	//Loads individual image as texture
@@ -66,8 +64,6 @@ int main( int argc, char* args[] )
     mapDirections.setNext("up", 330);
     mapDirections.setNext("right", SCREEN_WIDTH);
 
-	int nEnemies = 2;
-	//addEnemies(nEnemies);
 	Enemy enemy(&gRenderer, mapDirections);
 	//Enemy enemy2(&gRenderer);
 	
@@ -125,11 +121,6 @@ int main( int argc, char* args[] )
 	close();
 
 	return 0;
-}
-
-void addEnemies(int nEnemies) {
-
-
 }
 
 /* Move all enemies in the enemies vector
