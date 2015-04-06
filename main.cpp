@@ -6,6 +6,8 @@
 #include <vector>
 #include "Enemies/Enemy.h"
 #include "MapDirections.h"
+//#include "Towers.h"
+
 using namespace std;
 
 //Screen dimension constants
@@ -31,8 +33,12 @@ SDL_Renderer* gRenderer = NULL;		//The window renderer
 SDL_Texture* gBackground = NULL;		//Current displayed texture
 SDL_Texture* gGoblin = NULL;
 SDL_Texture* gTroll = NULL;
+SDL_Texture* gWizard = NULL;
 SDL_Texture* gWizardTower = NULL;
 SDL_Texture* gArcherTower = NULL;
+SDL_Texture* gCannonTower = NULL;
+SDL_Texture* gFreezeTower = NULL;
+SDL_Texture* gTower = NULL;
 vector<Enemy> enemies;				// stores all enemies
 
 int main( int argc, char* args[] )
@@ -86,6 +92,7 @@ int main( int argc, char* args[] )
 
 			//If mouse click occurs, place image where mouse was clicked
 			if(e.type == SDL_MOUSEBUTTONDOWN){
+				//if(e.tpye 
 				SDL_GetMouseState(&x,&y);
 
 			}
@@ -93,10 +100,16 @@ int main( int argc, char* args[] )
 
 
 		// create containers for each image which specifies its size and location
-		SDL_Rect goblinRect = getRect(gGoblin, ENEMY_MAX_DIMENSION, x, y);
-		SDL_Rect staticTrollRect = getRect(gTroll, ENEMY_MAX_DIMENSION, 151, 350);
-		SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION, 210, 390);
-		SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION, 210, 300);
+		//SDL_Rect goblinRect = getRect(gGoblin, ENEMY_MAX_DIMENSION, x, y);
+		//SDL_Rect staticTrollRect = getRect(gTroll, ENEMY_MAX_DIMENSION, 151, 350);
+		//SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION, 210, 390);
+		//SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION, 210, 300);
+		SDL_Rect gTowerRect1 = getRect(gTower, TOWER_MAX_DIMENSION,80,360);
+		SDL_Rect gTowerRect2 = getRect(gTower, TOWER_MAX_DIMENSION,220,275);
+		SDL_Rect gTowerRect3 = getRect(gTower, TOWER_MAX_DIMENSION,400,440);
+		SDL_Rect gTowerRect4 = getRect(gTower, TOWER_MAX_DIMENSION,500,600);
+		SDL_Rect gTowerRect5 = getRect(gTower, TOWER_MAX_DIMENSION,750,435);
+		
 
 		moveEnemies();	// moves all enemies in enemies vector (updates position)
 
@@ -105,10 +118,112 @@ int main( int argc, char* args[] )
 
 		//Render texture to screen
 		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
-		SDL_RenderCopy( gRenderer, gGoblin, NULL, &goblinRect);	// render goblin to the center of the mouse-click
-		SDL_RenderCopy( gRenderer, gTroll, NULL, &staticTrollRect);
-		SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
-		SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+		//SDL_RenderCopy( gRenderer, gGoblin, NULL, &goblinRect);	// render goblin to the center of the mouse-click
+		//SDL_RenderCopy( gRenderer, gTroll, NULL, &staticTrollRect);
+		//SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+		//SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+		//SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
+		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect2);
+		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect3);
+		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect4);
+		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect5);
+
+		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
+		if( (x >= 80-35 && x <= 80-35+TOWER_MAX_DIMENSION) && (y >= 360-35 && y <= 360-35+TOWER_MAX_DIMENSION) ){
+			//create containers for each image which specifies its size and location
+			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,80,360+TOWER_MAX_DIMENSION );
+			SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,80,360+2*TOWER_MAX_DIMENSION );
+			SDL_Rect gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,80,360+3*TOWER_MAX_DIMENSION );
+			SDL_Rect gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,80,360+4*TOWER_MAX_DIMENSION );
+
+			//open texutre on screen without rendering
+			SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+			SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+			SDL_RenderCopy( gRenderer, gCannonTower, NULL, &gCannonTowerRect);
+			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
+
+			//wait for event?
+
+		} else { //display regular tower symbol
+			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
+		}
+		//if tower2 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
+		if( (x >= 220-35 && x <= 220-35+TOWER_MAX_DIMENSION) && (y >= 275-35 && y <= 275-35+TOWER_MAX_DIMENSION) ){
+			//create containers for each image which specifies its size and location
+			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,220,275+TOWER_MAX_DIMENSION );
+			SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,220,275+2*TOWER_MAX_DIMENSION );
+			SDL_Rect gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,220,275+3*TOWER_MAX_DIMENSION );
+			SDL_Rect gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,220,275+4*TOWER_MAX_DIMENSION );
+
+			//open texutre on screen without rendering
+			SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+			SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+			SDL_RenderCopy( gRenderer, gCannonTower, NULL, &gCannonTowerRect);
+			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
+
+			//wait for event?
+
+		} else { //display regular tower symbol
+			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
+		}
+		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
+		if( (x >= 400-35 && x <= 400-35+TOWER_MAX_DIMENSION) && (y >= 440-35 && y <= 440-35+TOWER_MAX_DIMENSION) ){
+			//create containers for each image which specifies its size and location
+			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,400,440+TOWER_MAX_DIMENSION );
+			SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,400,440+2*TOWER_MAX_DIMENSION );
+			SDL_Rect gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,400,440+3*TOWER_MAX_DIMENSION );
+			SDL_Rect gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,400,440+4*TOWER_MAX_DIMENSION );
+
+			//open texutre on screen without rendering
+			SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+			SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+			SDL_RenderCopy( gRenderer, gCannonTower, NULL, &gCannonTowerRect);
+			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
+
+			//wait for event?
+
+		} else { //display regular tower symbol
+			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
+		}
+		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
+		if( (x >= 500-35 && x <= 500-35+TOWER_MAX_DIMENSION) && (y >= 600-35 && y <= 600-35+TOWER_MAX_DIMENSION) ){
+			//create containers for each image which specifies its size and location
+			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,500,600-TOWER_MAX_DIMENSION );
+			SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,500,600-2*TOWER_MAX_DIMENSION );
+			SDL_Rect gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,500,600-3*TOWER_MAX_DIMENSION );
+			SDL_Rect gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,500,600-4*TOWER_MAX_DIMENSION );
+
+			//open texutre on screen without rendering
+			SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+			SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+			SDL_RenderCopy( gRenderer, gCannonTower, NULL, &gCannonTowerRect);
+			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
+
+			//wait for event?
+
+		} else { //display regular tower symbol
+			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
+		}
+		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
+		if( (x >= 750-35 && x <= 750-35+TOWER_MAX_DIMENSION) && (y >= 435-35 && y <= 435-35+TOWER_MAX_DIMENSION) ){
+			//create containers for each image which specifies its size and location
+			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,750,435+TOWER_MAX_DIMENSION );
+			SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,750,435+2*TOWER_MAX_DIMENSION );
+			SDL_Rect gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,750,435+3*TOWER_MAX_DIMENSION );
+			SDL_Rect gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,750,435+4*TOWER_MAX_DIMENSION );
+
+			//open texutre on screen without rendering
+			SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+			SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+			SDL_RenderCopy( gRenderer, gCannonTower, NULL, &gCannonTowerRect);
+			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
+
+			//wait for event?
+
+		} else { //display regular tower symbol
+			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
+		}
+
 
 		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
 
@@ -196,12 +311,16 @@ bool loadMedia()
 	//Load PNG texture
 	gGoblin = loadTexture("img/goblin.png");
 	gTroll = loadTexture("img/troll.png");
+	gWizard = loadTexture("img/wizard.png");
 	gBackground = loadTexture("img/towerDefenseBackground.bmp");
 	gWizardTower = loadTexture("img/wizardTower.png");
 	gArcherTower = loadTexture("img/archerTower.png");
+	gCannonTower = loadTexture("img/cannonTower.png");
+	gFreezeTower = loadTexture("img/freezeTower.png");
+	gTower = loadTexture("img/TowerSymbol.png");
 
 	if(gBackground==NULL || gWizardTower==NULL || gArcherTower==NULL 
-		|| gGoblin==NULL || gTroll == NULL)
+		|| gGoblin==NULL || gTroll == NULL || gTower == NULL)
 	{
 		printf( "Failed to a load texture image!\n" );
 		success = false;
