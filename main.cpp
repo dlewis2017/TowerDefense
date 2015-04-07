@@ -84,7 +84,7 @@ int main( int argc, char* args[] )
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
-				//User requests quit
+			//User requests quit
 			if( e.type == SDL_QUIT )
 			{
 				quit = true;
@@ -92,7 +92,6 @@ int main( int argc, char* args[] )
 
 			//If mouse click occurs, place image where mouse was clicked
 			if(e.type == SDL_MOUSEBUTTONDOWN){
-				//if(e.tpye 
 				SDL_GetMouseState(&x,&y);
 
 			}
@@ -128,6 +127,8 @@ int main( int argc, char* args[] )
 		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect4);
 		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect5);
 
+
+		int trigger1; //used to determine which tower was clicked on first tower symbol
 		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
 		if( (x >= 80-35 && x <= 80-35+TOWER_MAX_DIMENSION) && (y >= 360-35 && y <= 360-35+TOWER_MAX_DIMENSION) ){
 			//create containers for each image which specifies its size and location
@@ -142,11 +143,60 @@ int main( int argc, char* args[] )
 			SDL_RenderCopy( gRenderer, gCannonTower, NULL, &gCannonTowerRect);
 			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
 
-			//wait for event?
+			//wait for second event
+			//Handle events on queue
+			SDL_Event e2;
+			while( SDL_PollEvent( &e2 ) != 0 )
+			{
+				//User requests quit
+				if( e2.type == SDL_QUIT )
+				{
+					quit = true;
+				}
 
-		} else { //display regular tower symbol
-			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
+				int x2, y2;
+				//If mouse click occurs, place image where mouse was clicked
+				if(e2.type == SDL_MOUSEBUTTONDOWN){
+					SDL_GetMouseState(&x2,&y2);
+					if( (x2>= 80-35 && x2 <= 80-35+TOWER_MAX_DIMENSION) && (y2 >= 360-35+TOWER_MAX_DIMENSION && y2 <= 360-35+2*TOWER_MAX_DIMENSION) ){
+						trigger1 = 1; //if wizard tower clicked
+						break;
+					}
+					else if( (x2>= 80-35 && x2 <= 80-35+TOWER_MAX_DIMENSION) && (y2 >= 360-35+2*TOWER_MAX_DIMENSION && y2 <= 360-35+3*TOWER_MAX_DIMENSION) ){
+						trigger1 = 2; //if archer tower clicked
+						break;
+					}
+					else if( (x2>= 80-35 && x2 <= 80-35+TOWER_MAX_DIMENSION) && (y2 >= 360-35+3*TOWER_MAX_DIMENSION && y2 <= 360-35+4*TOWER_MAX_DIMENSION) ){
+						trigger1 = 3; //if cannon tower clicked
+						break;
+					}
+					else if( (x2>= 80-35 && x2 <= 80-35+TOWER_MAX_DIMENSION) && (y2 >= 360-35+4*TOWER_MAX_DIMENSION && y2 <= 360-35+5*TOWER_MAX_DIMENSION) ){
+						trigger1 = 4; //if freeze tower clicked
+						break;
+					}
+				}
+				break;//get out of second event waiting loop
+			}
+
 		}
+		switch(trigger1){
+			case 1:
+				SDL_RenderCopy(gRenderer, gWizardTower, NULL, &gTowerRect1);
+				break;
+			case 2:
+				SDL_RenderCopy(gRenderer, gArcherTower, NULL, &gTowerRect1);
+				break;
+			case 3:
+				SDL_RenderCopy(gRenderer, gCannonTower, NULL, &gTowerRect1);
+				break;
+			case 4:
+				SDL_RenderCopy(gRenderer, gFreezeTower, NULL, &gTowerRect1);
+				break;
+			default:
+				SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1 );
+				break;
+		}
+
 		//if tower2 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
 		if( (x >= 220-35 && x <= 220-35+TOWER_MAX_DIMENSION) && (y >= 275-35 && y <= 275-35+TOWER_MAX_DIMENSION) ){
 			//create containers for each image which specifies its size and location
@@ -162,11 +212,9 @@ int main( int argc, char* args[] )
 			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
 
 			//wait for event?
-
-		} else { //display regular tower symbol
-			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
 		}
-		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
+
+		//if tower3 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
 		if( (x >= 400-35 && x <= 400-35+TOWER_MAX_DIMENSION) && (y >= 440-35 && y <= 440-35+TOWER_MAX_DIMENSION) ){
 			//create containers for each image which specifies its size and location
 			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,400,440+TOWER_MAX_DIMENSION );
@@ -182,10 +230,9 @@ int main( int argc, char* args[] )
 
 			//wait for event?
 
-		} else { //display regular tower symbol
-			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
 		}
-		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
+
+		//if tower4 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
 		if( (x >= 500-35 && x <= 500-35+TOWER_MAX_DIMENSION) && (y >= 600-35 && y <= 600-35+TOWER_MAX_DIMENSION) ){
 			//create containers for each image which specifies its size and location
 			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,500,600-TOWER_MAX_DIMENSION );
@@ -201,10 +248,9 @@ int main( int argc, char* args[] )
 
 			//wait for event?
 
-		} else { //display regular tower symbol
-			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
 		}
-		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
+
+		//if tower5 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
 		if( (x >= 750-35 && x <= 750-35+TOWER_MAX_DIMENSION) && (y >= 435-35 && y <= 435-35+TOWER_MAX_DIMENSION) ){
 			//create containers for each image which specifies its size and location
 			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,750,435+TOWER_MAX_DIMENSION );
@@ -219,9 +265,6 @@ int main( int argc, char* args[] )
 			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
 
 			//wait for event?
-
-		} else { //display regular tower symbol
-			SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
 		}
 
 
