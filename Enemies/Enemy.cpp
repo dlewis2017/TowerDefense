@@ -11,16 +11,12 @@ Enemy::Enemy(SDL_Renderer** gRendererPtr, MapDirections pathInfo)
 	gRenderer = gRendererPtr;
 
     mapDirections = pathInfo;
-
-	// load enemy img
-	gEnemy = NULL;
-	gEnemy = loadTexture("img/goblin.png");
 	
     //Initialize the offsets
     mPosX = ENEMY_MAX_DIMENSION/2;
     mPosY = 405;
 
-    enemyRect = getRect(gEnemy, ENEMY_MAX_DIMENSION, mPosX, mPosY);
+    //enemyRect = getRect(gEnemy, ENEMY_MAX_DIMENSION, mPosX, mPosY);
 
 }
 

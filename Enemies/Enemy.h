@@ -19,7 +19,7 @@ class Enemy
 		static const int SCREEN_HEIGHT = 800;
 
 		//Maximum velocity of the Enemy
-		static const double ENEMY_VEL = 11;		// different computers seem to require a different velocity
+		static const double ENEMY_VEL = .1;		// different computers seem to require a different velocity
 
 		Enemy(SDL_Renderer **gRenderer, MapDirections pathInfo);  // constructor
 		void render();						// Repositions the the enemy on the screen after gRenderer is updated
@@ -29,17 +29,17 @@ class Enemy
 		double getPosX();	// return current x coordinate of enemy
 		double getPosY();	// return current y coordinate
 
-    private:
+	protected:
+		int ENEMY_MAX_DIMENSION;
+		double MAX_DISTORTION;		// decimal of max percentage
+		MapDirections mapDirections;	// object to hold information to know when the Enemy should turn on the path
 		SDL_Texture* gEnemy;		// image of enemy
 		SDL_Renderer** gRenderer;	// double pointer to screen surface
 		SDL_Rect enemyRect;			// container for enemy image. Has positioning properties (x and y location)
-
 		double mPosX, mPosY;  	// The X and Y positions of the enemy
 
-		int ENEMY_MAX_DIMENSION;
-		double MAX_DISTORTION;		// decimal of max percentage
-
-		MapDirections mapDirections;	// object to hold information to know when the Enemy should turn on the path
+    private:
+		
 };
 
 #endif

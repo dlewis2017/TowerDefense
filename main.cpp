@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "Enemies/Enemy.h"
+#include "Enemies/Goblin.h"
 #include "MapDirections.h"
 //#include "Towers.h"
 
@@ -70,7 +71,7 @@ int main( int argc, char* args[] )
     mapDirections.setNext("up", 330);
     mapDirections.setNext("right", SCREEN_WIDTH);
 
-	Enemy enemy(&gRenderer, mapDirections);
+	Goblin enemy(&gRenderer, mapDirections);
 	//Enemy enemy2(&gRenderer);
 	
 	enemies.push_back(enemy);
