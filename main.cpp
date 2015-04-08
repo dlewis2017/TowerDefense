@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <time.h>
 //#include "Towers/Tower.h"
 //#include "Towers/ArcherTower.h"
 //#include "Towers/FreezeTower.h"
@@ -21,6 +22,7 @@ const int SCREEN_HEIGHT = 800;
 const int TOWER_MAX_DIMENSION = 70;
 const int ENEMY_MAX_DIMENSION = 60;
 const double MAX_DISTORTION = .57;		// decimal of max percentage
+const int ENEMY_TIME_DELAY = 1200;		// delay between enemies traversing the path, milliseconds
 
 // methods
 bool init();		//Starts up SDL and creates window
@@ -29,6 +31,7 @@ void close();		//Frees media and shuts down SDL
 SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);
 void moveEnemies();	// moves all enemies in the enemies vector
 void renderEnemies(); 	// render all enemies in the enemies vector
+void addEnemies(MapDirections mapDirections);		// add enemies until max # reached
 
 // global vars
 SDL_Texture* loadTexture( std::string path );	//Loads individual image as texture
@@ -64,8 +67,8 @@ int main( int argc, char* args[] )
 	bool quit = false;	// Main loop flag
 	SDL_Event e;		// Event handler
 
-	MapDirections mapDirections;	// stores turning instructions for the map's path
     // add directions for the specific map (must be hard-coded for each map)
+	MapDirections mapDirections;	// stores turning instructions for the map's path
     mapDirections.setNext("right", 127);
     mapDirections.setNext("up", 170);
     mapDirections.setNext("right", 310);
@@ -74,12 +77,13 @@ int main( int argc, char* args[] )
     mapDirections.setNext("up", 330);
     mapDirections.setNext("right", SCREEN_WIDTH);
 
-	Goblin enemy(&gRenderer, mapDirections);
-	//Enemy enemy2(&gRenderer);
-	
-	enemies.push_back(enemy);
-	//enemies.push_back(enemy2);
+    int nEnemies = 2;
+    double lastAddTime;	// keep track of last time that an enemy was added
+    bool allEnemiesAdded = false;
 
+    // add first enemy immediately
+    lastAddTime = clock() / (CLOCKS_PER_SEC / 1000);	// milliseconds conversion
+    addEnemies(mapDirections);
 
 	//While application is running
 	while( !quit )
@@ -109,7 +113,14 @@ int main( int argc, char* args[] )
 		SDL_Rect gTowerRect4 = getRect(gTower, TOWER_MAX_DIMENSION,500,600);
 		SDL_Rect gTowerRect5 = getRect(gTower, TOWER_MAX_DIMENSION,750,435);
 		
-
+		double clockTime = clock() / (CLOCKS_PER_SEC / 1000);
+		
+		// if it is time for another enemy to be added
+		if(!allEnemiesAdded && enemies.size() < nEnemies && (clockTime - lastAddTime) >= ENEMY_TIME_DELAY) {
+    		addEnemies(mapDirections);
+    		lastAddTime = clockTime;
+    		if(enemies.size() == nEnemies) allEnemiesAdded = true;
+    	}
 		moveEnemies();	// moves all enemies in enemies vector (updates position)
 
 		//Clear screen
@@ -274,6 +285,14 @@ int main( int argc, char* args[] )
 	close();
 
 	return 0;
+}
+
+// adds enemies every ____seconds
+void addEnemies(MapDirections mapDirections) {
+	Goblin enemy(&gRenderer, mapDirections);
+	
+	enemies.push_back(enemy);
+
 }
 
 /* Move all enemies in the enemies vector
