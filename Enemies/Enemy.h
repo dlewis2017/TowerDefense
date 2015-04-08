@@ -19,13 +19,15 @@ class Enemy
 		static const int SCREEN_HEIGHT = 800;
 
 		//Maximum velocity of the Enemy
-		static const double ENEMY_VEL = .1;		// different computers seem to require a different velocity
+		static const double ENEMY_VEL = 11;		// different computers seem to require a different velocity
 
 		Enemy(SDL_Renderer **gRenderer, MapDirections pathInfo);  // constructor
 		void render();						// Repositions the the enemy on the screen after gRenderer is updated
 		bool move();						// move the enemy on the screen according to map positions
 		SDL_Texture* loadTexture(std::string path);	// load enemy image
 		SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);	// contain SDL_Surface under distortion threshold
+		double getPosX();	// return current x coordinate of enemy
+		double getPosY();	// return current y coordinate
 
     private:
 		SDL_Texture* gEnemy;		// image of enemy

@@ -22,15 +22,6 @@ Enemy::Enemy(SDL_Renderer** gRendererPtr, MapDirections pathInfo)
 
     enemyRect = getRect(gEnemy, ENEMY_MAX_DIMENSION, mPosX, mPosY);
 
-   /* // add directions for the specific map (must be hard-coded for each map)
-    mapDirections.setNext("right", 127);
-    mapDirections.setNext("up", 170);
-    mapDirections.setNext("right", 310);
-    mapDirections.setNext("down", 489);
-    mapDirections.setNext("right", 547);
-    mapDirections.setNext("up", 330);
-    mapDirections.setNext("right", SCREEN_WIDTH);
-    */
 }
 
 /* Not necessary
@@ -173,4 +164,14 @@ SDL_Texture* Enemy::loadTexture( std::string path )
         SDL_FreeSurface( loadedSurface );
     }
     return newTexture;
+}
+
+// return x position of enemy
+double Enemy::getPosX() {
+	return mPosX;
+}
+
+// return y position of enemy
+double Enemy::getPosY() {
+	return mPosY;
 }
