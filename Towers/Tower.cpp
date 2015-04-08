@@ -21,15 +21,6 @@ bool Tower::inRange(double X, double Y, double rad)
 	else
 		return false;
 }
-int Tower::getArcherCost()
-{
-	return ArcherCost;
-}
-int Tower::getCannonCost()
-{
-	return CannonCost;
-}
-int Tower::getFreezeCost()
-{
-	return FreezeCost;
-}		
+int Tower::getCost() {
+	
+};

@@ -18,7 +18,7 @@ public:
         //void target();  //may or may not need to implement since it is already a single-targeting tower
         double getDPS();    //returns damage times attack speed (damage per second)
         double getRadius(); //returns distance the tower can fire
-        double getCost();   //returns cost to build tower
+        int getCost();   //returns cost to build tower
 private:
         double damage;
         double attackSpeed;

@@ -18,12 +18,13 @@ public:
         void target();  //NEED to implement - multitargeting
         double getDPS();    //returns damage times attack speed (damage per second)
         double getRadius(); //returns distance the tower can fire
-        double getCost();   //returns cost to build tower
+        int getCost();   //returns cost to build tower
+
 private:
         double damage;
         double attackSpeed;
         double radius;
-        double cost;
+        int cost;
         unsigned int numKills; //possibly? tracks total number of kills each tower has
 };
 

@@ -4,14 +4,13 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "Towers/Tower.h"
-#include "Towers/ArcherTower.h"
-#include "Towers/FreezeTower.h"
-#include "Towers/CannonTower.h"
+//#include "Towers/Tower.h"
+//#include "Towers/ArcherTower.h"
+//#include "Towers/FreezeTower.h"
+//#include "Towers/CannonTower.h"
 #include "Enemies/Enemy.h"
 #include "Enemies/Goblin.h"
 #include "MapDirections.h"
-//#include "Towers.h"
 
 using namespace std;
 
@@ -104,10 +103,6 @@ int main( int argc, char* args[] )
 
 
 		// create containers for each image which specifies its size and location
-		//SDL_Rect goblinRect = getRect(gGoblin, ENEMY_MAX_DIMENSION, x, y);
-		//SDL_Rect staticTrollRect = getRect(gTroll, ENEMY_MAX_DIMENSION, 151, 350);
-		//SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION, 210, 390);
-		//SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION, 210, 300);
 		SDL_Rect gTowerRect1 = getRect(gTower, TOWER_MAX_DIMENSION,80,360);
 		SDL_Rect gTowerRect2 = getRect(gTower, TOWER_MAX_DIMENSION,220,275);
 		SDL_Rect gTowerRect3 = getRect(gTower, TOWER_MAX_DIMENSION,400,440);
@@ -122,11 +117,6 @@ int main( int argc, char* args[] )
 
 		//Render texture to screen
 		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
-		//SDL_RenderCopy( gRenderer, gGoblin, NULL, &goblinRect);	// render goblin to the center of the mouse-click
-		//SDL_RenderCopy( gRenderer, gTroll, NULL, &staticTrollRect);
-		//SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
-		//SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
-		//SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1);
 		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect2);
 		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect3);
 		SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect4);
