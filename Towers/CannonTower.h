@@ -20,7 +20,6 @@ public:
         double getRadius(); //returns distance the tower can fire
         double getCost();   //returns cost to build tower
 private:
-        Image CannonImage;
         double damage;
         double attackSpeed;
         double radius;
