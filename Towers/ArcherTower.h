@@ -13,18 +13,17 @@ using namespace std;
 
 class ArcherTower : public Tower {
 public:
-        ArcherTower();  //default constructor
+        ArcherTower(double, double);  //constructor with the position as argument
         void attack();  //implement this with archer tower specific graphics
-        void target();  //may or may not need to implement since it is already a single-targeting tower
+        //void target();  //may or may not need to implement since it is already a single-targeting tower
         double getDPS();    //returns damage times attack speed (damage per second)
         double getRadius(); //returns distance the tower can fire
         double getCost();   //returns cost to build tower
 private:
-        Image ArcherImage;
         double damage;
         double attackSpeed;
         double radius;
-        double cost;
+        int cost;
         unsigned int numKills; //possibly? tracks total number of kills each tower has
 };
 

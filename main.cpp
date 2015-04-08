@@ -4,6 +4,10 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "Towers/Tower.h"
+#include "Towers/ArcherTower.h"
+#include "Towers/FreezeTower.h"
+#include "Towers/CannonTower.h"
 #include "Enemies/Enemy.h"
 #include "MapDirections.h"
 //#include "Towers.h"

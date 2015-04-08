@@ -19,12 +19,9 @@ public:
         double getRadius(); //returns distance the tower can fire
         double getCost();   //returns cost to build tower
 private:
-        Image FreezeImage;
-        double damage;
         double attackSpeed;
         double radius;
         double cost;
-        unsigned int numKills; //possibly? tracks total number of kills each tower has
 };
 
 #endif
