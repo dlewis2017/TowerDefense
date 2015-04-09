@@ -5,12 +5,14 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <stdlib.h>	// srand
 //#include "Towers/Tower.h"
 //#include "Towers/ArcherTower.h"
 //#include "Towers/FreezeTower.h"
 //#include "Towers/CannonTower.h"
 #include "Enemies/Enemy.h"
 #include "Enemies/Goblin.h"
+#include "Enemies/Troll.h"
 #include "MapDirections.h"
 
 using namespace std;
@@ -66,6 +68,7 @@ int main( int argc, char* args[] )
 	
 	bool quit = false;	// Main loop flag
 	SDL_Event e;		// Event handler
+	srand(time(NULL));	// seed random generator
 
     // add directions for the specific map (must be hard-coded for each map)
 	MapDirections mapDirections;	// stores turning instructions for the map's path
@@ -114,7 +117,7 @@ int main( int argc, char* args[] )
 		SDL_Rect gTowerRect5 = getRect(gTower, TOWER_MAX_DIMENSION,750,435);
 		
 		double clockTime = clock() / (CLOCKS_PER_SEC / 1000);
-		
+
 		// if it is time for another enemy to be added
 		if(!allEnemiesAdded && enemies.size() < nEnemies && (clockTime - lastAddTime) >= ENEMY_TIME_DELAY) {
     		addEnemies(mapDirections);
@@ -289,10 +292,22 @@ int main( int argc, char* args[] )
 
 // adds enemies every ____seconds
 void addEnemies(MapDirections mapDirections) {
-	Goblin enemy(&gRenderer, mapDirections);
-	
-	enemies.push_back(enemy);
-
+	// create a new enemy randomly
+	int random = rand() % 2;
+	switch(random) {
+		case 0:
+		{
+			Goblin goblin(&gRenderer, mapDirections);
+			enemies.push_back(goblin);
+			break;
+		}
+		case 1:
+		{
+			Troll troll(&gRenderer, mapDirections);
+			enemies.push_back(troll);
+			break;
+		}
+	}	
 }
 
 /* Move all enemies in the enemies vector
