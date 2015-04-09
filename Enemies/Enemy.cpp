@@ -16,8 +16,9 @@ Enemy::Enemy(SDL_Renderer** gRendererPtr, MapDirections pathInfo)
     mPosX = ENEMY_MAX_DIMENSION/2;
     mPosY = 405;
 
-    //enemyRect = getRect(gEnemy, ENEMY_MAX_DIMENSION, mPosX, mPosY);
-
+    moveInterval = 120;         // move every 100 microseconds
+    gettimeofday(&tp, NULL);
+    lastMoveTime = (tp.tv_sec * 1000 + tp.tv_usec / 1000) - moveInterval;   // will trigger movement immediately
 }
 
 /* Not necessary
@@ -52,10 +53,16 @@ void Enemy::handleEvent( SDL_Event& e )
 */
 
 /* Move the enemy. Return false if the enemy is done moving (reached end of path)
- * Movement instructions come from MapDirections object)
+ * Movement instructions come from MapDirections object
+ * Only move every moveInterval number of milliseconds, to standardize movement across different computers
  */
 bool Enemy::move()
 { 
+    // check if it is time to move again or not
+    gettimeofday(&tp, NULL);
+    long int curTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
+    if(curTime - lastMoveTime < moveInterval) return true; // don't move unless it has been long enough
+
     if(mapDirections.isEnd() == false) {
 
         string curDirection = mapDirections.getDir();
@@ -75,6 +82,7 @@ bool Enemy::move()
             mPosY += ENEMY_VEL; 
             if(mPosY >= mapDirections.getStop()) mapDirections.next();
         }
+        lastMoveTime = curTime;     // track that enemy just moved so it doesn't move again before it is supposed to
         return true;
     } else {
         cout << "done moving" << endl;

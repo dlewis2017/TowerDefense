@@ -4,7 +4,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <time.h>
+#include <sys/time.h>
+#include <ctime>
 #include <stdlib.h>	// srand
 //#include "Towers/Tower.h"
 //#include "Towers/ArcherTower.h"
@@ -24,7 +25,7 @@ const int SCREEN_HEIGHT = 800;
 const int TOWER_MAX_DIMENSION = 70;
 const int ENEMY_MAX_DIMENSION = 60;
 const double MAX_DISTORTION = .57;		// decimal of max percentage
-const int ENEMY_TIME_DELAY = 1200;		// delay between enemies traversing the path, milliseconds
+const int ENEMY_TIME_DELAY = 5000;		// delay between enemies traversing the path, milliseconds
 
 // methods
 bool init();		//Starts up SDL and creates window
@@ -80,12 +81,14 @@ int main( int argc, char* args[] )
     mapDirections.setNext("up", 330);
     mapDirections.setNext("right", SCREEN_WIDTH);
 
-    int nEnemies = 2;
-    double lastAddTime;	// keep track of last time that an enemy was added
+    int nEnemies = 3;
     bool allEnemiesAdded = false;
 
     // add first enemy immediately
-    lastAddTime = clock() / (CLOCKS_PER_SEC / 1000);	// milliseconds conversion
+    struct timeval tp;			// allows for milliseconds of current time
+    gettimeofday(&tp, NULL);
+    long int clockTime;			// used to track current time
+	long int lastAddTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
     addEnemies(mapDirections);
 
 	//While application is running
@@ -116,9 +119,13 @@ int main( int argc, char* args[] )
 		SDL_Rect gTowerRect4 = getRect(gTower, TOWER_MAX_DIMENSION,500,600);
 		SDL_Rect gTowerRect5 = getRect(gTower, TOWER_MAX_DIMENSION,750,435);
 		
-		double clockTime = clock() / (CLOCKS_PER_SEC / 1000);
+		// set timing to correctly space enemies
+		if(!allEnemiesAdded) {
+			gettimeofday(&tp, NULL);
+			clockTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
+		}
 
-		// if it is time for another enemy to be added
+		// check if it is time for another enemy to be added
 		if(!allEnemiesAdded && enemies.size() < nEnemies && (clockTime - lastAddTime) >= ENEMY_TIME_DELAY) {
     		addEnemies(mapDirections);
     		lastAddTime = clockTime;
