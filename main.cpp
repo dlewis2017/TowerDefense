@@ -92,10 +92,12 @@ int main( int argc, char* args[] )
 	long int lastAddTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
     addEnemies(mapDirections);
 
+    TowerSelector towerSelector(&gRenderer, 100, 100);
+
 	//While application is running
 	while( !quit )
 	{
-		int x,y;
+		int x,y;	// x and y locations of mouseclick 
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
@@ -108,6 +110,8 @@ int main( int argc, char* args[] )
 			//If mouse click occurs, place image where mouse was clicked
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 				SDL_GetMouseState(&x,&y);
+				// pass x and y mouse click coordinates to TowerSelector objects
+				towerSelector.handleMouseClick(x, y);
 
 			}
 		}
@@ -286,6 +290,7 @@ int main( int argc, char* args[] )
 
 
 		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
+		towerSelector.render();
 
 		//Update screen
 		SDL_RenderPresent( gRenderer );
