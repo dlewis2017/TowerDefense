@@ -23,6 +23,8 @@ public:
 
 private:
 	SDL_Renderer** gRenderer;	// double pointer to renderer
+	
+protected:
 	int MAX_DIMENSION;
 	double MAX_DISTORTION;		// decimal of max percentage
 };

@@ -11,6 +11,7 @@
 //#include "Towers/ArcherTower.h"
 //#include "Towers/FreezeTower.h"
 //#include "Towers/CannonTower.h"
+#include "Towers/TowerSelector.h"
 #include "Enemies/Enemy.h"
 #include "Enemies/Goblin.h"
 #include "Enemies/Troll.h"
@@ -19,7 +20,7 @@
 using namespace std;
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 1100;
+const int SCREEN_WIDTH = 900;
 const int SCREEN_HEIGHT = 800;
 
 const int TOWER_MAX_DIMENSION = 70;
