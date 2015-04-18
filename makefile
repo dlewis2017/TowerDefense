@@ -17,13 +17,16 @@ OBJ_NAMES = main
 #This is the target that compiles our executable
 all: main
 
-main: main.o Enemy.o Goblin.o Troll.o MapDirections.o
-	$(CC) main.o Enemy.o Goblin.o Troll.o MapDirections.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o main
+main: main.o Enemy.o Goblin.o Troll.o MapDirections.o Object.o
+	$(CC) main.o Object.o Enemy.o Goblin.o Troll.o MapDirections.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o main
 
 main.o: main.cpp
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c main.cpp
 
-Enemy.o: Enemies/Enemy.cpp Enemies/Enemy.h MapDirections.cpp MapDirections.h
+Object.o: Object.cpp Object.h
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Object.cpp
+
+Enemy.o: Enemies/Enemy.cpp Enemies/Enemy.h MapDirections.cpp MapDirections.h Object.h
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Enemies/Enemy.cpp
 
 Goblin.o: Enemies/Goblin.cpp Enemies/Goblin.h MapDirections.cpp MapDirections.h
