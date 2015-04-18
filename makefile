@@ -15,7 +15,7 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image
 OBJ_NAMES = main
 
 #This is the target that compiles our executable
-all: main cleanObjs
+all: main
 
 main: main.o Enemy.o Goblin.o Troll.o MapDirections.o
 	$(CC) main.o Enemy.o Goblin.o Troll.o MapDirections.o $(COMPILER_FLAGS) $(LINKER_FLAGS) -o main
