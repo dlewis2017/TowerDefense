@@ -13,29 +13,45 @@
 #include <stdio.h>
 #include <string>
 #include <sys/time.h>
+#include <vector>
 #include "../MapDirections.h"
 #include "Tower.h"
 #include "WizardTower.h"
 #include "ArcherTower.h"
 #include "CannonTower.h"
 #include "FreezeTower.h"
+#include "../Object.h"
 
-class TowerSpace : public Tower {
+class TowerSpace : public Object {
 	public:
 		//constructor creates a blank tower at a set location at the beginning of the main program
-		TowerSpace(double, double,  SDL_Texture*, SDL_Renderer*);
+		TowerSpace(SDL_Renderer*, double, double);
 		//destructor, called when the tower is to be replaced with a specific tower
 		//~TowerSpace();
 		//SDL loading media
 		//isClicked();//tells is tower is clicked based on its X and Y location
 		bool dispDropDown(double xclick, double yclick, SDL_Texture* gWizardTower, SDL_Texture* gArcherTower, SDL_Texture* gCannonTower, SDL_Texture* gFreezeTower, SDL_Renderer* gRenderer);//displays the dropdown menu of options
-		bool handleKeyPress(SDL_Event tower_choice);
+		bool handleKeyPress(SDL_Event tower_choice, *vector<TowerSpace>, *vector<Tower>);
+		void render();
+
 	private:
 		//holds x and y values for position
 		double towerX;
 		double towerY;
-		SDL_Texture* towerTexture; 
-		SDL_Renderer* towerRenderer;
+		SDL_Texture towerTexture; 
+		SDL_Rect towerRect;
+		SDL_Renderer** towerRenderer;
 		double TOWER_MAX_DIMENSION;
+		
+		SDL_Texture gWizardTower;
+		SDL_Texture gArcherTower;
+		SDL_Texture gCannonTower;
+		SDL_Texture gFreezeTower;
+
+		SDL_Rect gWizardTowerRect;
+		SDL_Rect gArcherTowerRect;
+		SDL_Rect gCannonTowerRect;
+		SDL_Rect gFreezeTowerRect;
+
 };
 #endif
