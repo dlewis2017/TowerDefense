@@ -37,4 +37,8 @@ int ArcherTower::getCost()
 {
 	return cost;
 }
-	
+void ArcherTower::displayTower()
+{
+
+
+}
