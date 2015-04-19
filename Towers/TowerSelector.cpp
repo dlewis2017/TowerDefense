@@ -21,5 +21,4 @@ void TowerSelector::handleMouseClick( int x, int y )
     mouseClickY = y;
     cout << "Mouseclick: x=" << mouseClickX << "  y=" << mouseClickY << endl;
 
-
 }

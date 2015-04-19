@@ -24,7 +24,7 @@ class TowerSelector : Object
 		SDL_Renderer** gRenderer;	// double pointer to renderer
 		SDL_Texture* gTower;		// image of empty tower
 		SDL_Rect towerRect;			// container for tower image. Has positioning properties (x and y location)
-		int xPos;
+		int xPos;					// x and y coordinates of the position of the TowerSelector
 		int yPos;
 		int mouseClickX;			// x and y coordinates of mouse click
 		int mouseClickY;
