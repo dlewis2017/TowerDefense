@@ -13,6 +13,7 @@
 //#include "Towers/FreezeTower.h"
 //#include "Towers/CannonTower.h"
 #include "Towers/TowerSelector.h"
+#include "Towers/WizardTower.h"
 #include "Enemies/Enemy.h"
 #include "Enemies/Goblin.h"
 #include "Enemies/Troll.h"
@@ -111,12 +112,12 @@ int main( int argc, char* args[] )
 			//If mouse click occurs, place image where mouse was clicked
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 				SDL_GetMouseState(&x,&y);
-<<<<<<< HEAD
-=======
+
+
 				// pass x and y mouse click coordinates to TowerSelector objects
 				towerSelector.handleMouseClick(x, y);
 
->>>>>>> b06759fb3c456fe1e67c215134b9f2fc1c2460c1
+
 			}
 		}
 
