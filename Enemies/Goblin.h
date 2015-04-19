@@ -18,17 +18,7 @@ class Goblin : public Enemy {
 		Goblin(SDL_Renderer **gRenderer, MapDirections pathInfo);  // constructor
 
 	private:
-		/*SDL_Texture* gGoblin;		// image of enemy
-		SDL_Renderer** gRenderer;	// double pointer to screen surface
-		SDL_Rect goblinRect;			// container for enemy image. Has positioning properties (x and y location)
-
-		double mPosX, mPosY;  	// The X and Y positions of the enemy
-
-		int ENEMY_MAX_DIMENSION;
-		double MAX_DISTORTION;		// decimal of max percentage
-
-		MapDirections mapDirections;	// object to hold information to know when the Enemy should turn on the path
-	*/
+	
 };
 
 #endif

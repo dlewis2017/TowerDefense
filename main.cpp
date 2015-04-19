@@ -12,6 +12,7 @@
 //#include "Towers/ArcherTower.h"
 //#include "Towers/FreezeTower.h"
 //#include "Towers/CannonTower.h"
+#include "Towers/TowerSelector.h"
 #include "Enemies/Enemy.h"
 #include "Enemies/Goblin.h"
 #include "Enemies/Troll.h"
@@ -26,7 +27,7 @@ const int SCREEN_HEIGHT = 800;
 const int TOWER_MAX_DIMENSION = 70;
 const int ENEMY_MAX_DIMENSION = 60;
 const double MAX_DISTORTION = .57;		// decimal of max percentage
-const int ENEMY_TIME_DELAY = 5000;		// delay between enemies traversing the path, milliseconds
+const int ENEMY_TIME_DELAY = 6500;		// delay between enemies traversing the path, milliseconds
 
 // methods
 bool init();		//Starts up SDL and creates window
@@ -74,12 +75,12 @@ int main( int argc, char* args[] )
 
     // add directions for the specific map (must be hard-coded for each map)
 	MapDirections mapDirections;	// stores turning instructions for the map's path
-    mapDirections.setNext("right", 127);
-    mapDirections.setNext("up", 170);
-    mapDirections.setNext("right", 310);
-    mapDirections.setNext("down", 489);
-    mapDirections.setNext("right", 547);
-    mapDirections.setNext("up", 330);
+    mapDirections.setNext("right", .1411*SCREEN_WIDTH);
+    mapDirections.setNext("up", .2125*SCREEN_HEIGHT);
+    mapDirections.setNext("right", .3444*SCREEN_WIDTH);
+    mapDirections.setNext("down", .6113*SCREEN_HEIGHT);
+    mapDirections.setNext("right", .6078*SCREEN_WIDTH);
+    mapDirections.setNext("up", .4125*SCREEN_HEIGHT);
     mapDirections.setNext("right", SCREEN_WIDTH);
 
     int nEnemies = 3;
@@ -92,10 +93,12 @@ int main( int argc, char* args[] )
 	long int lastAddTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
     addEnemies(mapDirections);
 
+    TowerSelector towerSelector(&gRenderer, 100, 100);
+
 	//While application is running
 	while( !quit )
 	{
-		int x,y;
+		int x,y;	// x and y locations of mouseclick 
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
@@ -108,6 +111,12 @@ int main( int argc, char* args[] )
 			//If mouse click occurs, place image where mouse was clicked
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 				SDL_GetMouseState(&x,&y);
+<<<<<<< HEAD
+=======
+				// pass x and y mouse click coordinates to TowerSelector objects
+				towerSelector.handleMouseClick(x, y);
+
+>>>>>>> b06759fb3c456fe1e67c215134b9f2fc1c2460c1
 			}
 		}
 
@@ -321,6 +330,7 @@ int main( int argc, char* args[] )
 */
 
 		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
+		towerSelector.render();
 
 		//Update screen
 		SDL_RenderPresent( gRenderer );
