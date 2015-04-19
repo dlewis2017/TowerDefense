@@ -131,17 +131,18 @@ int main( int argc, char* args[] )
 
 
 			}
-		SDL_Event tower_choice;
-		for(int i=0;i<towerSpaces.size();i++){
-			if (towerSpaces[i].dispDropDown(x,y)){
-				while(SDL_PollEvent(&tower_choice) != 0){
-                                        if(tower_choice.type == SDL_KEYDOWN){
-                                                towerSpaces[i].handleKeyPress(tower_choice,&towerSpaces,&towers);
-                                        }
-                                        else break;
-                                }
-                        }
-		}
+			SDL_Event tower_choice;
+			for(int i=0;i<towerSpaces.size();i++){
+				if (towerSpaces[i].dispDropDown(x,y)){
+					while(SDL_PollEvent(&tower_choice) != 0){
+	                                        if(tower_choice.type == SDL_KEYDOWN){
+	                                                towerSpaces[i].handleKeyPress(tower_choice,&towerSpaces,&towers);
+	                                        }
+	                                        else break;
+	                                }
+	                        }
+			}
+		}	
 		// set timing to correctly space enemies
 		if(!allEnemiesAdded) {
 			gettimeofday(&tp, NULL);

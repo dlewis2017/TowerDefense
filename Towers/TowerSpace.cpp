@@ -6,23 +6,23 @@
 */
 #include "TowerSpace.h"
 
-TowerSpace::TowerSpace(SDL_Renderer** gRenderer, double xpos, double ypos)
+TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, double xpos, double ypos) : Object(gRendererPtr)
 {
 	towerX = xpos;
 	towerY = ypos;
 	TOWER_MAX_DIMENSION = 70;
 
 	towerTexture = loadTexture("img/TowerSymbol.png");
-	SDL_Rect gTowerRect = getRect(tspace, TOWER_MAX_DIMENSION, towerX, towerY);
+	SDL_Rect gTowerRect = getRect(towerTexture, TOWER_MAX_DIMENSION, towerX, towerY);
 	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
 	
-	towerRenderer = gRenderer;
+	towerRenderer = gRendererPtr;
 
 	// create textures for each tower type
-	SDL_Texture gWizardTower = loadTexture("img/wizardTower.png");
-	SDL_Texture gArcherTower = loadTexture("img/archerTower.png");
-	SDL_Texture gCannonTower = loadTexture("img/cannonTower.png");
-	SDL_Texture gFreezeTower = loadTexture("img/freezeTower.png");
+	gWizardTower = loadTexture("img/wizardTower.png");
+	gArcherTower = loadTexture("img/archerTower.png");
+	gCannonTower = loadTexture("img/cannonTower.png");
+	gFreezeTower = loadTexture("img/freezeTower.png");
 
 	//create containers for each image which specifies its size and location
 	SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY+TOWER_MAX_DIMENSION );
@@ -49,7 +49,7 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 		return true;	
 	} else return false;
 }
-bool TowerSpace::handleKeyPress(SDL_Event tower_choice, *vector<TowerSpace>, *vector<Tower>)
+bool TowerSpace::handleKeyPress(SDL_Event tower_choice, *v ector<TowerSpace>, * vector<Tower>)
 {
 	switch( tower_choice.key.keysym.sym )
         {
