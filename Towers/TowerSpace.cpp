@@ -50,22 +50,23 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 		return true;	
 	} else return false;
 }
-bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, vector<Tower> *towers)
+
+/* takes in an SDL_Event, a pointer to the towerSpaces vector, and a pointer to the towers vector from main.cpp
+ * If a valid key is pressed to create a new tower, the TowerSpace is removed, and a new Tower is created
+ * and a pointer to it is added pushed onto the towers vector
+ */
+bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, vector<Tower*> *towers)
 {
-	if (e.key.keysym.sym == SDLK_w || e.key.keysym.sym == SDLK_a || e.key.keysym.sym == SDLK_c || e.key.keysym.sym == SDLK_f) {
-		//removes the specific towerSpace that was selected
-		for (int i=0;i<(*towerSpaces).size();i++){
-			if ((*towerSpaces)[i].getX() == towerX && (*towerSpaces)[i].getY() == towerY) {
-				(*towerSpaces).erase((*towerSpaces).begin() + i);
-			}
-		}
-	}
-	//adds a specific type of tower to the towers vector
+	// adds a specific type of tower to the towers vector
+	// objects are instantiated using operator new, adding the object to the HEAP
+	// this means the Towers will need to be explicitely deleted later to prevent a memory leak.
 	switch (e.key.keysym.sym){
 		case SDLK_w:
 		{
-			WizardTower Wiz(towerRenderer, towerX, towerY);
-			(*towers).push_back(Wiz);
+			// create a new WizardTower on the HEAP
+			// this means delete MUST be called on the object later, or else there will be a memory leak
+			WizardTower* Wiz = new WizardTower(towerRenderer, towerX, towerY);
+			towers->push_back(Wiz);
 			break;
 		}
 		case SDLK_a:
@@ -88,6 +89,16 @@ bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, ve
         }
 		default:
 			return false;
+	}
+
+	// if valid key was selected (a new tower was created), remove the TowerSpace
+	if (e.key.keysym.sym == SDLK_w || e.key.keysym.sym == SDLK_a || e.key.keysym.sym == SDLK_c || e.key.keysym.sym == SDLK_f) {
+		//removes the specific towerSpace that was selected
+		for (int i=0;i<(*towerSpaces).size();i++){
+			if ((*towerSpaces)[i].getX() == towerX && (*towerSpaces)[i].getY() == towerY) {
+				(*towerSpaces).erase((*towerSpaces).begin() + i);
+			}
+		}
 	}
 	return true;
 }

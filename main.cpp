@@ -54,7 +54,7 @@ SDL_Texture* gFreezeTower = NULL;
 SDL_Texture* gTower = NULL;
 vector<Enemy> enemies;				// stores all enemies
 vector<TowerSpace> towerSpaces;
-vector<Tower> towers;
+vector<Tower*> towers;
 
 int main( int argc, char* args[] )
 {
@@ -125,7 +125,6 @@ int main( int argc, char* args[] )
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 				SDL_GetMouseState(&x,&y);
 
-
 				// pass x and y mouse click coordinates to TowerSelector objects
 				towerSelector.handleMouseClick(x, y);
 
@@ -159,17 +158,20 @@ int main( int argc, char* args[] )
 		}
 		for (int i=0;i<towers.size();i++)
 		{
-			towers[i].render();
+			towers[i]->render();
 		}
+		
 		SDL_Event tower_choice;
+		
 		for(int i=0;i<towerSpaces.size();i++){
 			if (towerSpaces[i].dispDropDown(x,y)){
-				while(SDL_PollEvent(&tower_choice) != 0){
-	                if(tower_choice.type == SDL_KEYDOWN){
-	                    towerSpaces[i].handleKeyPress(tower_choice,&towerSpaces,&towers);
-	                }
-	                else break;
-	            }
+				if(SDL_PollEvent(&tower_choice) != 0) {;
+					if(tower_choice.type == SDL_KEYDOWN ){
+		               // if(tower_choice.type == SDL_KEYDOWN){
+		                    if( towerSpaces[i].handleKeyPress(tower_choice, &towerSpaces, &towers)) break;
+		               // }
+		            }
+		        }
 	        }
 		}
 
