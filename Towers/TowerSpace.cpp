@@ -26,10 +26,10 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, double xpos, double ypos) : 
 	gFreezeTower = loadTexture("img/freezeTower.png");
 
 	//create containers for each image which specifies its size and location
-	SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY+TOWER_MAX_DIMENSION );
-	SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY+2*TOWER_MAX_DIMENSION );
-	SDL_Rect gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY+3*TOWER_MAX_DIMENSION );
-	SDL_Rect gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY+4*TOWER_MAX_DIMENSION );
+	gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY+TOWER_MAX_DIMENSION );
+	gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY+2*TOWER_MAX_DIMENSION );
+	gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY+3*TOWER_MAX_DIMENSION );
+	gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY+4*TOWER_MAX_DIMENSION );
 
 }
 
@@ -47,6 +47,7 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 		SDL_RenderCopy( *towerRenderer, gArcherTower, NULL, &gArcherTowerRect);
 		SDL_RenderCopy( *towerRenderer, gCannonTower, NULL, &gCannonTowerRect);
 		SDL_RenderCopy( *towerRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
+		cout << "clicked on image... should display drop down" << endl;
 		return true;	
 	} else return false;
 }

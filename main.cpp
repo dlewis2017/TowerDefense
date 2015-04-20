@@ -131,17 +131,7 @@ int main( int argc, char* args[] )
 
 
 			}
-			SDL_Event tower_choice;
-			for(int i=0;i<towerSpaces.size();i++){
-				if (towerSpaces[i].dispDropDown(x,y)){
-					while(SDL_PollEvent(&tower_choice) != 0){
-	                                        if(tower_choice.type == SDL_KEYDOWN){
-	                                                towerSpaces[i].handleKeyPress(tower_choice,&towerSpaces,&towers);
-	                                        }
-	                                        else break;
-	                                }
-	                        }
-			}
+			
 		}	
 		// set timing to correctly space enemies
 		if(!allEnemiesAdded) {
@@ -168,6 +158,17 @@ int main( int argc, char* args[] )
 			towerSpaces[i].render();
 		}
 
+		SDL_Event tower_choice;
+		for(int i=0;i<towerSpaces.size();i++){
+			if (towerSpaces[i].dispDropDown(x,y)){
+				while(SDL_PollEvent(&tower_choice) != 0){
+	                if(tower_choice.type == SDL_KEYDOWN){
+	                    towerSpaces[i].handleKeyPress(tower_choice,&towerSpaces,&towers);
+	                }
+	                else break;
+	            }
+	        }
+		}
 
 		towerSelector.render();
 
@@ -364,7 +365,7 @@ bool init()
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		gWindow = SDL_CreateWindow( "Tower Defense", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 		if( gWindow == NULL )
 		{
 			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
