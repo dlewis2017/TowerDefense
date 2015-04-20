@@ -53,6 +53,8 @@ SDL_Texture* gCannonTower = NULL;
 SDL_Texture* gFreezeTower = NULL;
 SDL_Texture* gTower = NULL;
 vector<Enemy> enemies;				// stores all enemies
+vector<TowerSpace> towerSpaces;
+vector<Tower> towers;
 
 int main( int argc, char* args[] )
 {
@@ -96,6 +98,16 @@ int main( int argc, char* args[] )
 
     TowerSelector towerSelector(&gRenderer, 100, 100);
 
+	TowerSpace tower1(&gRenderer,80,360);
+	TowerSpace tower2(&gRenderer,220,275);
+	TowerSpace tower3(&gRenderer,400,440);
+	TowerSpace tower4(&gRenderer,570,285);
+	TowerSpace tower5(&gRenderer,750,435);
+	towerSpaces.push_back(tower1);
+	towerSpaces.push_back(tower2);
+	towerSpaces.push_back(tower3);
+	towerSpaces.push_back(tower4);
+	towerSpaces.push_back(tower5);
 	//While application is running
 	while( !quit )
 	{
@@ -119,217 +131,39 @@ int main( int argc, char* args[] )
 
 
 			}
+		SDL_Event tower_choice;
+		for(int i=0;i<towerSpaces.size();i++){
+			if (towerSpaces[i].dispDropDown(x,y)){
+				while(SDL_PollEvent(&tower_choice) != 0){
+                                        if(tower_choice.type == SDL_KEYDOWN){
+                                                towerSpaces[i].handleKeyPress(tower_choice,&towerSpaces,&towers);
+                                        }
+                                        else break;
+                                }
+                        }
 		}
-
-
-		// create containers for each image which specifies its size and location
-		//SDL_Rect gTowerRect1 = getRect(gTower, TOWER_MAX_DIMENSION,80,360);
-		//SDL_Rect gTowerRect2 = getRect(gTower, TOWER_MAX_DIMENSION,220,275);
-		//SDL_Rect gTowerRect3 = getRect(gTower, TOWER_MAX_DIMENSION,400,440);
-		//SDL_Rect gTowerRect4 = getRect(gTower, TOWER_MAX_DIMENSION,500,600);
-		//SDL_Rect gTowerRect5 = getRect(gTower, TOWER_MAX_DIMENSION,750,435);
-		
 		// set timing to correctly space enemies
 		if(!allEnemiesAdded) {
 			gettimeofday(&tp, NULL);
 			clockTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
 		}
-
 		// check if it is time for another enemy to be added
 		if(!allEnemiesAdded && enemies.size() < nEnemies && (clockTime - lastAddTime) >= ENEMY_TIME_DELAY) {
     		addEnemies(mapDirections);
     		lastAddTime = clockTime;
     		if(enemies.size() == nEnemies) allEnemiesAdded = true;
-    	}
+		}
+		//iterates through the towerSpaces vector and adds the ones currently in it
+		for (int i=0;i<towerSpaces.size();i++)
+		{
+			towerSpaces[i].render();
+		}
 		moveEnemies();	// moves all enemies in enemies vector (updates position)
-
 		//Clear screen
 		SDL_RenderClear( gRenderer );
 
 		//Render texture to screen
 		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
-		
-		bool T1 = true, T2 = true, T3 = true, T4 = true, T5 = true;
-		SDL_Event tower_choice;
-
-		if (T1) {
-		TowerSpace tower1(80,360,gTower,gRenderer);
-		SDL_Event tower_choice;
-			if (tower1.dispDropDown(x,y,gWizardTower,gArcherTower,gCannonTower,gFreezeTower,gRenderer)){
-				while( SDL_PollEvent( &tower_choice) != 0){
-					if(tower_choice.type == SDL_KEYDOWN){
-						T1 = tower1.handleKeyPress(tower_choice);
-					}
-					else break;
-				}
-			}
-		}
-
-		if(T2){
-			TowerSpace tower2(220,275,gTower,gRenderer);
-			if(tower2.dispDropDown(x,y,gWizardTower,gArcherTower,gCannonTower,gFreezeTower,gRenderer)){
-				while( SDL_PollEvent( &tower_choice) != 0){
-					if(tower_choice.type == SDL_KEYDOWN){
-						T2 = tower2.handleKeyPress(tower_choice);
-					}
-					else break;
-				}
-			}
-		}	
-		if(T3){
-			TowerSpace tower3(400,440,gTower,gRenderer);
-			if(tower3.dispDropDown(x,y,gWizardTower,gArcherTower,gCannonTower,gFreezeTower,gRenderer)){
-				while( SDL_PollEvent( &tower_choice) != 0){
-					if(tower_choice.type == SDL_KEYDOWN){
-						T3 = tower3.handleKeyPress(tower_choice);
-					}
-					else break;
-				}
-			}
-		}
-		if(T4){
-			TowerSpace tower4(570,285,gTower,gRenderer);
-			if(tower4.dispDropDown(x,y,gWizardTower,gArcherTower,gCannonTower,gFreezeTower,gRenderer)){
-				while( SDL_PollEvent( &tower_choice) != 0){
-					if(tower_choice.type == SDL_KEYDOWN){
-						T4 = tower4.handleKeyPress(tower_choice);
-					}
-					else break;
-				}
-			}
-		}
-		if(T5){
-			TowerSpace tower5(750,435,gTower,gRenderer);
-			if(tower5.dispDropDown(x,y,gWizardTower,gArcherTower,gCannonTower,gFreezeTower,gRenderer)){
-				while( SDL_PollEvent( &tower_choice) != 0){
-					if(tower_choice.type == SDL_KEYDOWN){
-						T5 = tower5.handleKeyPress(tower_choice);
-					}
-					else break;
-				}
-			}
-		}	
-		
-
-		/*If w is pressed destroy Tower Space and replace it with a new wizard tower object*/
-
-		/*SDL_Event tower_choice;		// Event handler
-		//Handle events on queue
-                while( SDL_PollEvent( &tower_choice ) != 0 )
-                {
-                    //User requests quit
-                    if( tower_choice.type == SDL_QUIT )
-                    {
-                        quit = true;
-                    }
-                    //User presses a key
-                    else if( tower_choice.type == SDL_KEYDOWN )
-                    {
-                        //Select surfaces based on key press
-                        switch( tower_choice.key.keysym.sym )
-                        {
-                            case SDLK_w:
-                            	WizardTower tower1
-                            	break;
-
-                            case SDLK_A:
-                            	gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_DOWN ];
-                            	break;
-
-                            case SDLK_C:
-                            	gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_LEFT ];
-                            	break;
-
-                            case SDLK_F:
-                            	gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_RIGHT ];
-                            	break;
-
-                            default:
-                            	break;
-                        }
-                    }
-                }
-
-
-			}
-		}*/
-
-		//SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect2);
-		//SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect3);
-		//SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect4);
-		//SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect5);
-
-/*
-		int trigger1; //used to determine which tower was clicked on first tower symbol
-		//if tower1 symbol is clicked, then open up tower options menu (x and y based on top left corner of image (hence x-35,y-35 [35 = 1/2 of TOWER_MAX_DIMENSION])
-		if( (x >= 80-35 && x <= 80-35+TOWER_MAX_DIMENSION) && (y >= 360-35 && y <= 360-35+TOWER_MAX_DIMENSION) ){
-			//create containers for each image which specifies its size and location
-			SDL_Rect gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,80,360+TOWER_MAX_DIMENSION );
-			SDL_Rect gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,80,360+2*TOWER_MAX_DIMENSION );
-			SDL_Rect gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,80,360+3*TOWER_MAX_DIMENSION );
-			SDL_Rect gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,80,360+4*TOWER_MAX_DIMENSION );
-
-			//open texutre on screen without rendering
-			SDL_RenderCopy( gRenderer, gWizardTower, NULL, &gWizardTowerRect);
-			SDL_RenderCopy( gRenderer, gArcherTower, NULL, &gArcherTowerRect);
-			SDL_RenderCopy( gRenderer, gCannonTower, NULL, &gCannonTowerRect);
-			SDL_RenderCopy( gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
-
-			//wait for second event
-			//Handle events on queue
-			SDL_Event e2;
-			while( SDL_PollEvent( &e2 ) != 0 )
-			{
-				//User requests quit
-				if( e2.type == SDL_QUIT )
-				{
-					quit = true;
-				}
-
-				int x2, y2;
-				//If mouse click occurs, place image where mouse was clicked
-				if(e2.type == SDL_MOUSEBUTTONDOWN){
-					SDL_GetMouseState(&x2,&y2);
-					if( (x2>= 80-35 && x2 <= 80-35+TOWER_MAX_DIMENSION) && (y2 >= 360-35+TOWER_MAX_DIMENSION && y2 <= 360-35+2*TOWER_MAX_DIMENSION) ){
-						trigger1 = 1; //if wizard tower clicked
-						break;
-					}
-					else if( (x2>= 80-35 && x2 <= 80-35+TOWER_MAX_DIMENSION) && (y2 >= 360-35+2*TOWER_MAX_DIMENSION && y2 <= 360-35+3*TOWER_MAX_DIMENSION) ){
-						trigger1 = 2; //if archer tower clicked
-						break;
-					}
-					else if( (x2>= 80-35 && x2 <= 80-35+TOWER_MAX_DIMENSION) && (y2 >= 360-35+3*TOWER_MAX_DIMENSION && y2 <= 360-35+4*TOWER_MAX_DIMENSION) ){
-						trigger1 = 3; //if cannon tower clicked
-						break;
-					}
-					else if( (x2>= 80-35 && x2 <= 80-35+TOWER_MAX_DIMENSION) && (y2 >= 360-35+4*TOWER_MAX_DIMENSION && y2 <= 360-35+5*TOWER_MAX_DIMENSION) ){
-						trigger1 = 4; //if freeze tower clicked
-						break;
-					}
-				}
-				break;//get out of second event waiting loop
-			}
-
-		}
-		switch(trigger1){
-			case 1:
-				SDL_RenderCopy(gRenderer, gWizardTower, NULL, &gTowerRect1);
-				break;
-			case 2:
-				SDL_RenderCopy(gRenderer, gArcherTower, NULL, &gTowerRect1);
-				break;
-			case 3:
-				SDL_RenderCopy(gRenderer, gCannonTower, NULL, &gTowerRect1);
-				break;
-			case 4:
-				SDL_RenderCopy(gRenderer, gFreezeTower, NULL, &gTowerRect1);
-				break;
-			default:
-				SDL_RenderCopy( gRenderer, gTower, NULL, &gTowerRect1 );
-				break;
-		}
-*/
-
 		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
 		towerSelector.render();
 
@@ -337,7 +171,6 @@ int main( int argc, char* args[] )
 		SDL_RenderPresent( gRenderer );
 
 	}
-		
 	//Free resources and close SDL
 	close();
 
