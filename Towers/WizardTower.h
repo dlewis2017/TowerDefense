@@ -7,18 +7,24 @@
 #ifndef WIZARDTOWER_H
 #define WIZARDTOWER_H
 
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <string>
 #include "Tower.h"
+//#include "../Object.h"
 #include <iostream>
+//#include ""
 using namespace std;
 
 class WizardTower : public Tower {
 public:
-        WizardTower(double, double, SDL_Texture*, SDL_Renderer*);  //constructor with the position as argument
+        WizardTower( SDL_Renderer** gRenderer, double xpos, double ypos); //constructor with the position as argument
         //void attack();  //implement this with archer tower specific graphics
         //void target();  //may or may not need to implement since it is already a single-targeting tower
         //double getDPS();    //returns damage times attack speed (damage per second)
         //double getRadius(); //returns distance the tower can fire
         //int getCost();   //returns cost to build tower
+        void render();
 
 private:
         double damage;
