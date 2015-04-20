@@ -44,14 +44,6 @@ SDL_Texture* loadTexture( std::string path );	//Loads individual image as textur
 SDL_Window* gWindow = NULL;			//The window we'll be rendering to
 SDL_Renderer* gRenderer = NULL;		//The window renderer
 SDL_Texture* gBackground = NULL;		//Current displayed texture
-SDL_Texture* gGoblin = NULL;
-SDL_Texture* gTroll = NULL;
-SDL_Texture* gWizard = NULL;
-SDL_Texture* gWizardTower = NULL;
-SDL_Texture* gArcherTower = NULL;
-SDL_Texture* gCannonTower = NULL;
-SDL_Texture* gFreezeTower = NULL;
-SDL_Texture* gTower = NULL;
 vector<Enemy> enemies;				// stores all enemies
 vector<TowerSpace> towerSpaces;
 vector<Tower*> towers;
@@ -162,7 +154,7 @@ int main( int argc, char* args[] )
 		}
 		
 		SDL_Event tower_choice;
-		
+
 		for(int i=0;i<towerSpaces.size();i++){
 			if (towerSpaces[i].dispDropDown(x,y)){
 				if(SDL_PollEvent(&tower_choice) != 0) {;
@@ -278,20 +270,11 @@ bool loadMedia()
 	bool success = true;
 
 	//Load PNG texture
-	gGoblin = loadTexture("img/goblin.png");
-	gTroll = loadTexture("img/troll.png");
-	gWizard = loadTexture("img/wizard.png");
 	gBackground = loadTexture("img/towerDefenseBackground.bmp");
-	gWizardTower = loadTexture("img/wizardTower.png");
-	gArcherTower = loadTexture("img/archerTower.png");
-	gCannonTower = loadTexture("img/cannonTower.png");
-	gFreezeTower = loadTexture("img/freezeTower.png");
-	gTower = loadTexture("img/TowerSymbol.png");
 
-	if(gBackground==NULL || gWizardTower==NULL || gArcherTower==NULL 
-		|| gGoblin==NULL || gTroll == NULL || gTower == NULL)
+	if(gBackground==NULL)
 	{
-		printf( "Failed to a load texture image!\n" );
+		printf( "Failed to a load background texture image!\n" );
 		success = false;
 	}
 
@@ -334,8 +317,10 @@ void close()
 	//Free loaded image
 	SDL_DestroyTexture( gBackground );
 	gBackground = NULL;
-	SDL_DestroyTexture( gGoblin );
-	gGoblin = NULL;
+	for(int i = 0; i < towers.size(); i++) {	// delete all Towers (living in the heap)
+		delete towers[i];
+	}
+	towerSpaces.clear();	// delete all towerSpaces
 
 	//Destroy window	
 	SDL_DestroyRenderer( gRenderer );
