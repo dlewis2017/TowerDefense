@@ -10,10 +10,7 @@ Tower::Tower(SDL_Renderer** gRendererPtr) : Object(gRendererPtr) {
 	gRendererr = gRendererPtr;
 }
 
-void Tower::render()
-{
-	cout << "tower render" << endl;
-}
+
 /*bool Tower::inRange(double X, double Y, double rad)
 {
 	//X and Y represent position of Tower

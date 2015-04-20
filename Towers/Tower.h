@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <string>
 #include "../Enemies/Enemy.h"
-#include "../MapDirections.h"
 #include "../Object.h"
 #include <iostream>
 using namespace std;
@@ -25,7 +24,7 @@ class Tower : public Object {
     	//virtual double getDPS() = 0;//returns damage times attack speed (damage per second)
     	//virtual double getRadius() = 0;//returns distance the tower can fire
     	//int getCost() = 0;//returns cost to build tower
-    	virtual void render();
+    	virtual void render() = 0;     // makes Tower class abstract
 
     private: 
     	SDL_Renderer** gRendererr;	// double pointer to renderer
