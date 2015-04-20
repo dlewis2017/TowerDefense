@@ -157,7 +157,10 @@ int main( int argc, char* args[] )
 		{
 			towerSpaces[i].render();
 		}
-
+		for (int i=0;i<towers.size();i++)
+		{
+			towers[i].render();
+		}
 		SDL_Event tower_choice;
 		for(int i=0;i<towerSpaces.size();i++){
 			if (towerSpaces[i].dispDropDown(x,y)){

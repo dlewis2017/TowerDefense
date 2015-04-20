@@ -25,7 +25,7 @@ class Tower : public Object {
     	//virtual double getDPS() = 0;//returns damage times attack speed (damage per second)
     	//virtual double getRadius() = 0;//returns distance the tower can fire
     	//int getCost() = 0;//returns cost to build tower
-    	void render();
+    	virtual void render();
 
     private: 
     	SDL_Renderer** gRendererr;	// double pointer to renderer
