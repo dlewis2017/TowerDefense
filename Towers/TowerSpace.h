@@ -16,7 +16,7 @@
 #include <vector>
 #include "../MapDirections.h"
 #include "Tower.h"
-//#include "WizardTower.h"
+#include "WizardTower.h"
 //#include "ArcherTower.h"
 //#include "CannonTower.h"
 //#include "FreezeTower.h"
@@ -34,6 +34,8 @@ class TowerSpace : public Object {
 		bool dispDropDown(double xclick, double yclick);//displays the dropdown menu of options
 		bool handleKeyPress(SDL_Event tower_choice, vector<TowerSpace> *, vector<Tower> *);
 		void render();
+		int getX();
+		int getY();
 
 	private:
 		//holds x and y values for position

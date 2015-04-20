@@ -47,7 +47,6 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 		SDL_RenderCopy( *towerRenderer, gArcherTower, NULL, &gArcherTowerRect);
 		SDL_RenderCopy( *towerRenderer, gCannonTower, NULL, &gCannonTowerRect);
 		SDL_RenderCopy( *towerRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
-		cout << "clicked on image... should display drop down" << endl;
 		return true;	
 	} else return false;
 }
@@ -56,31 +55,47 @@ bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, ve
 	if (e.key.keysym.sym == SDLK_w || e.key.keysym.sym == SDLK_a || e.key.keysym.sym == SDLK_c || e.key.keysym.sym == SDLK_f) {
 		//removes the specific towerSpace that was selected
 		for (int i=0;i<(*towerSpaces).size();i++){
-			if ((*towerSpaces[i]) == (*this)){
-				(*towerSpaces).erase(i);
+			if ((*towerSpaces)[i].getX() == towerX && (*towerSpaces)[i].getY() == towerY) {
+				(*towerSpaces).erase((*towerSpaces).begin() + i);
 			}
 		}
 	}
 	//adds a specific type of tower to the towers vector
 	switch (e.key.keysym.sym){
 		case SDLK_w:
-			WizardTower Wiz(gRenderer, xTower, yTower);
+		{
+			WizardTower Wiz(towerRenderer, towerX, towerY);
 			(*towers).push_back(Wiz);
 			break;
+		}
 		case SDLK_a:
+		{
 			//ArcherTower Archer(gRenderer, xTower, yTower);
             //(*towers).push_back(Archer);
             break;
+        }
 		case SDLK_c:
+			{
 			//CannonTower Cannon(gRenderer, xTower, yTower);
             //(*towers).push_back(Cannon);
             break;
+        }
 		case SDLK_f:
+		{
 			//FreezeTower Freeze(gRenderer, xTower, yTower);
             //(*towers).push_back(Freeze);
             break;
+        }
 		default:
 			return false;
 	}
 	return true;
+}
+
+int TowerSpace::getX() {
+	return towerX;
+}
+
+int TowerSpace::getY() {
+	return towerY;
 }
