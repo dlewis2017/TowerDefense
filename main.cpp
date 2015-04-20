@@ -154,11 +154,7 @@ int main( int argc, char* args[] )
     		lastAddTime = clockTime;
     		if(enemies.size() == nEnemies) allEnemiesAdded = true;
 		}
-		//iterates through the towerSpaces vector and adds the ones currently in it
-		for (int i=0;i<towerSpaces.size();i++)
-		{
-			towerSpaces[i].render();
-		}
+		
 		moveEnemies();	// moves all enemies in enemies vector (updates position)
 		//Clear screen
 		SDL_RenderClear( gRenderer );
@@ -166,6 +162,13 @@ int main( int argc, char* args[] )
 		//Render texture to screen
 		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
 		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
+		//iterates through the towerSpaces vector and adds the ones currently in it
+		for (int i=0;i<towerSpaces.size();i++)
+		{
+			towerSpaces[i].render();
+		}
+
+
 		towerSelector.render();
 
 		//Update screen

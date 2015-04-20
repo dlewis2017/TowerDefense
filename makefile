@@ -12,7 +12,7 @@ COMPILER_FLAGS = -w
 LINKER_FLAGS = -lSDL2 -lSDL2_image
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAMES = main.o Object.o TowerSelector.o Enemy.o Goblin.o Troll.o Tower.o TowerSpace.o WizardTower.o MapDirections.o
+OBJ_NAMES = main.o Object.o TowerSelector.o Enemy.o Goblin.o Troll.o Tower.o TowerSpace.o MapDirections.o
 
 #This is the target that compiles our executable
 all: main
@@ -43,9 +43,6 @@ Tower.o: Towers/Tower.cpp Towers/Tower.h
 
 TowerSpace.o: Towers/TowerSpace.cpp Towers/TowerSpace.h 
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Towers/TowerSpace.cpp
-
-WizardTower.o: Towers/WizardTower.cpp Towers/WizardTower.h 
-	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Towers/WizardTower.cpp
 
 MapDirections.o: MapDirections.cpp MapDirections.h
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c MapDirections.cpp

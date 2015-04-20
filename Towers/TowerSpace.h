@@ -21,11 +21,12 @@
 //#include "CannonTower.h"
 //#include "FreezeTower.h"
 #include "../Object.h"
+using namespace std;
 
 class TowerSpace : public Object {
 	public:
 		//constructor creates a blank tower at a set location at the beginning of the main program
-		TowerSpace(SDL_Renderer**, double, double);
+		TowerSpace(SDL_Renderer **gRenderer, double, double);
 		//destructor, called when the tower is to be replaced with a specific tower
 		//~TowerSpace();
 		//SDL loading media

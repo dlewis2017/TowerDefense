@@ -28,7 +28,7 @@ class Tower : public Object {
     	void render();
 
     private: 
-    	SDL_Renderer** gRenderer;	// double pointer to renderer
+    	SDL_Renderer** gRendererr;	// double pointer to renderer
 		double MAX_DISTORTION = .57;
 
 };

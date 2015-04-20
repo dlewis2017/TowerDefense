@@ -11,12 +11,13 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, double xpos, double ypos) : 
 	towerX = xpos;
 	towerY = ypos;
 	TOWER_MAX_DIMENSION = 70;
+	towerRenderer = gRendererPtr;
 
 	towerTexture = loadTexture("img/TowerSymbol.png");
-	SDL_Rect gTowerRect = getRect(towerTexture, TOWER_MAX_DIMENSION, towerX, towerY);
-	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
+	towerRect = getRect(towerTexture, TOWER_MAX_DIMENSION, towerX, towerY);
+	SDL_RenderCopy(*towerRenderer, towerTexture, NULL, &towerRect);
 	
-	towerRenderer = gRendererPtr;
+	
 
 	// create textures for each tower type
 	gWizardTower = loadTexture("img/wizardTower.png");
@@ -34,7 +35,7 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, double xpos, double ypos) : 
 
 // redisplays/renders the TowerSpace object on the screen
 void TowerSpace::render() {
-	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
+	SDL_RenderCopy(*towerRenderer, towerTexture, NULL, &towerRect);
 }
 
 bool TowerSpace::dispDropDown(double xclick, double yclick)
@@ -42,21 +43,21 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 	if( (xclick >= towerX-35 && xclick <= towerX-35+TOWER_MAX_DIMENSION) && (yclick >= towerY-35 && yclick <= towerY-35+TOWER_MAX_DIMENSION) ){
 
 		//open texutre on screen without rendering
-		SDL_RenderCopy( *gRenderer, gWizardTower, NULL, &gWizardTowerRect);
-		SDL_RenderCopy( *gRenderer, gArcherTower, NULL, &gArcherTowerRect);
-		SDL_RenderCopy( *gRenderer, gCannonTower, NULL, &gCannonTowerRect);
-		SDL_RenderCopy( *gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
+		SDL_RenderCopy( *towerRenderer, gWizardTower, NULL, &gWizardTowerRect);
+		SDL_RenderCopy( *towerRenderer, gArcherTower, NULL, &gArcherTowerRect);
+		SDL_RenderCopy( *towerRenderer, gCannonTower, NULL, &gCannonTowerRect);
+		SDL_RenderCopy( *towerRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
 		return true;	
 	} else return false;
 }
-bool TowerSpace::handleKeyPress(SDL_Event tower_choice, *v ector<TowerSpace>, * vector<Tower>)
+bool TowerSpace::handleKeyPress(SDL_Event tower_choice, vector<TowerSpace> *, vector<Tower> *)
 {
 	switch( tower_choice.key.keysym.sym )
         {
             case SDLK_w:
 				{
-					delete this;
-                    WizardTower Wiz1(towerX,towerY,towerTexture,towerRenderer); 
+					//delete this;
+                   // WizardTower Wiz1(towerX,towerY,towerTexture,towerRenderer); 
                 }
 				return false;
 

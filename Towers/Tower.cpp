@@ -5,10 +5,9 @@
 */
 
 #include "Tower.h"
-#include <cmath>
 
 Tower::Tower(SDL_Renderer** gRendererPtr) : Object(gRendererPtr) {
-	gRenderer = gRendererPtr;
+	gRendererr = gRendererPtr;
 
 
 }
