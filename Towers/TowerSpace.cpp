@@ -11,11 +11,11 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, double xpos, double ypos) : 
 	towerX = xpos;
 	towerY = ypos;
 	TOWER_MAX_DIMENSION = 70;
-	towerRenderer = gRendererPtr;
+	gRenderer = gRendererPtr;
 
 	towerTexture = loadTexture("img/TowerSymbol.png");
 	towerRect = getRect(towerTexture, TOWER_MAX_DIMENSION, towerX, towerY);
-	SDL_RenderCopy(*towerRenderer, towerTexture, NULL, &towerRect);
+	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
 	
 	
 
@@ -35,7 +35,7 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, double xpos, double ypos) : 
 
 // redisplays/renders the TowerSpace object on the screen
 void TowerSpace::render() {
-	SDL_RenderCopy(*towerRenderer, towerTexture, NULL, &towerRect);
+	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
 }
 
 bool TowerSpace::dispDropDown(double xclick, double yclick)
@@ -43,10 +43,10 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 	if( (xclick >= towerX-35 && xclick <= towerX-35+TOWER_MAX_DIMENSION) && (yclick >= towerY-35 && yclick <= towerY-35+TOWER_MAX_DIMENSION) ){
 
 		//open texutre on screen without rendering
-		SDL_RenderCopy( *towerRenderer, gWizardTower, NULL, &gWizardTowerRect);
-		SDL_RenderCopy( *towerRenderer, gArcherTower, NULL, &gArcherTowerRect);
-		SDL_RenderCopy( *towerRenderer, gCannonTower, NULL, &gCannonTowerRect);
-		SDL_RenderCopy( *towerRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
+		SDL_RenderCopy( *gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+		SDL_RenderCopy( *gRenderer, gArcherTower, NULL, &gArcherTowerRect);
+		SDL_RenderCopy( *gRenderer, gCannonTower, NULL, &gCannonTowerRect);
+		SDL_RenderCopy( *gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
 		return true;	
 	} else return false;
 }
@@ -61,32 +61,32 @@ bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, ve
 	// objects are instantiated using operator new, adding the object to the HEAP
 	// this means the Towers will need to be explicitely deleted later to prevent a memory leak.
 	switch (e.key.keysym.sym){
-		case SDLK_w:
-		{
-			// create a new WizardTower on the HEAP
-			// this means delete MUST be called on the object later, or else there will be a memory leak
-			WizardTower* Wiz = new WizardTower(towerRenderer, towerX, towerY);
-			towers->push_back(Wiz);
-			break;
-		}
 		case SDLK_a:
 		{
-			//ArcherTower Archer(gRenderer, xTower, yTower);
-            //(*towers).push_back(Archer);
+			ArcherTower* archer = new ArcherTower(gRenderer, towerX, towerY);
+            towers->push_back(archer);
             break;
         }
 		case SDLK_c:
 			{
-			//CannonTower Cannon(gRenderer, xTower, yTower);
-            //(*towers).push_back(Cannon);
+			CannonTower* cannon = new CannonTower(gRenderer, towerX, towerY);
+            towers->push_back(cannon);
             break;
         }
 		case SDLK_f:
 		{
-			//FreezeTower Freeze(gRenderer, xTower, yTower);
-            //(*towers).push_back(Freeze);
+			FreezeTower* freeze = new FreezeTower(gRenderer, towerX, towerY);
+            towers->push_back(freeze);
             break;
         }
+        case SDLK_w:
+		{
+			// create a new WizardTower on the HEAP
+			// this means delete MUST be called on the object later, or else there will be a memory leak
+			WizardTower* wiz = new WizardTower(gRenderer, towerX, towerY);
+			towers->push_back(wiz);
+			break;
+		}
 		default:
 			return false;
 	}

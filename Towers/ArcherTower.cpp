@@ -7,17 +7,30 @@
 #include "ArcherTower.h"
 
 //constructor that initializes an ArcherTower (arguments = position)
-ArcherTower::ArcherTower(double X, double Y)
+ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, int xpos, int ypos) : Tower(gRendererPtr)
 {
 	//initialize fields
-	towerX = X;
-	towerY = Y;
+	towerX = xpos;
+	towerY = ypos;
 	numKills = 0;
 	damage = 1.5;
 	attackSpeed = 30.5;//number of times it attacks per minute
 	radius = 2.0;
 	cost = 100;
+	gRenderer = gRendererPtr;
+
+	gTower = loadTexture("img/archerTower.png");
+	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
+	
 }
+
+// render the tower image to the screen
+void ArcherTower::render()
+{
+	SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
+}
+
+/*
 void ArcherTower::attack()
 {
 	if (inRange(towerX, towerY, radius))
@@ -42,3 +55,5 @@ void ArcherTower::displayTower()
 
 
 }
+
+*/

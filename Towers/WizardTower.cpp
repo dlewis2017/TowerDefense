@@ -7,9 +7,9 @@
 #include "WizardTower.h"
 
 //constructor that initializes an WizardTower (arguments = position)
-WizardTower::WizardTower( SDL_Renderer** gRendererPtr, double xpos, double ypos) : Tower(gRendererPtr)
+WizardTower::WizardTower( SDL_Renderer** gRendererPtr, int xpos, int ypos) : Tower(gRendererPtr)
 {
-	//initialize fields
+	//initialize private variables
 	towerX = xpos;
 	towerY = ypos;
 	numKills = 0;
@@ -17,17 +17,17 @@ WizardTower::WizardTower( SDL_Renderer** gRendererPtr, double xpos, double ypos)
 	attackSpeed = 30.5;//number of times it attacks per minute
 	radius = 2.0;
 	cost = 100;
-	TOWER_MAX_DIMENSION = 70;
 	gRenderer = gRendererPtr;
 
-	gWizardTower = NULL;
-	gWizardTower = loadTexture("img/wizardTower.png");
-	gWizardTowerRect = getRect(gWizardTower,MAX_DIMENSION, towerX, towerY);
+	gTower = loadTexture("img/wizardTower.png");
+	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
 	
 }
+
+// render the tower image to the screen
 void WizardTower::render()
 {
-	SDL_RenderCopy(*gRenderer, gWizardTower, NULL, &gWizardTowerRect);
+	SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
 }
 /*void WizardTower::attack()
 {

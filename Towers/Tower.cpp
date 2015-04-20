@@ -8,6 +8,8 @@
 
 Tower::Tower(SDL_Renderer** gRendererPtr) : Object(gRendererPtr) {
 	gRendererr = gRendererPtr;
+	MAX_DIMENSION = 70;
+	MAX_DISTORTION = .57;
 }
 
 

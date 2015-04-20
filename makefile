@@ -12,7 +12,7 @@ COMPILER_FLAGS = -w
 LINKER_FLAGS = -lSDL2 -lSDL2_image
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAMES = main.o Object.o TowerSelector.o Enemy.o Goblin.o Troll.o Tower.o TowerSpace.o WizardTower.o MapDirections.o
+OBJ_NAMES = main.o Object.o Enemy.o Goblin.o Troll.o Tower.o TowerSpace.o ArcherTower.o CannonTower.o FreezeTower.o WizardTower.o MapDirections.o
 
 #This is the target that compiles our executable
 all: main
@@ -25,9 +25,6 @@ main.o: main.cpp
 
 Object.o: Object.cpp Object.h
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Object.cpp
-
-TowerSelector.o: Towers/TowerSelector.h Towers/TowerSelector.cpp
-	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Towers/TowerSelector.cpp
 
 Enemy.o: Enemies/Enemy.cpp Enemies/Enemy.h MapDirections.cpp MapDirections.h
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Enemies/Enemy.cpp
@@ -43,6 +40,15 @@ Tower.o: Towers/Tower.cpp Towers/Tower.h
 
 TowerSpace.o: Towers/TowerSpace.cpp Towers/TowerSpace.h 
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Towers/TowerSpace.cpp
+
+ArcherTower.o: Towers/ArcherTower.cpp Towers/ArcherTower.h 
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Towers/ArcherTower.cpp
+
+CannonTower.o: Towers/CannonTower.cpp Towers/CannonTower.h 
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Towers/CannonTower.cpp
+
+FreezeTower.o: Towers/FreezeTower.cpp Towers/FreezeTower.h 
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Towers/FreezeTower.cpp
 
 WizardTower.o: Towers/WizardTower.cpp Towers/WizardTower.h 
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Towers/WizardTower.cpp

@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <string>
 #include "../Enemies/Enemy.h"
-#include "../Object.h"
 #include <iostream>
 using namespace std;
 
@@ -27,8 +26,11 @@ class Tower : public Object {
     	virtual void render() = 0;     // makes Tower class abstract
 
     private: 
-    	SDL_Renderer** gRendererr;	// double pointer to renderer
-		double MAX_DISTORTION = .57;
+    	SDL_Renderer** gRendererr;	 // double pointer to renderer
+		double MAX_DISTORTION;        
+
+    protected:
+        int MAX_DIMENSION;     // share this value with derived towers
 
 };
 

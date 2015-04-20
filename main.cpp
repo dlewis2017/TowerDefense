@@ -9,11 +9,6 @@
 #include <stdlib.h>	// srand
 #include "Towers/Tower.h"
 #include "Towers/TowerSpace.h"
-//#include "Towers/ArcherTower.h"
-//#include "Towers/FreezeTower.h"
-//#include "Towers/CannonTower.h"
-#include "Towers/TowerSelector.h"
-#include "Towers/WizardTower.h"
 #include "Enemies/Enemy.h"
 #include "Enemies/Goblin.h"
 #include "Enemies/Troll.h"
@@ -88,8 +83,6 @@ int main( int argc, char* args[] )
 	long int lastAddTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
     addEnemies(mapDirections);
 
-    TowerSelector towerSelector(&gRenderer, 100, 100);
-
 	TowerSpace tower1(&gRenderer,80,360);
 	TowerSpace tower2(&gRenderer,220,275);
 	TowerSpace tower3(&gRenderer,400,440);
@@ -118,8 +111,6 @@ int main( int argc, char* args[] )
 				SDL_GetMouseState(&x,&y);
 
 				// pass x and y mouse click coordinates to TowerSelector objects
-				towerSelector.handleMouseClick(x, y);
-
 
 			}
 			
@@ -166,8 +157,6 @@ int main( int argc, char* args[] )
 		        }
 	        }
 		}
-
-		towerSelector.render();
 
 		//Update screen
 		SDL_RenderPresent( gRenderer );

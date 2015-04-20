@@ -7,23 +7,35 @@
 #include "CannonTower.h"
 
 //constructor that initializes an CannonTower (arguments = position)
-CannonTower::CannonTower(double X, double Y)
+CannonTower::CannonTower(SDL_Renderer** gRendererPtr, int xpos, int ypos) : Tower(gRendererPtr)
 {
         //initialize fields
-        towerX = X;
-        towerY = Y;
+        towerX = xpos;
+        towerY = ypos;
         numKills = 0;
         damage = 9.0;
         attackSpeed = 7.5;//number of times it attacks per minute
         radius = 1.5;
         cost = 150;
+
+        gRenderer = gRendererPtr;
+        gTower = loadTexture("img/cannonTower.png");
+        gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
+        
 }
+
+// render the tower image to the screen
+void CannonTower::render()
+{
+    SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
+}
+/*
 void CannonTower::attack()
 {
-        if (inRange(towerX, towerY, radius))
-        {
-                //attack the enemy
-        }
+    if (inRange(towerX, towerY, radius))
+    {
+        //attack the enemy
+    }
 }
 double CannonTower::getDPS()
 {
@@ -38,3 +50,4 @@ int CannonTower::getCost()
         return cost;
 }
 
+*/

@@ -17,16 +17,16 @@
 #include "../MapDirections.h"
 #include "Tower.h"
 #include "WizardTower.h"
-//#include "ArcherTower.h"
-//#include "CannonTower.h"
-//#include "FreezeTower.h"
+#include "ArcherTower.h"
+#include "CannonTower.h"
+#include "FreezeTower.h"
 #include "../Object.h"
 using namespace std;
 
 class TowerSpace : public Object {
 	public:
 		//constructor creates a blank tower at a set location at the beginning of the main program
-		TowerSpace(SDL_Renderer **gRenderer, double, double);
+		TowerSpace(SDL_Renderer **gRendererPtr, double, double);
 		//destructor, called when the tower is to be replaced with a specific tower
 		//~TowerSpace();
 		//SDL loading media
@@ -43,7 +43,7 @@ class TowerSpace : public Object {
 		double towerY;
 		SDL_Texture* towerTexture; 
 		SDL_Rect towerRect;
-		SDL_Renderer** towerRenderer;
+		SDL_Renderer** gRenderer;
 		double TOWER_MAX_DIMENSION;
 
 		SDL_Texture* gWizardTower;
