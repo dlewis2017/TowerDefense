@@ -51,31 +51,36 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 		return true;	
 	} else return false;
 }
-bool TowerSpace::handleKeyPress(SDL_Event tower_choice, vector<TowerSpace> *, vector<Tower> *)
+bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, vector<Tower> *towers)
 {
-	switch( tower_choice.key.keysym.sym )
-        {
-            case SDLK_w:
-				{
-					//delete this;
-                   // WizardTower Wiz1(towerX,towerY,towerTexture,towerRenderer); 
-                }
-				return false;
-
-            /*case SDLK_a:
-                gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_DOWN ];
-                break;
-
-            case SDLK_c:
-                gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_LEFT ];
-                break;
-
-            case SDLK_f:
-                gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_RIGHT ];
-                break;
-*/
-            default:
-				return true;
-        }
-
+	if (e.key.keysym.sym == SDLK_w || e.key.keysym.sym == SDLK_a || e.key.keysym.sym == SDLK_c || e.key.keysym.sym == SDLK_f) {
+		//removes the specific towerSpace that was selected
+		for (int i=0;i<(*towerSpaces).size();i++){
+			if ((*towerSpaces[i]) == (*this)){
+				(*towerSpaces).erase(i);
+			}
+		}
+	}
+	//adds a specific type of tower to the towers vector
+	switch (e.key.keysym.sym){
+		case SDLK_w:
+			WizardTower Wiz(gRenderer, xTower, yTower);
+			(*towers).push_back(Wiz);
+			break;
+		case SDLK_a:
+			//ArcherTower Archer(gRenderer, xTower, yTower);
+            //(*towers).push_back(Archer);
+            break;
+		case SDLK_c:
+			//CannonTower Cannon(gRenderer, xTower, yTower);
+            //(*towers).push_back(Cannon);
+            break;
+		case SDLK_f:
+			//FreezeTower Freeze(gRenderer, xTower, yTower);
+            //(*towers).push_back(Freeze);
+            break;
+		default:
+			return false;
+	}
+	return true;
 }
