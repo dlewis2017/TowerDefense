@@ -22,17 +22,21 @@ class Tower : public Object {
     	//virtual double getDPS() = 0;//returns damage times attack speed (damage per second)
     	//virtual double getRadius() = 0;//returns distance the tower can fire
     	//int getCost() = 0;//returns cost to build tower
-    	virtual void render() = 0;     // makes Tower class abstract
-		virtual bool inRange(vector<Enemy> *);//senses if enemy is in the specific towers range
+    	virtual void render() = 0;        // makes Tower class abstract
+		bool inRange(vector<Enemy> *);    //s enses if enemy is in the specific tower's range
+
 	private: 
     	SDL_Renderer** gRendererr;	 // double pointer to renderer
 		double MAX_DISTORTION;        
 
     protected:
-        int MAX_DIMENSION;     // share this value with derived towers
-		double TOWER_X;
-		double TOWER_Y;
-		double TOWER_RANGE;
+        int MAX_DIMENSION;      // share this value with derived towers
+		int towerX;
+        int towerY;
+		int range;
+        int damage;
+
+        Enemy* target;          // target is a pointer to the enemy that is the target
 };
 
 #endif

@@ -23,10 +23,7 @@ public:
 
 private:
         double attackSpeed;
-        double radius;
         int cost;
-        int towerX;
-        int towerY;
         SDL_Texture* gTower;           // image of tower
         SDL_Rect gTowerRect;           // container for tower image. Has positioning properties (x and y location)
         SDL_Renderer** gRenderer;      // double pointer to screen surface

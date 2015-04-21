@@ -23,13 +23,9 @@ public:
         void render();      // render tower image to screen 
 
 private:
-        double damage;
         double attackSpeed;
-        double radius;
         int cost;
         unsigned int numKills;      //possibly? tracks total number of kills each tower has
-        int towerX;
-        int towerY;
         SDL_Texture* gTower;        // image of tower
         SDL_Rect gTowerRect;        // container for tower image. Has positioning properties (x and y location)
         SDL_Renderer** gRenderer;   // double pointer to screen surface

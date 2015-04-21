@@ -10,21 +10,18 @@
 CannonTower::CannonTower(SDL_Renderer** gRendererPtr, int xpos, int ypos) : Tower(gRendererPtr)
 {
         //initialize fields
-        towerX = xpos;
-        towerY = ypos;
-        numKills = 0;
-        damage = 9.0;
-        attackSpeed = 7.5;//number of times it attacks per minute
-        radius = 1.5;
-        cost = 150;
+    towerX = xpos;
+    towerY = ypos;
+    numKills = 0;
+    damage = 50;
+    attackSpeed = 7.5;//number of times it attacks per minute
+    range = 175;
+    cost = 150;
 
-        gRenderer = gRendererPtr;
-        gTower = loadTexture("img/cannonTower.png");
-        gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
-		//sets protected fields for Tower base class
-    	TOWER_X = (double)xpos;
-    	TOWER_Y = (double)ypos;
-    	TOWER_RANGE = 175.0;
+    gRenderer = gRendererPtr;
+    gTower = loadTexture("img/cannonTower.png");
+    gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
+   
 }
 
 // render the tower image to the screen
