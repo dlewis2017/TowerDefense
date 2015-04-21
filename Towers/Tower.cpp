@@ -6,8 +6,9 @@
 
 #include "Tower.h"
 
-Tower::Tower(SDL_Renderer** gRendererPtr) : Object(gRendererPtr) {
+Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTemp) : Object(gRendererPtr) {
 	gRendererr = gRendererPtr;
+	enemies = enemiesTemp;
 	MAX_DIMENSION = 70;
 	MAX_DISTORTION = .57;
 	target = NULL;
@@ -32,7 +33,23 @@ bool Tower::inRange(vector<Enemy> *enemies)
 			return true;
 		}
 	}
+	target = NULL;	// no target selected
 	return false;
+}
+
+void Tower::attack() {
+
+	target->takeDamage(damage);
+
+	if(target->isDead()) {	// if the enemy was just killed by the most recent attack
+		for(int i = 0; i < enemies->size(); i++) {
+			if(&((*enemies)[i]) == target) {	// find which index in enemy vector the target enemy that just died is
+				enemies->erase(enemies->begin() + i);
+				break;
+			}
+		}
+		target = NULL; 		// reset tower's target
+	}
 }
 
 //int Tower::getCost() {

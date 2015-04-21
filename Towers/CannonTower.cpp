@@ -7,7 +7,8 @@
 #include "CannonTower.h"
 
 //constructor that initializes an CannonTower (arguments = position)
-CannonTower::CannonTower(SDL_Renderer** gRendererPtr, int xpos, int ypos) : Tower(gRendererPtr)
+CannonTower::CannonTower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTemp, int xpos, \
+    int ypos) : Tower(gRendererPtr, enemiesTemp)
 {
         //initialize fields
     towerX = xpos;
@@ -18,6 +19,7 @@ CannonTower::CannonTower(SDL_Renderer** gRendererPtr, int xpos, int ypos) : Towe
     range = 175;
     cost = 150;
 
+    enemies = enemiesTemp;
     gRenderer = gRendererPtr;
     gTower = loadTexture("img/cannonTower.png");
     gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);

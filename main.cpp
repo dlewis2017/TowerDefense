@@ -32,7 +32,7 @@ void close();		//Frees media and shuts down SDL
 SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);
 void moveEnemies();	// moves all enemies in the enemies vector
 void renderEnemies(); 	// render all enemies in the enemies vector
-void addEnemies(MapDirections mapDirections);		// add enemies until max # reached
+void addEnemies(MapDirections mapDirections, int * nEnemiesAdded);		// add enemies until max # reached
 
 // global varsF
 SDL_Texture* loadTexture( std::string path );	//Loads individual image as texture
@@ -74,6 +74,7 @@ int main( int argc, char* args[] )
     mapDirections.setNext("right", SCREEN_WIDTH);
 
     int nEnemies = 3;
+    int nEnemiesAdded = 0;
     bool allEnemiesAdded = false;
 
     // add first enemy immediately
@@ -81,13 +82,13 @@ int main( int argc, char* args[] )
     gettimeofday(&tp, NULL);
     long int clockTime;			// used to track current time
 	long int lastAddTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
-    addEnemies(mapDirections);
+    addEnemies(mapDirections, &nEnemiesAdded);
 
-	TowerSpace tower1(&gRenderer,80,360);
-	TowerSpace tower2(&gRenderer,220,275);
-	TowerSpace tower3(&gRenderer,400,440);
-	TowerSpace tower4(&gRenderer,570,285);
-	TowerSpace tower5(&gRenderer,750,435);
+	TowerSpace tower1(&gRenderer, &towerSpaces, &towers, &enemies, 80, 360);
+	TowerSpace tower2(&gRenderer, &towerSpaces, &towers, &enemies, 220, 275);
+	TowerSpace tower3(&gRenderer, &towerSpaces, &towers, &enemies, 400, 440);
+	TowerSpace tower4(&gRenderer, &towerSpaces, &towers, &enemies, 570, 285);
+	TowerSpace tower5(&gRenderer, &towerSpaces, &towers, &enemies, 750, 435);
 	towerSpaces.push_back(tower1);
 	towerSpaces.push_back(tower2);
 	towerSpaces.push_back(tower3);
@@ -121,8 +122,8 @@ int main( int argc, char* args[] )
 			clockTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
 		}
 		// check if it is time for another enemy to be added
-		if(!allEnemiesAdded && enemies.size() < nEnemies && (clockTime - lastAddTime) >= ENEMY_TIME_DELAY) {
-    		addEnemies(mapDirections);
+		if(!allEnemiesAdded && nEnemiesAdded < nEnemies && (clockTime - lastAddTime) >= ENEMY_TIME_DELAY) {
+    		addEnemies(mapDirections, &nEnemiesAdded);
     		lastAddTime = clockTime;
     		if(enemies.size() == nEnemies) allEnemiesAdded = true;
 		}
@@ -150,7 +151,7 @@ int main( int argc, char* args[] )
 				if(SDL_PollEvent(&tower_choice) != 0) {;
 					if(tower_choice.type == SDL_KEYDOWN ){
 		               // if(tower_choice.type == SDL_KEYDOWN){
-		                    if( towerSpaces[i].handleKeyPress(tower_choice, &towerSpaces, &towers)) break;
+		                    if( towerSpaces[i].handleKeyPress(tower_choice)) break;
 		               // }
 		            }
 		        }
@@ -161,6 +162,7 @@ int main( int argc, char* args[] )
 			if (towers[i]->inRange(&enemies)){
 				//towers[i]->attack();
 				cout << "Enemy is in range!" << endl;
+				towers[i]->attack();
 			}
 		}
 		//Update screen
@@ -174,7 +176,7 @@ int main( int argc, char* args[] )
 }
 
 // adds enemies every ____seconds
-void addEnemies(MapDirections mapDirections) {
+void addEnemies(MapDirections mapDirections, int *nEnemiesAdded) {
 	// create a new enemy randomly
 	int random = rand() % 2;
 	switch(random) {
@@ -190,7 +192,8 @@ void addEnemies(MapDirections mapDirections) {
 			enemies.push_back(troll);
 			break;
 		}
-	}	
+	}
+	(*nEnemiesAdded)++;	// incremement nEnemiesAdded counter
 }
 
 /* Move all enemies in the enemies vector

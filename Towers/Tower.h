@@ -16,9 +16,9 @@ using namespace std;
 
 class Tower : public Object {
 	public:
-		Tower(SDL_Renderer **gRendererPtr);
+		Tower(SDL_Renderer **gRendererPtr, vector<Enemy> *);
     	//virtual void target() = 0;//targeting function, can be implemented by subclasses for multitargeting (cannon)
-    	//virtual void attack() = 0;//function to begin attacking (decreasing health) of target
+    	void attack(); //function to begin attacking (decreasing health) of target
     	//virtual double getDPS() = 0;//returns damage times attack speed (damage per second)
     	//virtual double getRadius() = 0;//returns distance the tower can fire
     	//int getCost() = 0;//returns cost to build tower
@@ -37,6 +37,7 @@ class Tower : public Object {
         int damage;
 
         Enemy* target;          // target is a pointer to the enemy that is the target
+        vector<Enemy> *enemies;  // ref to vector of enemies from main.cpp
 };
 
 #endif

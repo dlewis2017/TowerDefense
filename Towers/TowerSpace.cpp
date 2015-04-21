@@ -6,12 +6,16 @@
 */
 #include "TowerSpace.h"
 
-TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, double xpos, double ypos) : Object(gRendererPtr)
+TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace> *towerSpacesTemp, \
+	vector<Tower*> *towersTemp, vector<Enemy> *enemiesTemp, double xpos, double ypos) : Object(gRendererPtr)
 {
 	towerX = xpos;
 	towerY = ypos;
 	TOWER_MAX_DIMENSION = 70;
 	gRenderer = gRendererPtr;
+	towerSpaces = towerSpacesTemp;
+	towers = towersTemp;
+	enemies = enemiesTemp;
 
 	towerTexture = loadTexture("img/TowerSymbol.png");
 	towerRect = getRect(towerTexture, TOWER_MAX_DIMENSION, towerX, towerY);
@@ -51,11 +55,11 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 	} else return false;
 }
 
-/* takes in an SDL_Event, a pointer to the towerSpaces vector, and a pointer to the towers vector from main.cpp
+/* takes in an SDL_Event and utilizes a pointer to the towerSpaces vector and a pointer to the towers vector from main.cpp
  * If a valid key is pressed to create a new tower, the TowerSpace is removed, and a new Tower is created
  * and a pointer to it is added pushed onto the towers vector
  */
-bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, vector<Tower*> *towers)
+bool TowerSpace::handleKeyPress(SDL_Event e)
 {
 	// adds a specific type of tower to the towers vector
 	// objects are instantiated using operator new, adding the object to the HEAP
@@ -63,19 +67,19 @@ bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, ve
 	switch (e.key.keysym.sym){
 		case SDLK_a:
 		{
-			ArcherTower* archer = new ArcherTower(gRenderer, towerX, towerY);
+			ArcherTower* archer = new ArcherTower(gRenderer, enemies, towerX, towerY);
             towers->push_back(archer);
             break;
         }
 		case SDLK_c:
 			{
-			CannonTower* cannon = new CannonTower(gRenderer, towerX, towerY);
+			CannonTower* cannon = new CannonTower(gRenderer, enemies, towerX, towerY);
             towers->push_back(cannon);
             break;
         }
 		case SDLK_f:
 		{
-			FreezeTower* freeze = new FreezeTower(gRenderer, towerX, towerY);
+			FreezeTower* freeze = new FreezeTower(gRenderer, enemies, towerX, towerY);
             towers->push_back(freeze);
             break;
         }
@@ -83,7 +87,7 @@ bool TowerSpace::handleKeyPress(SDL_Event e, vector<TowerSpace> *towerSpaces, ve
 		{
 			// create a new WizardTower on the HEAP
 			// this means delete MUST be called on the object later, or else there will be a memory leak
-			WizardTower* wiz = new WizardTower(gRenderer, towerX, towerY);
+			WizardTower* wiz = new WizardTower(gRenderer, enemies, towerX, towerY);
 			towers->push_back(wiz);
 			break;
 		}

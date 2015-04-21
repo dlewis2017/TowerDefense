@@ -25,14 +25,16 @@ using namespace std;
 
 class TowerSpace : public Object {
 	public:
-		//constructor creates a blank tower at a set location at the beginning of the main program
-		TowerSpace(SDL_Renderer **gRendererPtr, double, double);
+		/* constructor creates a blank tower at a set location at the beginning of the main program
+		 * takes in a reference to the vector of enemies so it can be passed on to Tower constructors */
+		TowerSpace(SDL_Renderer **gRendererPtr, vector<TowerSpace> *, vector<Tower*> *, \
+			vector<Enemy> *, double, double);
 		//destructor, called when the tower is to be replaced with a specific tower
 		//~TowerSpace();
 		//SDL loading media
 		//isClicked();//tells is tower is clicked based on its X and Y location
 		bool dispDropDown(double xclick, double yclick);//displays the dropdown menu of options
-		bool handleKeyPress(SDL_Event tower_choice, vector<TowerSpace> *, vector<Tower*> *);
+		bool handleKeyPress(SDL_Event tower_choice);
 		void render();
 		int getX();
 		int getY();
@@ -45,6 +47,10 @@ class TowerSpace : public Object {
 		SDL_Rect towerRect;
 		SDL_Renderer** gRenderer;
 		double TOWER_MAX_DIMENSION;
+
+		vector<TowerSpace> *towerSpaces;
+		vector<Tower*> *towers;
+		vector<Enemy> *enemies;
 
 		SDL_Texture* gWizardTower;
 		SDL_Texture* gArcherTower;

@@ -13,7 +13,7 @@ using namespace std;
 
 class ArcherTower : public Tower {
 public:
-        ArcherTower(SDL_Renderer** gRenderer, int xpos, int ypos);  //constructor with the position as argument
+        ArcherTower(SDL_Renderer** gRenderer, vector<Enemy> *, int xpos, int ypos);  //constructor with the position as argument
         /*void attack();      //implement this with archer tower specific graphics
         void target();      //may or may not need to implement since it is already a single-targeting tower
         double getDPS();    //returns damage times attack speed (damage per second)
@@ -30,7 +30,6 @@ private:
         SDL_Texture* gTower;        // image of tower
         SDL_Rect gTowerRect;        // container for tower image. Has positioning properties (x and y location)
         SDL_Renderer** gRenderer;   // double pointer to screen surface
-
 };
 
 #endif

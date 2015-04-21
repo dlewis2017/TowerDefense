@@ -81,6 +81,7 @@ double Enemy::getPosY() {
 // reduce Enemy's health by the amount of damage given by the tower
 void Enemy::takeDamage(int damage) {
     health -= damage;
+    cout << "health remaining: " << health << endl;
 }
 
 // return true if enemy has run out of health
