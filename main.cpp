@@ -126,7 +126,7 @@ int main( int argc, char* args[] )
     		lastAddTime = clockTime;
     		if(enemies.size() == nEnemies) allEnemiesAdded = true;
 		}
-		
+
 		moveEnemies();	// moves all enemies in enemies vector (updates position)
 		//Clear screen
 		SDL_RenderClear( gRenderer );
@@ -135,15 +135,14 @@ int main( int argc, char* args[] )
 		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
 		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
 		//iterates through the towerSpaces vector and adds the ones currently in it
-		for (int i=0;i<towerSpaces.size();i++)
-		{
+		for (int i=0;i<towerSpaces.size();i++){
 			towerSpaces[i].render();
 		}
-		for (int i=0;i<towers.size();i++)
-		{
+		//renders the Towers
+		for (int i=0;i<towers.size();i++){
 			towers[i]->render();
 		}
-		
+		//iterates through the towers and calls the inRange to sense if enemies are in range
 		SDL_Event tower_choice;
 
 		for(int i=0;i<towerSpaces.size();i++){
@@ -157,7 +156,13 @@ int main( int argc, char* args[] )
 		        }
 	        }
 		}
-
+		//TODO: implement a more functional loop
+		for (int i=0;i<towers.size();i++){
+			if (towers[i]->inRange(&enemies)){
+				//towers[i]->attack();
+				cout << "Enemy is in range!" << endl;
+			}
+		}
 		//Update screen
 		SDL_RenderPresent( gRenderer );
 

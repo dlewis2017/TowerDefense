@@ -13,19 +13,17 @@ Tower::Tower(SDL_Renderer** gRendererPtr) : Object(gRendererPtr) {
 }
 
 
-/*bool Tower::inRange(double X, double Y, double rad)
+bool Tower::inRange(vector<Enemy> *enemies)
 {
-	//X and Y represent position of Tower
-	//rad = radius of Tower
-	double enemy_X = Enemy.getPosX();
-	double enemy_Y = Enemy.getPosY();
-	
-	double distance = sqrt(pow(enemy_Y - Y, 2.0) + pow(enemy_X - X, 2.0));
-	if (distance <= rad)
-		return true;
-	else
-		return false;
-}*/
+	for (int i=0;i<enemies->size();i++) {
+		double enemy_X = (*enemies)[i].getPosX();
+		double enemy_Y = (*enemies)[i].getPosY();
+		double distance = sqrt(pow(enemy_Y - TOWER_Y, 2.0) + pow(enemy_X - TOWER_X, 2.0));
+		if (distance <= TOWER_RANGE)
+			return true;
+	}
+	return false;
+}
 //int Tower::getCost() {
 	
 //};

@@ -19,19 +19,20 @@ class Tower : public Object {
 		Tower(SDL_Renderer **gRendererPtr);
     	//virtual void target() = 0;//targeting function, can be implemented by subclasses for multitargeting (cannon)
     	//virtual void attack() = 0;//function to begin attacking (decreasing health) of target
-	//virtual bool inRange(double, double, double);//senses if enemy is in the specific towers range
     	//virtual double getDPS() = 0;//returns damage times attack speed (damage per second)
     	//virtual double getRadius() = 0;//returns distance the tower can fire
     	//int getCost() = 0;//returns cost to build tower
     	virtual void render() = 0;     // makes Tower class abstract
-
-    private: 
+		virtual bool inRange(vector<Enemy> *);//senses if enemy is in the specific towers range
+	private: 
     	SDL_Renderer** gRendererr;	 // double pointer to renderer
 		double MAX_DISTORTION;        
 
     protected:
         int MAX_DIMENSION;     // share this value with derived towers
-
+		double TOWER_X;
+		double TOWER_Y;
+		double TOWER_RANGE;
 };
 
 #endif

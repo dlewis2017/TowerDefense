@@ -9,17 +9,20 @@
 //constructor that initializes an FreezeTower (arguments = position)
 FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, int xpos, int ypos) : Tower(gRendererPtr)
 {
-        //initialize fields
-        towerX = xpos;
-        towerY = ypos;
-        attackSpeed = 4.0;//number of times it attacks per minute
-        radius = 3.0;
-        cost = 200;
+    //initialize fields
+    towerX = xpos;
+    towerY = ypos;
+    attackSpeed = 4.0;//number of times it attacks per minute
+    radius = 3.0;
+    cost = 200;
 
-        gRenderer = gRendererPtr;
-        gTower = loadTexture("img/freezeTower.png");
-        gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
-        
+    gRenderer = gRendererPtr;
+    gTower = loadTexture("img/freezeTower.png");
+	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
+	//initialize protected fields for Tower base class
+    TOWER_X = (double)xpos;
+    TOWER_Y = (double)ypos;
+    TOWER_RANGE = 125.0;	        
 }
 
 // render the tower image to the screen

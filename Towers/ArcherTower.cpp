@@ -21,7 +21,10 @@ ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, int xpos, int ypos) : Towe
 
 	gTower = loadTexture("img/archerTower.png");
 	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
-	
+	//sets protected fields for Tower base class
+    TOWER_X = (double)xpos;
+    TOWER_Y = (double)ypos;
+    TOWER_RANGE = 175.0;	
 }
 
 // render the tower image to the screen

@@ -21,7 +21,11 @@ WizardTower::WizardTower( SDL_Renderer** gRendererPtr, int xpos, int ypos) : Tow
 
 	gTower = loadTexture("img/wizardTower.png");
 	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
-	
+
+	//sets the values for the protected fields in the Tower class
+	TOWER_X = (double)xpos;
+	TOWER_Y = (double)ypos;
+	TOWER_RANGE = 120.0;	
 }
 
 // render the tower image to the screen
