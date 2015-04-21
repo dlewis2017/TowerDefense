@@ -7,9 +7,7 @@ using namespace std;
 Enemy::Enemy(SDL_Renderer** gRendererPtr, MapDirections pathInfo) : Object(gRendererPtr)
 {
 	ENEMY_MAX_DIMENSION = 60;   // protected variable in Object class, should they be the same?
-
 	gRenderer = gRendererPtr;
-
     mapDirections = pathInfo;
 	
     //Initialize the offsets
@@ -78,4 +76,15 @@ double Enemy::getPosX() {
 // return y position of enemy
 double Enemy::getPosY() {
 	return mPosY;
+}
+
+// reduce Enemy's health by the amount of damage given by the tower
+void Enemy::takeDamage(int damage) {
+    health -= damage;
+}
+
+// return true if enemy has run out of health
+bool Enemy::isDead() {
+    if(health <= 0) return true;
+    else return false;
 }

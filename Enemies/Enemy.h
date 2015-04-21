@@ -24,15 +24,15 @@ class Enemy : public Object
 		Enemy(SDL_Renderer **gRenderer, MapDirections pathInfo);  // constructor
 		void render();						// Repositions the the enemy on the screen after gRenderer is updated
 		bool move();						// move the enemy on the screen according to map positions
-	//	SDL_Texture* loadTexture(std::string path);	// load enemy image
-	//	SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);	// contain SDL_Surface under distortion threshold
 		double getPosX();	// return current x coordinate of enemy
 		double getPosY();	// return current y coordinate
-
+		void takeDamage(int);	// take x amount of damage from an Enemy tower
+		bool isDead();		// return T if health has run out, false otherwise
+	
 	protected:
 		int ENEMY_MAX_DIMENSION;
 		double MAX_DISTORTION;		// decimal of max percentage
-		MapDirections mapDirections;	// object to hold information to know when the Enemy should turn on the path
+		MapDirections mapDirections;// object to hold information to know when the Enemy should turn on the path
 		SDL_Texture* gEnemy;		// image of enemy
 		SDL_Renderer** gRenderer;	// double pointer to renderer
 		SDL_Rect enemyRect;			// container for enemy image. Has positioning properties (x and y location)
@@ -40,6 +40,8 @@ class Enemy : public Object
 		struct timeval tp;			// allows for milliseconds of current time, for animation
 		long int lastMoveTime;		// store time of last movement
 		int moveInterval;			// move every __ milliseconds
+
+		int health;					// should be different for each Enemy and set in the derived classes
 
     private:
 		
