@@ -63,25 +63,19 @@ void Tower::attack() {
 	if(curTime - lastAttackTime >= attackDelay*1000) { // attackDelay is in seconds, convert to milliseconds
 		target->takeDamage(damage);
 		lastAttackTime = curTime;
-		cout << "attacked: " << target << endl;
 
 		// check if enemy died from the most recent attack
 		if(target->isDead()) {	// if the enemy was just killed by the most recent attack
-			/*for(int i = 0; i < towers->size(); i++) {
+			for(int i = 0; i < towers->size(); i++) {
 				if((*towers)[i] == (this)) {
-					cout << "skipping tower in loop, as expected" << endl;
 					continue;
 				}
 				(*towers)[i]->resetTarget(target);
 			}
-			*/
-			cout << ">> Enemy is dead" << endl;
-			cout << "size of enemy vector" << enemies->size() << endl;
+			
 			for(int i = 0; i < enemies->size(); i++) {
-				cout << "Enemy addr in vec: " << (*enemies)[i] << "  target addr: " << target << endl;
 				if((*enemies)[i] == target) {	// find which index in enemy vector the target enemy that just died is
-					enemies->erase(enemies->begin() + i);
-					cout << ">>>> enemy deleted" << endl;
+					enemies->erase(enemies->begin() + i);	// erase pointer to enemy from vector
 					delete target;	// free Enemy's memory
 					break;
 				}

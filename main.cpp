@@ -95,6 +95,7 @@ int main( int argc, char* args[] )
 	towerSpaces.push_back(tower4);
 	towerSpaces.push_back(tower5);
 	//While application is running
+	
 	while( !quit )
 	{
 		int x,y;	// x and y locations of mouseclick 
