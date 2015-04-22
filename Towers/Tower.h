@@ -10,8 +10,10 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
-#include "../Enemies/Enemy.h"
+#include <sys/time.h>
 #include <iostream>
+#include <cmath>
+#include "../Enemies/Enemy.h"
 using namespace std;
 
 class Tower : public Object {
@@ -25,9 +27,11 @@ class Tower : public Object {
     	virtual void render() = 0;        // makes Tower class abstract
 		bool inRange(vector<Enemy> *);    //s enses if enemy is in the specific tower's range
 
-	private: 
+	private:
     	SDL_Renderer** gRendererr;	 // double pointer to renderer
 		double MAX_DISTORTION;        
+        struct timeval timeStruct;   // allows for milliseconds of current time, for attack frequency
+        long long lastAttackTime;    // last time that an Enemy was attacked
 
     protected:
         int MAX_DIMENSION;      // share this value with derived towers
@@ -35,6 +39,7 @@ class Tower : public Object {
         int towerY;
 		int range;
         int damage;
+        int attackDelay;        // number of seconds tower will wait before attacking another enemy
 
         Enemy* target;          // target is a pointer to the enemy that is the target
         vector<Enemy> *enemies;  // ref to vector of enemies from main.cpp

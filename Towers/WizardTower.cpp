@@ -15,8 +15,8 @@ WizardTower::WizardTower( SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTe
 	towerY = ypos;
 	numKills = 0;
 	damage = 50;
-	attackSpeed = 30.5;//number of times it attacks per minute
-	range = 120;
+	attackDelay = 3;	//number of times it attacks per minute
+	range = 160;
 	cost = 100;
 	gRenderer = gRendererPtr;
 	enemies = enemiesTemp;

@@ -23,7 +23,6 @@ public:
         void render();      // render tower image to screen 
 
 private:
-        double attackSpeed;
         int cost;
         unsigned int numKills;      //possibly? tracks total number of kills each tower has
         SDL_Texture* gTower;        // image of tower

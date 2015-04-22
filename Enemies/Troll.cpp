@@ -9,7 +9,7 @@ Troll::Troll(SDL_Renderer** gRendererPtr, MapDirections pathInfo) : Enemy(gRende
 	// load enemy img
 	gEnemy = NULL;
 	gEnemy = loadTexture("img/troll.png");	// utilizes Enemy class method
-	health = 200;	// sets the protected variable in Enemy class
+	health = 250;	// sets the protected variable in Enemy class
 
     enemyRect = getRect(gEnemy, ENEMY_MAX_DIMENSION, mPosX, mPosY);
 }

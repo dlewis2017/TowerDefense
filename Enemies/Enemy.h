@@ -38,7 +38,7 @@ class Enemy : public Object
 		SDL_Rect enemyRect;			// container for enemy image. Has positioning properties (x and y location)
 		double mPosX, mPosY;  		// The X and Y positions of the enemy
 		struct timeval tp;			// allows for milliseconds of current time, for animation
-		long int lastMoveTime;		// store time of last movement
+		long long lastMoveTime;		// store time of last movement
 		int moveInterval;			// move every __ milliseconds
 
 		int health;					// should be different for each Enemy and set in the derived classes

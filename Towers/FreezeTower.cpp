@@ -13,9 +13,9 @@ FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTem
     //initialize fields
     towerX = xpos;
     towerY = ypos;
-    attackSpeed = 4.0;//number of times it attacks per minute
-    range = 125;
-    damage = 50;
+    attackDelay = 2;    //number of times it attacks per minute
+    range = 140;
+    damage = 75;
     cost = 200;
 
     enemies = enemiesTemp;

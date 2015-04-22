@@ -73,7 +73,7 @@ int main( int argc, char* args[] )
     mapDirections.setNext("up", .4125*SCREEN_HEIGHT);
     mapDirections.setNext("right", SCREEN_WIDTH);
 
-    int nEnemies = 3;
+    int nEnemies = 2;
     int nEnemiesAdded = 0;
     bool allEnemiesAdded = false;
 
@@ -160,8 +160,7 @@ int main( int argc, char* args[] )
 		//TODO: implement a more functional loop
 		for (int i=0;i<towers.size();i++){
 			if (towers[i]->inRange(&enemies)){
-				//towers[i]->attack();
-				cout << "Enemy is in range!" << endl;
+//				cout << "Enemy is in range!" << endl;
 				towers[i]->attack();
 			}
 		}
