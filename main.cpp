@@ -39,7 +39,7 @@ SDL_Texture* loadTexture( std::string path );	//Loads individual image as textur
 SDL_Window* gWindow = NULL;			//The window we'll be rendering to
 SDL_Renderer* gRenderer = NULL;		//The window renderer
 SDL_Texture* gBackground = NULL;		//Current displayed texture
-vector<Enemy> enemies;				// stores all enemies
+vector<Enemy*> enemies;				// stores all enemies
 vector<TowerSpace> towerSpaces;
 vector<Tower*> towers;
 
@@ -73,7 +73,7 @@ int main( int argc, char* args[] )
     mapDirections.setNext("up", .4125*SCREEN_HEIGHT);
     mapDirections.setNext("right", SCREEN_WIDTH);
 
-    int nEnemies = 2;
+    int nEnemies = 3;
     int nEnemiesAdded = 0;
     bool allEnemiesAdded = false;
 
@@ -159,7 +159,7 @@ int main( int argc, char* args[] )
 		}
 		//TODO: implement a more functional loop
 		for (int i=0;i<towers.size();i++){
-			if (towers[i]->inRange(&enemies)){
+			if (towers[i]->inRange()){
 //				cout << "Enemy is in range!" << endl;
 				towers[i]->attack();
 			}
@@ -181,13 +181,13 @@ void addEnemies(MapDirections mapDirections, int *nEnemiesAdded) {
 	switch(random) {
 		case 0:
 		{
-			Goblin goblin(&gRenderer, mapDirections);
+			Goblin* goblin = new Goblin(&gRenderer, mapDirections);
 			enemies.push_back(goblin);
 			break;
 		}
 		case 1:
 		{
-			Troll troll(&gRenderer, mapDirections);
+			Troll* troll = new Troll(&gRenderer, mapDirections);
 			enemies.push_back(troll);
 			break;
 		}
@@ -201,7 +201,7 @@ void addEnemies(MapDirections mapDirections, int *nEnemiesAdded) {
  */
 void moveEnemies() {
 	for(int i = 0; i < enemies.size(); i++) {
-		if(enemies[i].move() == false) {
+		if(enemies[i]->move() == false) {			// if enemy has reached end of path
 			enemies.erase(enemies.begin() + i);
 		}
 	}
@@ -212,7 +212,7 @@ void moveEnemies() {
 */
 void renderEnemies() {
 	for(int i = 0; i < enemies.size(); i++) {
-		enemies[i].render();
+		enemies[i]->render();
 	}
 }
 

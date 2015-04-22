@@ -12,7 +12,7 @@ using namespace std;
 
 class FreezeTower : public Tower {
 public:
-        FreezeTower(SDL_Renderer** gRenderer, vector<Enemy> *, int xpos, int ypos);  //default constructor
+        FreezeTower(SDL_Renderer** gRenderer, vector<Enemy*> *, vector<Tower*> *, int xpos, int ypos);  //default constructor
         /*void attack();  	//implement this with archer tower specific graphics
         void target();  	//may or may not need to implement since it is already a single-targeting tower
         double getDPS();    //returns damage times attack speed (damage per second)

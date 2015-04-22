@@ -13,7 +13,7 @@ using namespace std;
 
 class CannonTower : public Tower {
 public:
-        CannonTower(SDL_Renderer** gRenderer, vector<Enemy> *, int xpos, int ypos);  //default constructor
+        CannonTower(SDL_Renderer** gRenderer, vector<Enemy*> *, vector<Tower*> *, int xpos, int ypos);  //default constructor
         /*void attack();      //implement this with cannon tower specific graphics
         void target();      //NEED to implement - multitargeting
         double getDPS();    //returns damage times attack speed (damage per second)

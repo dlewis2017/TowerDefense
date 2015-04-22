@@ -7,7 +7,7 @@
 #include "TowerSpace.h"
 
 TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace> *towerSpacesTemp, \
-	vector<Tower*> *towersTemp, vector<Enemy> *enemiesTemp, double xpos, double ypos) : Object(gRendererPtr)
+	vector<Tower*> *towersTemp, vector<Enemy*> *enemiesTemp, double xpos, double ypos) : Object(gRendererPtr)
 {
 	towerX = xpos;
 	towerY = ypos;
@@ -67,27 +67,27 @@ bool TowerSpace::handleKeyPress(SDL_Event e)
 	switch (e.key.keysym.sym){
 		case SDLK_a:
 		{
-			ArcherTower* archer = new ArcherTower(gRenderer, enemies, towerX, towerY);
+			// create a new WizardTower on the HEAP
+			// this means delete MUST be called on the object later, or else there will be a memory leak
+			ArcherTower* archer = new ArcherTower(gRenderer, enemies, towers, towerX, towerY);
             towers->push_back(archer);
             break;
         }
 		case SDLK_c:
-			{
-			CannonTower* cannon = new CannonTower(gRenderer, enemies, towerX, towerY);
+		{
+			CannonTower* cannon = new CannonTower(gRenderer, enemies, towers, towerX, towerY);
             towers->push_back(cannon);
             break;
         }
 		case SDLK_f:
 		{
-			FreezeTower* freeze = new FreezeTower(gRenderer, enemies, towerX, towerY);
+			FreezeTower* freeze = new FreezeTower(gRenderer, enemies, towers, towerX, towerY);
             towers->push_back(freeze);
             break;
         }
         case SDLK_w:
 		{
-			// create a new WizardTower on the HEAP
-			// this means delete MUST be called on the object later, or else there will be a memory leak
-			WizardTower* wiz = new WizardTower(gRenderer, enemies, towerX, towerY);
+			WizardTower* wiz = new WizardTower(gRenderer, enemies, towers, towerX, towerY);
 			towers->push_back(wiz);
 			break;
 		}

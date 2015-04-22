@@ -6,9 +6,11 @@
 
 #include "Tower.h"
 
-Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTemp) : Object(gRendererPtr) {
+Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTemp, \
+	vector<Tower*> *towersTemp) : Object(gRendererPtr) {
 	gRendererr = gRendererPtr;
 	enemies = enemiesTemp;
+	towers = towersTemp;
 	MAX_DIMENSION = 70;
 	MAX_DISTORTION = .57;
 	target = NULL;
@@ -16,7 +18,7 @@ Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTemp) : Object(
 	lastAttackTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - (attackDelay*1000);   // will make attack eligible immediatley
 }
 
-bool Tower::inRange(vector<Enemy> *enemies)
+bool Tower::inRange()
 {
 	// if there is a target selected, check if it is still in range.
 	// if not, reset target
@@ -31,12 +33,12 @@ bool Tower::inRange(vector<Enemy> *enemies)
 	}
 
 	// if there is no target currently selected, check to see if any of the enemies are in range
-	for (int i=0;i<enemies->size();i++) {
-		int enemy_X = (*enemies)[i].getPosX();
-		int enemy_Y = (*enemies)[i].getPosY();
+	for (int i=0; i < enemies->size(); i++) {
+		int enemy_X = (*enemies)[i]->getPosX();
+		int enemy_Y = (*enemies)[i]->getPosY();
 		double distance = sqrt(pow(enemy_Y - towerY, 2) + pow(enemy_X - towerX, 2));
 		if (distance <= range) {
-			target = &((*enemies)[i]);
+			target = (*enemies)[i];
 			return true;
 		}
 	}
@@ -49,7 +51,9 @@ bool Tower::inRange(vector<Enemy> *enemies)
  */
 void Tower::attack() {
 	
-	if(target == NULL) return;	// no need to attack if no enemy is in range
+	if(target == NULL){
+	 	return;	// no need to attack if no enemy is in range
+	 }
 
 	// get current time
 	gettimeofday(&timeStruct, NULL);
@@ -63,14 +67,37 @@ void Tower::attack() {
 
 		// check if enemy died from the most recent attack
 		if(target->isDead()) {	// if the enemy was just killed by the most recent attack
+			/*for(int i = 0; i < towers->size(); i++) {
+				if((*towers)[i] == (this)) {
+					cout << "skipping tower in loop, as expected" << endl;
+					continue;
+				}
+				(*towers)[i]->resetTarget(target);
+			}
+			*/
+			cout << ">> Enemy is dead" << endl;
+			cout << "size of enemy vector" << enemies->size() << endl;
 			for(int i = 0; i < enemies->size(); i++) {
-				if(&((*enemies)[i]) == target) {	// find which index in enemy vector the target enemy that just died is
+				cout << "Enemy addr in vec: " << (*enemies)[i] << "  target addr: " << target << endl;
+				if((*enemies)[i] == target) {	// find which index in enemy vector the target enemy that just died is
 					enemies->erase(enemies->begin() + i);
+					cout << ">>>> enemy deleted" << endl;
+					delete target;	// free Enemy's memory
 					break;
 				}
 			}
 			target = NULL; 		// reset tower's target
 		}
+	}
+}
+/* If the Tower's target matches the argument, the target should be reset to null 
+ * this method should be used if an enemy was just killed by a tower, meaning
+ * other towers should stop trying to attack the dead enemy
+ */
+void Tower::resetTarget(Enemy* enemy) {
+	if(target == enemy) {
+		cout << "resetting target..." << endl;
+		target = NULL;		// reset the Tower's target
 	}
 }
 

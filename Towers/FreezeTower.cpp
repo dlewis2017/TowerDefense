@@ -7,8 +7,8 @@
 #include "FreezeTower.h"
 
 //constructor that initializes an FreezeTower (arguments = position)
-FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTemp, int xpos, \
-    int ypos) : Tower(gRendererPtr, enemiesTemp)
+FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTemp, \
+    vector<Tower*> * towersTemp, int xpos, int ypos) : Tower(gRendererPtr, enemiesTemp, towersTemp)
 {
     //initialize fields
     towerX = xpos;
@@ -18,7 +18,6 @@ FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTem
     damage = 75;
     cost = 200;
 
-    enemies = enemiesTemp;
     gRenderer = gRendererPtr;
     gTower = loadTexture("img/freezeTower.png");
 	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);        

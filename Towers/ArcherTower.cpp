@@ -7,8 +7,8 @@
 #include "ArcherTower.h"
 
 //constructor that initializes an ArcherTower (arguments = position)
-ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTemp, int xpos, \
-	int ypos) : Tower(gRendererPtr, enemiesTemp)
+ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTemp, \
+	vector<Tower*> * towersTemp, int xpos, int ypos) : Tower(gRendererPtr, enemiesTemp, towersTemp)
 {
 	//initialize properties (many are Tower protected variables)
 	towerX = xpos;
@@ -19,7 +19,6 @@ ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, vector<Enemy> * enemiesTem
 	cost = 100;
 	numKills = 0;
 
-	enemies = enemiesTemp;
 	gRenderer = gRendererPtr;
 	gTower = loadTexture("img/archerTower.png");
 	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);

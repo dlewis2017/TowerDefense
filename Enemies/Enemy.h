@@ -41,7 +41,7 @@ class Enemy : public Object
 		long long lastMoveTime;		// store time of last movement
 		int moveInterval;			// move every __ milliseconds
 
-		int health;					// should be different for each Enemy and set in the derived classes
+		long health;					// should be different for each Enemy and set in the derived classes
 
     private:
 		

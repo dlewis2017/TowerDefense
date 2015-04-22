@@ -28,7 +28,7 @@ class TowerSpace : public Object {
 		/* constructor creates a blank tower at a set location at the beginning of the main program
 		 * takes in a reference to the vector of enemies so it can be passed on to Tower constructors */
 		TowerSpace(SDL_Renderer **gRendererPtr, vector<TowerSpace> *, vector<Tower*> *, \
-			vector<Enemy> *, double, double);
+			vector<Enemy*> *, double, double);
 		//destructor, called when the tower is to be replaced with a specific tower
 		//~TowerSpace();
 		//SDL loading media
@@ -50,7 +50,7 @@ class TowerSpace : public Object {
 
 		vector<TowerSpace> *towerSpaces;
 		vector<Tower*> *towers;
-		vector<Enemy> *enemies;
+		vector<Enemy*> *enemies;
 
 		SDL_Texture* gWizardTower;
 		SDL_Texture* gArcherTower;
