@@ -12,6 +12,8 @@
 #include "Enemies/Enemy.h"
 #include "Enemies/Goblin.h"
 #include "Enemies/Troll.h"
+#include "Enemies/Dragon.h"
+#include "Enemies/Wizard.h"
 #include "MapDirections.h"
 
 using namespace std;
@@ -178,7 +180,7 @@ int main( int argc, char* args[] )
 // adds enemies every ____seconds
 void addEnemies(MapDirections mapDirections, int *nEnemiesAdded) {
 	// create a new enemy randomly
-	int random = rand() % 2;
+	int random = rand() % 4;
 	switch(random) {
 		case 0:
 		{
@@ -190,6 +192,18 @@ void addEnemies(MapDirections mapDirections, int *nEnemiesAdded) {
 		{
 			Troll* troll = new Troll(&gRenderer, mapDirections);
 			enemies.push_back(troll);
+			break;
+		}
+		case 2:
+		{
+			Dragon* dragon = new Dragon(&gRenderer, mapDirections);
+			enemies.push_back(dragon);
+			break;
+		}
+		case 3:
+		{
+			Wizard* wizard = new Wizard(&gRenderer, mapDirections);
+			enemies.push_back(wizard);
 			break;
 		}
 	}
