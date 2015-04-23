@@ -9,11 +9,12 @@ CC = g++
 COMPILER_FLAGS = -w
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2 -lSDL2_image
+LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAMES = main.o Object.o Enemy.o Goblin.o Troll.o Tower.o TowerSpace.o \
-Dragon.o Wizard.o ArcherTower.o CannonTower.o FreezeTower.o WizardTower.o MapDirections.o
+Dragon.o Wizard.o ArcherTower.o CannonTower.o FreezeTower.o WizardTower.o \
+MapDirections.o
 
 #This is the target that compiles our executable
 all: main
