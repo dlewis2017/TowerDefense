@@ -322,7 +322,7 @@ bool loadMedia()
 		success = false;
 	}
 	//Open the font
-	gFont = TTF_OpenFont( "img/FFF_Tusj.ttf", 28 );
+	gFont = TTF_OpenFont( "img/SEASRN__.ttf", 28 );
 	if( gFont == NULL )
 	{
 		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
