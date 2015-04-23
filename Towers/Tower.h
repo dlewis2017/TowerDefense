@@ -20,7 +20,7 @@ class Tower : public Object {
 	public:
 		Tower(SDL_Renderer **gRendererPtr, vector<Enemy*> *, vector<Tower*> *);
     	//virtual void target() = 0;//targeting function, can be implemented by subclasses for multitargeting (cannon)
-    	void attack(); //function to begin attacking (decreasing health) of target
+    	void attack(int*); //function to begin attacking (decreasing health) of target
     	//virtual double getDPS() = 0;//returns damage times attack speed (damage per second)
     	//virtual double getRadius() = 0;//returns distance the tower can fire
     	//int getCost() = 0;//returns cost to build tower
@@ -35,6 +35,7 @@ class Tower : public Object {
         long long lastAttackTime;    // last time that an Enemy was attacked
 
     protected:
+		int pts_per_kill;
         int MAX_DIMENSION;      // share this value with derived towers
 		int towerX;
         int towerY;

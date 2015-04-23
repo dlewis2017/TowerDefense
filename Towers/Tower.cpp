@@ -16,6 +16,7 @@ Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTemp, \
 	target = NULL;
 	gettimeofday(&timeStruct, NULL);	// get current time of day
 	lastAttackTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - (attackDelay*1000);   // will make attack eligible immediatley
+	pts_per_kill = 30;
 }
 
 bool Tower::inRange()
@@ -49,7 +50,7 @@ bool Tower::inRange()
 /* Attack currently targeted enemy. Check if the Tower's attackDelay has been respected first.
  * After attacking, check to see if enemy is now dead. If yes, remove the Enemy.
  */
-void Tower::attack() {
+void Tower::attack(int* points) {
 	
 	if(target == NULL){
 	 	return;	// no need to attack if no enemy is in range
@@ -66,6 +67,8 @@ void Tower::attack() {
 
 		// check if enemy died from the most recent attack
 		if(target->isDead()) {	// if the enemy was just killed by the most recent attack
+			*points += pts_per_kill;
+			cout << "Nice kill! Total points = " << *points << endl;
 			for(int i = 0; i < towers->size(); i++) {
 				if((*towers)[i] == (this)) {
 					continue;

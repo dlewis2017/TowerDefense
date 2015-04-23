@@ -162,7 +162,7 @@ int main( int argc, char* args[] )
 		for (int i=0;i<towers.size();i++){
 			if (towers[i]->inRange()){
 //				cout << "Enemy is in range!" << endl;
-				towers[i]->attack();
+				towers[i]->attack(&total_points);
 			}
 		}
 		//Update screen
