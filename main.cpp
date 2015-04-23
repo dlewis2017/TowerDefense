@@ -95,7 +95,7 @@ int main( int argc, char* args[] )
 	towerSpaces.push_back(tower4);
 	towerSpaces.push_back(tower5);
 	//While application is running
-	
+	int total_points = 400;	
 	while( !quit )
 	{
 		int x,y;	// x and y locations of mouseclick 
@@ -152,7 +152,7 @@ int main( int argc, char* args[] )
 				if(SDL_PollEvent(&tower_choice) != 0) {;
 					if(tower_choice.type == SDL_KEYDOWN ){
 		               // if(tower_choice.type == SDL_KEYDOWN){
-		                    if( towerSpaces[i].handleKeyPress(tower_choice)) break;
+		                    if( towerSpaces[i].handleKeyPress(tower_choice, &total_points)) break;
 		               // }
 		            }
 		        }

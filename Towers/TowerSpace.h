@@ -34,7 +34,7 @@ class TowerSpace : public Object {
 		//SDL loading media
 		//isClicked();//tells is tower is clicked based on its X and Y location
 		bool dispDropDown(double xclick, double yclick);//displays the dropdown menu of options
-		bool handleKeyPress(SDL_Event tower_choice);
+		bool handleKeyPress(SDL_Event tower_choice, int*);
 		void render();
 		int getX();
 		int getY();
@@ -43,6 +43,10 @@ class TowerSpace : public Object {
 		//holds x and y values for position
 		double towerX;
 		double towerY;
+        int WizardCost;
+        int ArcherCost;
+        int FreezeCost;
+        int CannonCost;
 		SDL_Texture* towerTexture; 
 		SDL_Rect towerRect;
 		SDL_Renderer** gRenderer;

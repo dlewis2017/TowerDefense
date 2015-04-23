@@ -21,7 +21,10 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace> *towerSpa
 	towerRect = getRect(towerTexture, TOWER_MAX_DIMENSION, towerX, towerY);
 	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
 	
-	
+    WizardCost = 80;
+    ArcherCost = 100;
+    CannonCost = 120;
+    FreezeCost = 150;	
 
 	// create textures for each tower type
 	gWizardTower = loadTexture("img/wizardTower.png");
@@ -59,7 +62,7 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
  * If a valid key is pressed to create a new tower, the TowerSpace is removed, and a new Tower is created
  * and a pointer to it is added pushed onto the towers vector
  */
-bool TowerSpace::handleKeyPress(SDL_Event e)
+bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 {
 	// adds a specific type of tower to the towers vector
 	// objects are instantiated using operator new, adding the object to the HEAP
@@ -69,32 +72,64 @@ bool TowerSpace::handleKeyPress(SDL_Event e)
 		{
 			// create a new WizardTower on the HEAP
 			// this means delete MUST be called on the object later, or else there will be a memory leak
-			ArcherTower* archer = new ArcherTower(gRenderer, enemies, towers, towerX, towerY);
-            towers->push_back(archer);
-            break;
+			if (*points >= ArcherCost)
+			{
+				ArcherTower* archer = new ArcherTower(gRenderer, enemies, towers, towerX, towerY);
+            	towers->push_back(archer);
+				*points -= ArcherCost;
+            }
+			else {
+				cout << "You do not have enough points to buy this tower!" << endl;
+				return false;
+			}	
+			break;
         }
 		case SDLK_c:
 		{
-			CannonTower* cannon = new CannonTower(gRenderer, enemies, towers, towerX, towerY);
-            towers->push_back(cannon);
+			if (*points >= CannonCost)
+			{
+				CannonTower* cannon = new CannonTower(gRenderer, enemies, towers, towerX, towerY);
+            	towers->push_back(cannon);
+				*points -= CannonCost;
+			}
+			else {
+				cout << "You do not have enough points to buy this tower!" << endl;
+				return false;
+			}
             break;
         }
 		case SDLK_f:
 		{
-			FreezeTower* freeze = new FreezeTower(gRenderer, enemies, towers, towerX, towerY);
-            towers->push_back(freeze);
+			if (*points >= FreezeCost)
+			{
+				FreezeTower* freeze = new FreezeTower(gRenderer, enemies, towers, towerX, towerY);
+            	towers->push_back(freeze);
+				*points -= FreezeCost;
+			}
+			else {
+				cout << "You do not have enough points to buy this tower!" << endl;
+				return false;
+			}
             break;
         }
         case SDLK_w:
 		{
-			WizardTower* wiz = new WizardTower(gRenderer, enemies, towers, towerX, towerY);
-			towers->push_back(wiz);
+			if (*points >= WizardCost)
+			{
+				WizardTower* wiz = new WizardTower(gRenderer, enemies, towers, towerX, towerY);
+				towers->push_back(wiz);
+				*points -= WizardCost;
+			}
+			else {
+				cout << "You do not have enough points to buy this tower!" << endl;
+				return false;
+			}
 			break;
 		}
 		default:
 			return false;
 	}
-
+	cout << "Number of points remaining: " << *points << endl;
 	// if valid key was selected (a new tower was created), remove the TowerSpace
 	if (e.key.keysym.sym == SDLK_w || e.key.keysym.sym == SDLK_a || e.key.keysym.sym == SDLK_c || e.key.keysym.sym == SDLK_f) {
 		//removes the specific towerSpace that was selected
