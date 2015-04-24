@@ -91,13 +91,14 @@ int main( int argc, char* args[] )
 
     // add directions for the specific map (must be hard-coded for each map)
 	MapDirections mapDirections;	// stores turning instructions for the map's path
-    mapDirections.setNext("right", .1411*SCREEN_WIDTH);
-    mapDirections.setNext("up", .2125*SCREEN_HEIGHT);
-    mapDirections.setNext("right", .3444*SCREEN_WIDTH);
-    mapDirections.setNext("down", .6113*SCREEN_HEIGHT);
-    mapDirections.setNext("right", .6078*SCREEN_WIDTH);
-    mapDirections.setNext("up", .4125*SCREEN_HEIGHT);
+    mapDirections.setNext("right", .1675*SCREEN_WIDTH);
+    mapDirections.setNext("up", .1750*SCREEN_HEIGHT);
+    mapDirections.setNext("right", .3677*SCREEN_WIDTH);
+    mapDirections.setNext("down", .6488*SCREEN_HEIGHT);
+    mapDirections.setNext("right", .6361*SCREEN_WIDTH);
+    mapDirections.setNext("up", .3850*SCREEN_HEIGHT);
     mapDirections.setNext("right", SCREEN_WIDTH);
+
 
     int nEnemies = 3;
     int nEnemiesAdded = 0;
@@ -167,7 +168,6 @@ int main( int argc, char* args[] )
 
 		//Render texture to screen
 		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
-		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
 		//iterates through the towerSpaces vector and adds the ones currently in it
 		for (int i=0;i<towerSpaces.size();i++){
 			towerSpaces[i].render();
@@ -176,6 +176,8 @@ int main( int argc, char* args[] )
 		for (int i=0;i<towers.size();i++){
 			towers[i]->render();
 		}
+		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
+
 		//iterates through the towers and calls the inRange to sense if enemies are in range
 		SDL_Event tower_choice;
 
