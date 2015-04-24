@@ -27,6 +27,7 @@ ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
 // deallocate memory
 ArcherTower::~ArcherTower() {
 	delete gTower;
+	delete gRange;
 }
 
 // render the tower image to the screen

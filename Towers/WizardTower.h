@@ -17,6 +17,7 @@ using namespace std;
 class WizardTower : public Tower {
 public:
         WizardTower( SDL_Renderer** gRenderer, vector<Enemy*> *, vector<Tower*> *, int xpos, int ypos); //constructor with the position as argument
+        ~WizardTower();
         void render();      // render tower image to screen
 
 private:

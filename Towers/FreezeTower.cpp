@@ -24,6 +24,12 @@ FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
           
 }
 
+// deallocate memory
+FreezeTower::~FreezeTower() {
+    delete gTower;
+    delete gRange;
+}
+
 // render the tower image to the screen
 void FreezeTower::render() {
     // only render Range radius if the flag is set (from handleMouseClick())

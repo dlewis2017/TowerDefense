@@ -24,6 +24,12 @@ WizardTower::WizardTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
    	
 }
 
+// deallocate memory
+WizardTower::~WizardTower() {
+	delete gTower;
+	delete gRange;
+}
+
 // render the tower image to the screen
 void WizardTower::render() {
 	// only render Range radius if the flag is set (from handleMouseClick())
