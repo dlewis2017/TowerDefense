@@ -12,9 +12,8 @@ COMPILER_FLAGS = -w
 LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAMES = main.o Object.o Enemy.o Goblin.o Troll.o Tower.o TowerSpace.o \
-Dragon.o Wizard.o ArcherTower.o CannonTower.o FreezeTower.o WizardTower.o \
-MapDirections.o
+OBJ_NAMES = main.o Object.o Enemy.o HealthBar.o Goblin.o Troll.o Dragon.o Wizard.o \
+Tower.o TowerSpace.o ArcherTower.o CannonTower.o FreezeTower.o WizardTower.o MapDirections.o
 
 #This is the target that compiles our executable
 all: main
@@ -30,6 +29,9 @@ Object.o: Object.cpp Object.h
 
 Enemy.o: Enemies/Enemy.cpp Enemies/Enemy.h MapDirections.cpp MapDirections.h
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Enemies/Enemy.cpp
+
+HealthBar.o: Enemies/HealthBar.cpp Enemies/HealthBar.h
+	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Enemies/HealthBar.cpp
 
 Goblin.o: Enemies/Goblin.cpp Enemies/Goblin.h MapDirections.cpp MapDirections.h
 	$(CC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -c Enemies/Goblin.cpp

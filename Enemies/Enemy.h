@@ -9,10 +9,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
+#include <iostream>
 #include <string>
 #include <sys/time.h>
 #include "../MapDirections.h"
 #include "../Object.h"
+#include "HealthBar.h"
 
 class Enemy : public Object
 {
@@ -22,8 +24,9 @@ class Enemy : public Object
 		static const double ENEMY_VEL = 3;		// different computers seem to require a different velocity
 
 		Enemy(SDL_Renderer **gRenderer, MapDirections pathInfo);  // constructor
-		void render();						// Repositions the the enemy on the screen after gRenderer is updated
-		bool move();						// move the enemy on the screen according to map positions
+		virtual ~Enemy();	// deconstructor
+		void render();		// Repositions the the enemy on the screen after gRenderer is updated
+		bool move();		// move the enemy on the screen according to map positions
 		double getPosX();	// return current x coordinate of enemy
 		double getPosY();	// return current y coordinate
 		void takeDamage(int);	// take x amount of damage from an Enemy tower
@@ -41,7 +44,9 @@ class Enemy : public Object
 		long long lastMoveTime;		// store time of last movement
 		int moveInterval;			// move every __ milliseconds
 
-		long health;					// should be different for each Enemy and set in the derived classes
+		long health;				// should be different for each Enemy and set in the derived classes
+		double maxHealth;				// hold initial health value
+		HealthBar* healthBar;		// health bar to display above the Enemy
 
     private:
 		

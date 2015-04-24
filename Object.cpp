@@ -1,4 +1,6 @@
 #include "Object.h"
+#include <iostream>
+using namespace std;
 
 Object::Object(SDL_Renderer** gRendererPtr)
 {
@@ -32,6 +34,9 @@ SDL_Rect Object::getRect(SDL_Texture* texture, int maxDimension, int x, int y) {
         } else {
             textureWidth = maxDimension;    // safe because width won't exceed MAX_DISTORTION threshold
         }
+        container.x = (int)(x - (.5 * maxDimension) + (.5*(maxDimension - textureWidth)));
+        container.y = (int)(y - (.5 * textureHeight));          
+        
         
     } else {                                            // width = maxDimension. Distort height as necessary
         double factor = textureWidth / maxDimension;    // scaling factor to reduce height by
@@ -42,9 +47,9 @@ SDL_Rect Object::getRect(SDL_Texture* texture, int maxDimension, int x, int y) {
         } else {
             textureHeight = maxDimension;   // safe because width won't exceed MAX_DISTORTION threshold
         }
+        container.x = (int)(x - (.5 * textureWidth));
+        container.y = (int)(y - (.5 * maxDimension) + (.5*(maxDimension - textureHeight)));
     }
-    container.x = (int)(x - (.5 * textureWidth));
-    container.y = (int)(y - (.5 * textureHeight));          
     container.w = (int)textureWidth;
     container.h = (int)textureHeight;
 

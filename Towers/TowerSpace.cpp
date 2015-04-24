@@ -21,6 +21,7 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace> *towerSpa
 	towerRect = getRect(towerTexture, TOWER_MAX_DIMENSION, towerX, towerY);
 	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
 	
+	// set cost for each type of tower
     WizardCost = 80;
     ArcherCost = 100;
     CannonCost = 120;
@@ -39,6 +40,16 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace> *towerSpa
 	gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY+4*TOWER_MAX_DIMENSION );
 
 }
+
+// delete allocated memory
+/*TowerSpace::~TowerSpace() {
+	delete towerTexture;
+	delete gArcherTower;
+	delete gCannonTower;
+	delete gFreezeTower;
+	delete gWizardTower;
+}
+*/
 
 // redisplays/renders the TowerSpace object on the screen
 void TowerSpace::render() {

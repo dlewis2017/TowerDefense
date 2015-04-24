@@ -1,6 +1,3 @@
-#include <SDL2/SDL.h>
-#include <string>
-#include <iostream>
 #include "Enemy.h"
 using namespace std;
 
@@ -17,6 +14,18 @@ Enemy::Enemy(SDL_Renderer** gRendererPtr, MapDirections pathInfo) : Object(gRend
     moveInterval = 120;         // move every 100 microseconds
     gettimeofday(&tp, NULL);
     lastMoveTime = (tp.tv_sec * 1000 + tp.tv_usec / 1000) - moveInterval;   // will trigger movement immediately
+
+    //HealthBar healthBar(gRendererPtr);
+
+    //healthBar(gRendererPtr);  
+
+    healthBar = new HealthBar(gRendererPtr, ENEMY_MAX_DIMENSION); 
+}
+
+// delete allocated memory
+Enemy::~Enemy() {
+    //delete healthBar;
+    //delete gEnemy;
 }
 
 /* Move the enemy. Return false if the enemy is done moving (reached end of path)
@@ -35,19 +44,19 @@ bool Enemy::move()
         string curDirection = mapDirections.getDir();
         if (curDirection == "right") {
             mPosX += ENEMY_VEL;
-            if(mPosX >= mapDirections.getStop()) mapDirections.next();  // check if ready for next direction
+            if(mPosX + .5*enemyRect.w >= mapDirections.getStop()) mapDirections.next();  // check if ready for next direction
         } 
         else if(curDirection == "left") {
             mPosX -= ENEMY_VEL;
-            if(mPosX <= mapDirections.getStop()) mapDirections.next();
+            if(mPosX + .5*enemyRect.w <= mapDirections.getStop()) mapDirections.next();
         } 
         else if(curDirection == "up") {
             mPosY -= ENEMY_VEL;
-            if(mPosY <= mapDirections.getStop()) mapDirections.next();
+            if(mPosY - .5*enemyRect.h <= mapDirections.getStop()) mapDirections.next();
         } 
         else if(curDirection == "down") {
             mPosY += ENEMY_VEL; 
-            if(mPosY >= mapDirections.getStop()) mapDirections.next();
+            if(mPosY + .5*enemyRect.h >= mapDirections.getStop()) mapDirections.next();
         }
         lastMoveTime = curTime;     // track that enemy just moved so it doesn't move again before it is supposed to
         return true;
@@ -66,16 +75,19 @@ void Enemy::render()
     enemyRect.y = mPosY;
     SDL_RenderCopy( *gRenderer, gEnemy, NULL, &enemyRect);  // renderings need to be pushed to screen still. happens in main
 	
+    // update healthBar too
+    healthBar->update(getPosX(), getPosY() - .5*enemyRect.h, (double)health/maxHealth);    // give x center, y top, % health
+    healthBar->render();
 }
 
 // return x position of enemy
 double Enemy::getPosX() {
-	return mPosX;
+	return enemyRect.x + .5*enemyRect.w;
 }
 
 // return y position of enemy
 double Enemy::getPosY() {
-	return mPosY;
+	return enemyRect.y + .5*enemyRect.h;
 }
 
 // reduce Enemy's health by the amount of damage given by the tower

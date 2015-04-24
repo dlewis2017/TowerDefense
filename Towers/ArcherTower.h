@@ -14,6 +14,7 @@ using namespace std;
 class ArcherTower : public Tower {
 public:
         ArcherTower(SDL_Renderer** gRenderer, vector<Enemy*> *, vector<Tower*> *, int xpos, int ypos);  //constructor with the position as argument
+        ~ArcherTower();     // deconstructor
         /*void attack();      //implement this with archer tower specific graphics
         void target();      //may or may not need to implement since it is already a single-targeting tower
         double getDPS();    //returns damage times attack speed (damage per second)

@@ -29,6 +29,7 @@ class TowerSpace : public Object {
 		 * takes in a reference to the vector of enemies so it can be passed on to Tower constructors */
 		TowerSpace(SDL_Renderer **gRendererPtr, vector<TowerSpace> *, vector<Tower*> *, \
 			vector<Enemy*> *, double, double);
+		//~TowerSpace();	// deconstructor
 		//destructor, called when the tower is to be replaced with a specific tower
 		//~TowerSpace();
 		//SDL loading media
