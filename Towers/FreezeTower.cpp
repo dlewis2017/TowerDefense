@@ -16,38 +16,19 @@ FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
     attackDelay = 2;    //number of times it attacks per minute
     range = 140;
     damage = 75;
-    cost = 200;
 
-    gRenderer = gRendererPtr;
     gTower = loadTexture("img/freezeTower.png");
-	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);        
+	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
+    gRange = loadTexture("img/range.png");                          // load in range radius image
+    gRangeRect = getRect(gRange, 2*range, towerX, towerY);          // container for range radius with correct sizing
+          
 }
 
 // render the tower image to the screen
-void FreezeTower::render()
-{
+void FreezeTower::render() {
+    // only render Range radius if the flag is set (from handleMouseClick())
+    if(renderRange) {
+        SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
+    }
     SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
 }
-
-/*
-void FreezeTower::attack()
-{
-    if (inRange(towerX, towerY, radius))
-    {
-            //attack the enemy
-    }
-}
-double FreezeTower::getDPS()
-{
-        return ((attackSpeed/60.0)*damage);
-}
-double FreezeTower::getRadius()
-{
-        return radius;
-}
-int FreezeTower::getCost()
-{
-        return cost;
-}
-
-*/

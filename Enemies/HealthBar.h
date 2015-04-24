@@ -26,7 +26,6 @@ class HealthBar : public Object {
 		int barHeight;				// height of health bar
 		int maxEnemyDimension;		// store max dimension of enemy
 
-
 		SDL_Texture* gGreenBar;
 		SDL_Texture* gRedBar;
 

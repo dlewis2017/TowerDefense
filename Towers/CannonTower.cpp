@@ -13,42 +13,22 @@ CannonTower::CannonTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
         //initialize fields
     towerX = xpos;
     towerY = ypos;
-    numKills = 0;
     damage = 50;
     attackDelay = 3;    //number of times it attacks per minute
     range = 180;
-    cost = 150;
 
-    gRenderer = gRendererPtr;
     gTower = loadTexture("img/cannonTower.png");
     gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
+    gRange = loadTexture("img/range.png");                          // load in range radius image
+    gRangeRect = getRect(gRange, 2*range, towerX, towerY);          // container for range radius with correct sizing
    
 }
 
 // render the tower image to the screen
-void CannonTower::render()
-{
+void CannonTower::render() {
+    // only render Range radius if the flag is set (from handleMouseClick())
+    if(renderRange) {
+        SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
+    }
     SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
 }
-/*
-void CannonTower::attack()
-{
-    if (inRange(towerX, towerY, radius))
-    {
-        //attack the enemy
-    }
-}
-double CannonTower::getDPS()
-{
-        return ((attackSpeed/60.0)*damage);
-}
-double CannonTower::getRadius()
-{
-        return radius;
-}
-int CannonTower::getCost()
-{
-        return cost;
-}
-
-*/

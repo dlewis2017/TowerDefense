@@ -16,13 +16,12 @@ ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
 	damage = 50;
 	attackDelay = 2;	//number of times it attacks per minute
 	range = 195;
-	cost = 100;
-	numKills = 0;
-
-	gRenderer = gRendererPtr;
+	
 	gTower = loadTexture("img/archerTower.png");
 	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
-	
+	gRange = loadTexture("img/range.png");                          // load in range radius image
+    gRangeRect = getRect(gRange, 2*range, towerX, towerY);          // container for range radius with correct sizing
+   
 }
 
 // deallocate memory
@@ -31,35 +30,10 @@ ArcherTower::~ArcherTower() {
 }
 
 // render the tower image to the screen
-void ArcherTower::render()
-{
+void ArcherTower::render() {
+	// only render Range radius if the flag is set (from handleMouseClick())
+	if(renderRange) {
+		SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
+	}
 	SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
 }
-
-/*
-void ArcherTower::attack()
-{
-	if (inRange(towerX, towerY, radius))
-	{
-		//attack the enemy
-	}
-}
-double ArcherTower::getDPS()
-{
-	return ((attackSpeed/60.0)*damage);
-}
-double ArcherTower::getRadius()
-{
-	return radius;
-}
-int ArcherTower::getCost()
-{
-	return cost;
-}
-void ArcherTower::displayTower()
-{
-
-
-}
-
-*/

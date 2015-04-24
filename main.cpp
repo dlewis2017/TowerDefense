@@ -27,7 +27,7 @@ const int SCREEN_HEIGHT = 800;
 const int TOWER_MAX_DIMENSION = 70;
 const int ENEMY_MAX_DIMENSION = 60;
 const double MAX_DISTORTION = .57;		// decimal of max percentage
-const int ENEMY_TIME_DELAY = 6500;		// delay between enemies traversing the path, milliseconds
+const int ENEMY_TIME_DELAY = 4500;		// delay between enemies traversing the path, milliseconds
 
 //Text palcement
 const int TITLE_X = 300;
@@ -100,7 +100,7 @@ int main( int argc, char* args[] )
     mapDirections.setNext("right", SCREEN_WIDTH);
 
 
-    int nEnemies = 3;
+    int nEnemies = 7;
     int nEnemiesAdded = 0;
     bool allEnemiesAdded = false;
 
@@ -152,7 +152,10 @@ int main( int argc, char* args[] )
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 				SDL_GetMouseState(&x,&y);
 
-				// pass x and y mouse click coordinates to TowerSelector objects
+				// pass x and y mouse click coordinates Towers
+				for(int i = 0; i < towers.size(); i++) {
+					towers[i]->handleMouseClick(x, y);
+				}
 
 			}
 			

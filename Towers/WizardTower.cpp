@@ -13,38 +13,22 @@ WizardTower::WizardTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
 	//initialize private variables
 	towerX = xpos;
 	towerY = ypos;
-	numKills = 0;
 	damage = 50;
 	attackDelay = 3;	//number of times it attacks per minute
 	range = 160;
-	cost = 100;
-	gRenderer = gRendererPtr;
-
+	
 	gTower = loadTexture("img/wizardTower.png");
-	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);	
+	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
+	gRange = loadTexture("img/range.png");                          // load in range radius image
+    gRangeRect = getRect(gRange, 2*range, towerX, towerY);          // container for range radius with correct sizing
+   	
 }
 
 // render the tower image to the screen
-void WizardTower::render()
-{
+void WizardTower::render() {
+	// only render Range radius if the flag is set (from handleMouseClick())
+	if(renderRange) {
+		SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
+	}
 	SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
 }
-/*void WizardTower::attack()
-{
-	if (inRange(towerX, towerY, radius))
-	{
-		//attack the enemy
-	}
-}
-double WizardTower::getDPS()
-{
-	return ((attackSpeed/60.0)*damage);
-}
-double WizardTower::getRadius()
-{
-	return radius;
-}
-int WizardTower::getCost()
-{
-	return cost;
-}*/

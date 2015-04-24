@@ -8,7 +8,7 @@
 
 Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTemp, \
 	vector<Tower*> *towersTemp) : Object(gRendererPtr) {
-	gRendererr = gRendererPtr;
+	gRenderer = gRendererPtr;
 	enemies = enemiesTemp;
 	towers = towersTemp;
 	MAX_DIMENSION = 70;
@@ -17,8 +17,15 @@ Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTemp, \
 	gettimeofday(&timeStruct, NULL);	// get current time of day
 	lastAttackTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - (attackDelay*1000);   // will make attack eligible immediatley
 	pts_per_kill = 30;
+	renderRange = false;
 }
 
+/* Find an enemy that is in range of the tower
+ * If the tower already has a target, check and see if that target is still in range. If not, look for another.
+ * If the tower does not have a target, check and see if each enemy in the vector of pointers to 
+ * Enemies are in range. Set the first one that is as the target.
+ * Returns true if it has a target, false if not
+ */
 bool Tower::inRange()
 {
 	// if there is a target selected, check if it is still in range.
@@ -93,12 +100,31 @@ void Tower::attack(int* points) {
  */
 void Tower::resetTarget(Enemy* enemy) {
 	if(target == enemy) {
-		cout << "resetting target..." << endl;
-		target = NULL;		// reset the Tower's target
+		target = NULL;		// reset the Tower's target since it's target is now dead
 	}
 }
 
-//int Tower::getCost() {
-	
-//};
+// display radius around Tower for visual of it's range
+void Tower::handleMouseClick( int x, int y ) {
+	// check if the recent mouseclick was on the image or not
+    if(x < towerX + .5*gTowerRect.w && x > towerX - .5*gTowerRect.w 
+    	&& y < towerY + .5*gTowerRect.y && y > towerY - .5*gTowerRect.h) 
+    {
+    	// if tower was clicked AND it renderRange was already true, turn it back off
+    	if(renderRange) {
+    		renderRange = false;
+    	} else {
+    		renderRange = true;
+    	}
+    } else {
+    	renderRange = false;
+    }
+}
 
+void Tower::render() {
+	// only render Range radius if the flag is set (from handleMouseClick())
+	if(renderRange) {
+		SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
+	}
+	SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
+}
