@@ -42,7 +42,7 @@ bool init();		//Starts up SDL and creates window
 bool loadMedia();	//Loads media
 void close();		//Frees media and shuts down SDL
 SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);
-void moveEnemies();	// moves all enemies in the enemies vector
+void moveEnemies(int *);	// moves all enemies in the enemies vector
 void renderEnemies(); 	// render all enemies in the enemies vector
 void addEnemies(MapDirections mapDirections, int * nEnemiesAdded);		// add enemies until max # reached
 bool loadFromFile( std::string path ); //load image at specified path
@@ -114,13 +114,19 @@ int main( int argc, char* args[] )
 	TowerSpace tower1(&gRenderer, &towerSpaces, &towers, &enemies, 80, 360);
 	TowerSpace tower2(&gRenderer, &towerSpaces, &towers, &enemies, 220, 275);
 	TowerSpace tower3(&gRenderer, &towerSpaces, &towers, &enemies, 400, 440);
-	TowerSpace tower4(&gRenderer, &towerSpaces, &towers, &enemies, 570, 285);
+	TowerSpace tower4(&gRenderer, &towerSpaces, &towers, &enemies, 670, 285);
 	TowerSpace tower5(&gRenderer, &towerSpaces, &towers, &enemies, 750, 435);
+	TowerSpace tower6(&gRenderer, &towerSpaces, &towers, &enemies, 500, 590);
+	TowerSpace tower7(&gRenderer, &towerSpaces, &towers, &enemies, 400, 200);
+	TowerSpace tower8(&gRenderer, &towerSpaces, &towers, &enemies, 160, 120);
 	towerSpaces.push_back(tower1);
 	towerSpaces.push_back(tower2);
 	towerSpaces.push_back(tower3);
 	towerSpaces.push_back(tower4);
 	towerSpaces.push_back(tower5);
+	towerSpaces.push_back(tower6);
+	towerSpaces.push_back(tower7);
+	towerSpaces.push_back(tower8);
 
 	//instatiate object in class that generates text
 	//LTexture gTextTexture;
@@ -128,7 +134,8 @@ int main( int argc, char* args[] )
 	//gTextTexture.render( ( SCREEN_WIDTH - gTextTexture.getWidth() ) / 2, ( SCREEN_HEIGHT - gTextTexture.getHeight() ) / 2 );
 
 	//While application is running
-	int total_points = 400;	
+	int total_points = 400;
+	int lives = 3;
 	while( !quit )
 	{
 		int x,y;	// x and y locations of mouseclick 
@@ -162,7 +169,7 @@ int main( int argc, char* args[] )
     		if(enemies.size() == nEnemies) allEnemiesAdded = true;
 		}
 
-		moveEnemies();	// moves all enemies in enemies vector (updates position)
+		moveEnemies(&lives);	// moves all enemies in enemies vector (updates position)
 		//Clear screen
 		SDL_RenderClear( gRenderer );
 
@@ -177,7 +184,10 @@ int main( int argc, char* args[] )
 			towers[i]->render();
 		}
 		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
-
+		if(lives == 0){
+			cout<<"GAME OVER!!!!"<<endl;
+			quit = true;
+		}
 		//iterates through the towers and calls the inRange to sense if enemies are in range
 		SDL_Event tower_choice;
 
@@ -249,9 +259,11 @@ void addEnemies(MapDirections mapDirections, int *nEnemiesAdded) {
  * Check return status of enemy.move(). If false, then the enemy has
  * reached the end of the path, and should be removed from the enemies vector
  */
-void moveEnemies() {
+void moveEnemies(int* life) {
 	for(int i = 0; i < enemies.size(); i++) {
 		if(enemies[i]->move() == false) {			// if enemy has reached end of path
+			*life -= 1;
+			cout<<"Lives remain: "<<*life<<endl;
 			enemies.erase(enemies.begin() + i);
 		}
 	}
