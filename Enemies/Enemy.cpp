@@ -62,7 +62,6 @@ bool Enemy::move()
         lastMoveTime = curTime;     // track that enemy just moved so it doesn't move again before it is supposed to
         return true;
     } else {
-        cout << "done moving" << endl;
         return false;
     }
 }
