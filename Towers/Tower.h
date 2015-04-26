@@ -19,6 +19,7 @@ using namespace std;
 class Tower : public Object {
 	public:
 		Tower(SDL_Renderer **gRendererPtr, vector<Enemy*> *, vector<Tower*> *);
+        ~Tower();                      // deconstructor frees allocated memory
     	void attack(int*);             // function to begin attacking (decreasing health) of target
     	virtual void render() = 0;     // makes Tower class abstract
 		bool inRange();                // senses if any enemy is in the specific tower's range
@@ -41,7 +42,7 @@ class Tower : public Object {
         bool renderRange;       // bool flag to display range or not
 
         SDL_Renderer** gRenderer;    // double pointer to renderer
-        SDL_Texture * gTower;   // texture containing tower's image
+        SDL_Texture* gTower;   // texture containing tower's image
         SDL_Rect gTowerRect;    // container for gTower texture
         SDL_Texture* gRange;    // texture for Range radius
         SDL_Rect gRangeRect;    // container for Range radius

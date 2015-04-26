@@ -8,16 +8,26 @@
 
 Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTemp, \
 	vector<Tower*> *towersTemp) : Object(gRendererPtr) {
+	
 	gRenderer = gRendererPtr;
 	enemies = enemiesTemp;
 	towers = towersTemp;
+
 	MAX_DIMENSION = 70;
 	MAX_DISTORTION = .57;
 	target = NULL;
-	gettimeofday(&timeStruct, NULL);	// get current time of day
-	lastAttackTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - (attackDelay*1000);   // will make attack eligible immediatley
 	pts_per_kill = 30;
 	renderRange = false;
+
+	// initialize timing so that towers know when they can attack	
+	gettimeofday(&timeStruct, NULL);	// get current time of day
+	lastAttackTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - (attackDelay*1000);   // will make attack eligible immediatley
+}
+
+// deallocate memory
+Tower::~Tower() {
+	SDL_DestroyTexture(gTower);
+	SDL_DestroyTexture(gRange);
 }
 
 /* Find an enemy that is in range of the tower
@@ -75,7 +85,6 @@ void Tower::attack(int* points) {
 		// check if enemy died from the most recent attack
 		if(target->isDead()) {	// if the enemy was just killed by the most recent attack
 			*points += pts_per_kill;
-			cout << "Nice kill! Total points = " << *points << endl;
 			for(int i = 0; i < towers->size(); i++) {
 				if((*towers)[i] == (this)) {
 					continue;
@@ -94,6 +103,7 @@ void Tower::attack(int* points) {
 		}
 	}
 }
+
 /* If the Tower's target matches the argument, the target should be reset to null 
  * this method should be used if an enemy was just killed by a tower, meaning
  * other towers should stop trying to attack the dead enemy
@@ -119,12 +129,4 @@ void Tower::handleMouseClick( int x, int y ) {
     } else {
     	renderRange = false;
     }
-}
-
-void Tower::render() {
-	// only render Range radius if the flag is set (from handleMouseClick())
-	if(renderRange) {
-		SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
-	}
-	SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
 }

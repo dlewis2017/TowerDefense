@@ -24,12 +24,6 @@ CannonTower::CannonTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
    
 }
 
-// deallocate memory
-CannonTower::~CannonTower() {
-    delete gTower;
-    delete gRange;
-}
-
 // render the tower image to the screen
 void CannonTower::render() {
     // only render Range radius if the flag is set (from handleMouseClick())

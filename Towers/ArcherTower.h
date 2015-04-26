@@ -14,7 +14,6 @@ using namespace std;
 class ArcherTower : public Tower {
 public:
     ArcherTower(SDL_Renderer** gRenderer, vector<Enemy*> *, vector<Tower*> *, int xpos, int ypos);  //constructor with the position as argument
-    ~ArcherTower();     // deconstructor
     void render();      // render tower image to screen
 
 private:

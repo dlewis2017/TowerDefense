@@ -6,7 +6,7 @@
 */
 #include "TowerSpace.h"
 
-TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace> *towerSpacesTemp, \
+TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace*> *towerSpacesTemp, \
 	vector<Tower*> *towersTemp, vector<Enemy*> *enemiesTemp, double xpos, double ypos) : Object(gRendererPtr)
 {
 	towerX = xpos;
@@ -42,14 +42,13 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace> *towerSpa
 }
 
 // delete allocated memory
-/*TowerSpace::~TowerSpace() {
-	delete towerTexture;
-	delete gArcherTower;
-	delete gCannonTower;
-	delete gFreezeTower;
-	delete gWizardTower;
+TowerSpace::~TowerSpace() {
+	SDL_DestroyTexture(towerTexture);
+	SDL_DestroyTexture(gArcherTower);
+	SDL_DestroyTexture(gCannonTower);
+	SDL_DestroyTexture(gFreezeTower);
+	SDL_DestroyTexture(gWizardTower);
 }
-*/
 
 // redisplays/renders the TowerSpace object on the screen
 void TowerSpace::render() {
@@ -140,23 +139,18 @@ bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 		default:
 			return false;
 	}
+
 	cout << "Number of points remaining: " << *points << endl;
+
 	// if valid key was selected (a new tower was created), remove the TowerSpace
 	if (e.key.keysym.sym == SDLK_w || e.key.keysym.sym == SDLK_a || e.key.keysym.sym == SDLK_c || e.key.keysym.sym == SDLK_f) {
 		//removes the specific towerSpace that was selected
-		for (int i=0;i<(*towerSpaces).size();i++){
-			if ((*towerSpaces)[i].getX() == towerX && (*towerSpaces)[i].getY() == towerY) {
-				(*towerSpaces).erase((*towerSpaces).begin() + i);
+		for (int i = 0; i < towerSpaces->size(); i++) {
+			if ((*towerSpaces)[i] == this) {
+				delete this;
+				towerSpaces->erase(towerSpaces->begin() + i);
 			}
 		}
 	}
 	return true;
-}
-
-int TowerSpace::getX() {
-	return towerX;
-}
-
-int TowerSpace::getY() {
-	return towerY;
 }

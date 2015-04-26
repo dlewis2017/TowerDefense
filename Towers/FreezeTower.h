@@ -13,7 +13,6 @@ using namespace std;
 class FreezeTower : public Tower {
 public:
     FreezeTower(SDL_Renderer** gRenderer, vector<Enemy*> *, vector<Tower*> *, int xpos, int ypos);  //default constructor
-    ~FreezeTower();
     void render();      // render tower image to screen
 
 private:
