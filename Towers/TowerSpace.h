@@ -31,6 +31,7 @@ class TowerSpace : public Object {
 			vector<Enemy*> *, double, double);
 		~TowerSpace(); // destructor, called when the tower is to be replaced with a specific tower
 		//isClicked();//tells is tower is clicked based on its X and Y location
+		void createRects(); //creates rects for each img loaded
 		bool dispDropDown(double xclick, double yclick);//displays the dropdown menu of options
 		bool handleKeyPress(SDL_Event tower_choice, int*);
 		void render();
@@ -56,11 +57,19 @@ class TowerSpace : public Object {
 		SDL_Texture* gArcherTower;
 		SDL_Texture* gCannonTower;
 		SDL_Texture* gFreezeTower;
+		SDL_Texture* gW;
+		SDL_Texture* gA;
+		SDL_Texture* gF;
+		SDL_Texture* gC;
 
 		SDL_Rect gWizardTowerRect;
 		SDL_Rect gArcherTowerRect;
 		SDL_Rect gCannonTowerRect;
 		SDL_Rect gFreezeTowerRect;
+		SDL_Rect gWRect;
+		SDL_Rect gARect;
+		SDL_Rect gCRect;
+		SDL_Rect gFRect;
 
 };
 #endif
