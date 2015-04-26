@@ -170,7 +170,7 @@ int main( int argc, char* args[] )
 		}
 
 		moveEnemies(&lives);	// moves all enemies in enemies vector (updates position)
-		
+
 		//Clear screen
 		SDL_RenderClear( gRenderer );
 
@@ -287,8 +287,11 @@ void moveEnemies(int* life) {
  * Destroys the SDL_Textures after they are rendered
  */
 void renderText(int total_points) {
+	int extraTitleWidth = 150;
+	int extraTitleHeight = 70;
 	SDL_Texture *titleTexture = renderText("Tower Defense");
-	SDL_Rect titleRect {TITLE_X, TITLE_Y, TEXT_WIDTH + 150, TEXT_HEIGHT + 70}; // make title larger
+	SDL_Rect titleRect {.5*SCREEN_WIDTH - .5 * (TEXT_WIDTH + extraTitleWidth), TITLE_Y, TEXT_WIDTH \
+		+ extraTitleWidth, TEXT_HEIGHT + extraTitleHeight}; // make title larger, centered
 	SDL_RenderCopy(gRenderer, titleTexture, NULL, &titleRect);
 	SDL_DestroyTexture(titleTexture);
 
