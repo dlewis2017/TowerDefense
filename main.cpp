@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <sys/time.h>
@@ -16,7 +17,6 @@
 #include "Enemies/Dragon.h"
 #include "Enemies/Wizard.h"
 #include "MapDirections.h"
-//#include "LTexture.h"
 
 using namespace std;
 
@@ -32,9 +32,9 @@ const int ENEMY_TIME_DELAY = 4500;		// delay between enemies traversing the path
 //Text palcement
 const int TITLE_X = 300;
 const int TITLE_Y = 0;
-const int COIN_X = 0;
+const int COIN_X = 5;
 const int COIN_Y = 650;
-const int LIVES_X = 0;
+const int LIVES_X = 5;
 const int LIVES_Y = 700;
 
 // methods
@@ -43,14 +43,11 @@ bool loadMedia();	//Loads media
 void close();		//Frees media and shuts down SDL
 SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);
 void moveEnemies(int *);	// moves all enemies in the enemies vector
-void renderEnemies(); 	// render all enemies in the enemies vector
 void addEnemies(MapDirections mapDirections, int * nEnemiesAdded);		// add enemies until max # reached
-bool loadFromFile( std::string path ); //load image at specified path
-bool loadFromRenderedText( std::string textureText, SDL_Color textColor ); //craete image from string
-//void setColor( Uint8 red, Uint8 green, Uint8 blue ); //set color modulation
-//void setBlendMode( SDL_BlendMode blending ); //set blending
-//void setAlpha( Uint8 alpha ); //set alhpa modulation
-void render(SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
+SDL_Texture* renderText(const std::string &message);
+string toString(int);	// converts integer to string
+void renderText(int total_points);		// render all text textures to the screen (title, # coins, # lives)
+void render(int total_points);		// render everything that needs to be rendered, in the correct order
 
 // global varsF
 SDL_Texture* loadTexture( std::string path );	//Loads individual image as texture
@@ -58,16 +55,15 @@ SDL_Window* gWindow = NULL;			//The window we'll be rendering to
 SDL_Renderer* gRenderer = NULL;		//The window renderer
 SDL_Texture* gBackground = NULL;		//Current displayed texture
 vector<Enemy*> enemies;				// stores all enemies
-vector<TowerSpace> towerSpaces;
+vector<TowerSpace*> towerSpaces;
 vector<Tower*> towers;
 
+// True Type Font
+string fontFile = "img/SEASRN__.ttf";
 TTF_Font *gFont = NULL;
-int TEXT_WIDTH = 0;
+SDL_Color textColor;
+int TEXT_WIDTH = 0;		// these are updated each time renderText is called
 int TEXT_HEIGHT = 0;
-SDL_Texture* mTexture = NULL;
-SDL_Texture* titleTexture = NULL;
-SDL_Texture* coinTexture = NULL;
-SDL_Texture* livesTexture = NULL;
 
 int main( int argc, char* args[] )
 {
@@ -111,14 +107,14 @@ int main( int argc, char* args[] )
 	long int lastAddTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
     addEnemies(mapDirections, &nEnemiesAdded);
 
-	TowerSpace tower1(&gRenderer, &towerSpaces, &towers, &enemies, 80, 360);
-	TowerSpace tower2(&gRenderer, &towerSpaces, &towers, &enemies, 220, 275);
-	TowerSpace tower3(&gRenderer, &towerSpaces, &towers, &enemies, 400, 440);
-	TowerSpace tower4(&gRenderer, &towerSpaces, &towers, &enemies, 670, 285);
-	TowerSpace tower5(&gRenderer, &towerSpaces, &towers, &enemies, 750, 435);
-	TowerSpace tower6(&gRenderer, &towerSpaces, &towers, &enemies, 500, 590);
-	TowerSpace tower7(&gRenderer, &towerSpaces, &towers, &enemies, 400, 200);
-	TowerSpace tower8(&gRenderer, &towerSpaces, &towers, &enemies, 160, 120);
+	TowerSpace *tower1 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 80, 360);
+	TowerSpace *tower2 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 220, 275);
+	TowerSpace *tower3 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 400, 440);
+	TowerSpace *tower4 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 670, 285);
+	TowerSpace *tower5 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 750, 435);
+	TowerSpace *tower6 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 500, 590);
+	TowerSpace *tower7 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 400, 200);
+	TowerSpace *tower8 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 160, 120);
 	towerSpaces.push_back(tower1);
 	towerSpaces.push_back(tower2);
 	towerSpaces.push_back(tower3);
@@ -127,6 +123,7 @@ int main( int argc, char* args[] )
 	towerSpaces.push_back(tower6);
 	towerSpaces.push_back(tower7);
 	towerSpaces.push_back(tower8);
+
 
 	//instatiate object in class that generates text
 	//LTexture gTextTexture;
@@ -173,33 +170,27 @@ int main( int argc, char* args[] )
 		}
 
 		moveEnemies(&lives);	// moves all enemies in enemies vector (updates position)
+		
 		//Clear screen
 		SDL_RenderClear( gRenderer );
 
-		//Render texture to screen
-		SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
-		//iterates through the towerSpaces vector and adds the ones currently in it
-		for (int i=0;i<towerSpaces.size();i++){
-			towerSpaces[i].render();
-		}
-		//renders the Towers
-		for (int i=0;i<towers.size();i++){
-			towers[i]->render();
-		}
-		renderEnemies();	// calls SDL_RenderCopy() on all enemies in the enemies vector
+		// render everything: background, towers, towerspaces, enemies, on-screen text
+		render(total_points);
+
 		if(lives == 0){
 			cout<<"GAME OVER!!!!"<<endl;
 			quit = true;
 		}
+
 		//iterates through the towers and calls the inRange to sense if enemies are in range
 		SDL_Event tower_choice;
 
 		for(int i=0;i<towerSpaces.size();i++){
-			if (towerSpaces[i].dispDropDown(x,y)){
+			if (towerSpaces[i]->dispDropDown(x,y)){
 				if(SDL_PollEvent(&tower_choice) != 0) {;
 					if(tower_choice.type == SDL_KEYDOWN ){
 		               // if(tower_choice.type == SDL_KEYDOWN){
-		                    if( towerSpaces[i].handleKeyPress(tower_choice, &total_points)) break;
+		                    if( towerSpaces[i]->handleKeyPress(tower_choice, &total_points)) break;
 		               // }
 		            }
 		        }
@@ -214,7 +205,7 @@ int main( int argc, char* args[] )
 		}
 
 		//render text on screen
-		render();
+		//render();
 		//Update screen
 		SDL_RenderPresent( gRenderer );
 
@@ -223,6 +214,26 @@ int main( int argc, char* args[] )
 	close();
 
 	return 0;
+}
+
+void render(int total_points) {
+	//Render texture to screen
+	SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
+		
+	// render each TowerSpace
+	for (int i=0;i<towerSpaces.size();i++){
+		towerSpaces[i]->render();
+	}
+	//renders the Towers
+	for (int i=0;i<towers.size();i++){
+		towers[i]->render();
+	}
+	// call SDL_RenderCopy() on all enemies in the enemies vector
+	for(int i = 0; i < enemies.size(); i++) {
+		enemies[i]->render();
+	}
+
+	renderText(total_points);
 }
 
 // adds enemies every ____seconds
@@ -272,13 +283,31 @@ void moveEnemies(int* life) {
 	}
 }
 
+/* Render the title, number of coins, and number of lives as text to the screen
+ * Destroys the SDL_Textures after they are rendered
+ */
+void renderText(int total_points) {
+	SDL_Texture *titleTexture = renderText("Tower Defense");
+	SDL_Rect titleRect {TITLE_X, TITLE_Y, TEXT_WIDTH + 150, TEXT_HEIGHT + 70}; // make title larger
+	SDL_RenderCopy(gRenderer, titleTexture, NULL, &titleRect);
+	SDL_DestroyTexture(titleTexture);
 
-/* Render all enemies in the enemies vector
-*/
-void renderEnemies() {
-	for(int i = 0; i < enemies.size(); i++) {
-		enemies[i]->render();
-	}
+	SDL_Texture *coinTexture = renderText("Coins: " + toString(total_points));
+	SDL_Rect coinsRect {COIN_X, COIN_Y, TEXT_WIDTH, TEXT_HEIGHT};
+	SDL_RenderCopy(gRenderer, coinTexture, NULL, &coinsRect);
+	SDL_DestroyTexture(coinTexture);
+
+	SDL_Texture *livesTexture = renderText("Lives: ");
+	SDL_Rect livesRect {LIVES_X, LIVES_Y, TEXT_WIDTH, TEXT_HEIGHT};
+	SDL_RenderCopy(gRenderer, livesTexture, NULL, &livesRect);
+	SDL_DestroyTexture(livesTexture);
+}
+
+// converts an int to a string and returns it
+string toString(int num) {
+	ostringstream numAsString ;
+	numAsString << num ;
+    return numAsString.str() ;
 }
 
 /* Return an SDL_Rect with an SDL_Surface as the background
@@ -338,23 +367,6 @@ bool loadMedia()
 		printf( "Failed to a load background texture image!\n" );
 		success = false;
 	}
-	//Open the font
-	gFont = TTF_OpenFont( "img/SEASRN__.ttf", 28 );
-	if( gFont == NULL )
-	{
-		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
-		success = false;
-	}
-	else
-	{
-		//Render text
-		SDL_Color textColor = { 0, 0, 0 };
-		if( !loadFromRenderedText( "Some text", textColor ) )
-		{
-			printf( "Failed to render text texture!\n" );
-			success = false;
-		}
-	}
 
 	return success;
 }
@@ -398,7 +410,12 @@ void close()
 	for(int i = 0; i < towers.size(); i++) {	// delete all Towers (living in the heap)
 		delete towers[i];
 	}
-	towerSpaces.clear();	// delete all towerSpaces
+	for(int i = 0; i < towerSpaces.size(); i++) {	// delete all TowerSpaces in the heap
+		delete towerSpaces[i];
+	}
+	for(int i = 0; i < enemies.size(); i++) {	// delete all enemies in the heap
+		delete enemies[i];
+	}
 
 	//Destroy window	
 	SDL_DestroyRenderer( gRenderer );
@@ -464,133 +481,50 @@ bool init()
 					success = false;
 				}
 				 //Initialize SDL_ttf
-				if( TTF_Init() == -1 )
+				if( TTF_Init() != 0 )
 				{
 					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
 					success = false;
 				}
+				//Open the font
+				gFont = TTF_OpenFont(fontFile.c_str(), 28 );
+				if( gFont == NULL )
+				{
+					printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
+					success = false;
+				}
+				textColor = { 0, 0, 0 };	// set font color
 			}
 		}
 	}
 
 	return success;
 }
-bool loadFromFile( std::string path )
-{
-	//Get rid of preexisting texture
-	//free();
 
-	//The final texture
-	SDL_Texture* newTexture = NULL;
-
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	if( loadedSurface == NULL )
-	{
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+/**
+* Render the message we want to display to a texture for drawing
+* message is the text that should be displayed in the texture that is returned
+* @return An SDL_Texture containing the rendered message, or NULL if something went wrong
+*/
+SDL_Texture* renderText(const std::string &message)
+{	
+	//We need to first render to a surface as that's what TTF_RenderText
+	//returns, then load that surface into a texture
+	SDL_Surface *surf = TTF_RenderText_Solid( gFont, message.c_str(), textColor );
+	//SDL_Surface *surf = TTF_RenderText_Blended(gFont, message.c_str(), color);
+	if (surf == NULL){
+		cout << "Error creating TTF surface" << endl;
+		return NULL;
 	}
-	else
-	{
-		//Color key image
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
-
-		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-		if( newTexture == NULL )
-		{
-			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-		}
-		else
-		{
-			//Get image dimensions
-			TEXT_WIDTH = loadedSurface->w;
-			TEXT_HEIGHT = loadedSurface->h;
-		}
-
-		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
-	}
-
-	//Return success
-	mTexture = newTexture;
-	return mTexture != NULL;
-}
-bool loadFromRenderedText( std::string textureText, SDL_Color textColor )
-{
-	//Get rid of preexisting texture
-	//free();
-
-	//Render text surface
-	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
-	SDL_Surface* titleSurface = TTF_RenderText_Solid( gFont, "Tower Defense!", textColor );
-	SDL_Surface* coinSurface = TTF_RenderText_Solid( gFont, "Coins:", textColor );
-	SDL_Surface* livesSurface = TTF_RenderText_Solid( gFont, "Lives:", textColor );
-	if( titleSurface == NULL )
-	{
-		printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
-	}
-	else
-	{
-		//Create texture from surface pixels
-        mTexture = SDL_CreateTextureFromSurface( gRenderer, textSurface );
-        titleTexture = SDL_CreateTextureFromSurface(gRenderer, titleSurface);
-        coinTexture = SDL_CreateTextureFromSurface(gRenderer, coinSurface);
-        livesTexture = SDL_CreateTextureFromSurface(gRenderer, livesSurface);
-		if( mTexture == NULL )
-		{
-			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
-		}
-		else
-		{
-			//Get image dimensions
-			TEXT_WIDTH = textSurface->w;
-			TEXT_HEIGHT = textSurface->h;
-		}
-
-		//Get rid of old surface
-		SDL_FreeSurface( textSurface );
-	}
+	//Get image dimensions
+	TEXT_WIDTH = surf->w;
+	TEXT_HEIGHT = surf->h;
 	
-	//Return success
-	return mTexture != NULL;
-}
-/*void setColor( Uint8 red, Uint8 green, Uint8 blue )
-{
-	//Modulate texture rgb
-	SDL_SetTextureColorMod( mTexture, red, green, blue );
-}
-void setBlendMode( SDL_BlendMode blending )
-{
-	//Set blending function
-	SDL_SetTextureBlendMode( mTexture, blending );
-}
-void setAlpha( Uint8 alpha )
-{
-	//Modulate texture alpha
-	SDL_SetTextureAlphaMod( mTexture, alpha );
-}*/
-void render(SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
-{
-	//Set rendering space and render to screen
-	SDL_Rect renderTitleQuad = { TITLE_X, TITLE_Y, TEXT_WIDTH+150, TEXT_HEIGHT+70 };
-	SDL_Rect renderCoinQuad = { COIN_X, COIN_Y, TEXT_WIDTH, TEXT_HEIGHT };
-	SDL_Rect renderLivesQuad = { LIVES_X, LIVES_Y, TEXT_WIDTH, TEXT_HEIGHT };
-
-
-	//Set clip rendering dimensions
-	if( clip != NULL )
-	{
-		renderTitleQuad.w = clip->w;
-		renderTitleQuad.h = clip->h;
-		renderCoinQuad.w = clip->w;
-		renderCoinQuad.h = clip->h;
-		renderLivesQuad.w = clip->w;
-		renderLivesQuad.h = clip->h;
-
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(gRenderer, surf);
+	if (texture == NULL){
+		cout << "Error converting TTF surface to texture" << endl;
 	}
-
-	//Render to screen
-	SDL_RenderCopyEx( gRenderer, titleTexture, clip, &renderTitleQuad, angle, center, flip );
-	SDL_RenderCopyEx( gRenderer, coinTexture, clip, &renderCoinQuad, angle, center, flip );
-	SDL_RenderCopyEx( gRenderer, livesTexture, clip, &renderLivesQuad, angle, center, flip );
+	//Clean up the surface
+	SDL_FreeSurface(surf);
+	return texture;
 }
