@@ -5,7 +5,9 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 #include <vector>
+#include <map>
 #include <sys/time.h>
 #include <ctime>
 #include <unistd.h> // usleep
@@ -44,14 +46,15 @@ bool init();		//Starts up SDL and creates window
 bool loadMedia();	//Loads media
 void close();		//Frees media and shuts down SDL
 SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);
-void moveEnemies(int *);	// moves all enemies in the enemies vector
-void addEnemies(MapDirections mapDirections, int * nEnemiesAdded);		// add enemies until max # reached
-SDL_Texture* renderText(const std::string &message);
-string toString(int);	// converts integer to string
+void moveEnemies(int *);						// moves all enemies in the enemies vector
+void addEnemies(MapDirections mapDirections, vector<string> *, int * nEnemiesAdded);		// add enemies until max # reached based on a vector of predefined enemies
+SDL_Texture* renderText(const string &message);	// render text-labels onto the screen
+string toString(int);							// converts integer to string
+vector<string> split(const string &s, char delim);	// given a string, returns a vector with elements of string using delimeter
 void renderText(int total_points, int lives, int wave);	// render all text textures to the screen (title, # coins, # lives)
 void render(int total_points, int lives, int wave);		// render everything that needs to be rendered, in the correct order
 
-// global varsF
+// global vars
 SDL_Texture* loadTexture( std::string path );	//Loads individual image as texture
 SDL_Window* gWindow = NULL;			//The window we'll be rendering to
 SDL_Renderer* gRenderer = NULL;		//The window renderer
@@ -97,8 +100,14 @@ int main( int argc, char* args[] )
     mapDirections.setNext("up", .3850*SCREEN_HEIGHT);
     mapDirections.setNext("right", SCREEN_WIDTH);
 
+    // create a hashmap to extract a string of enemies for each wave
+    map<int, string> waveEnemies;
+    waveEnemies[1] = "g,g,t,g,w,g";
+    waveEnemies[2] = "g,t,w,g,w,t,w";
+    waveEnemies[3] = "w,t,w,g,t,t,w";
+    waveEnemies[4] = "t,w,d,t,w,d,t,w,d";
 
-    int nEnemies = 7;
+    int nWaves = waveEnemies.size();
     int nEnemiesAdded = 0;
     bool allEnemiesAdded = false;
 
@@ -107,7 +116,12 @@ int main( int argc, char* args[] )
     gettimeofday(&tp, NULL);
     long int clockTime;			// used to track current time
 	long int lastAddTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
-    addEnemies(mapDirections, &nEnemiesAdded);
+
+	int total_points = 400;
+	int lives = 3;
+	int wave = 1;
+	vector<string> curWaveEnemies = split(waveEnemies[wave], ',');
+    addEnemies(mapDirections, &curWaveEnemies, &nEnemiesAdded);
 
 	TowerSpace *tower1 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 80, 360);
 	TowerSpace *tower2 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 220, 275);
@@ -127,9 +141,7 @@ int main( int argc, char* args[] )
 	towerSpaces.push_back(tower8);
 
 	//While application is running
-	int total_points = 400;
-	int lives = 3;
-	int wave = 1;
+
 	while( !quit )
 	{
 		int x,y;	// x and y locations of mouseclick 
@@ -145,7 +157,7 @@ int main( int argc, char* args[] )
 			//If mouse click occurs, place image where mouse was clicked
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 				SDL_GetMouseState(&x,&y);
-
+				cout << "x: " << x << ", y: " << y << endl;
 				// pass x and y mouse click coordinates Towers
 				for(int i = 0; i < towers.size(); i++) {
 					towers[i]->handleMouseClick(x, y);
@@ -154,16 +166,32 @@ int main( int argc, char* args[] )
 			}
 			
 		}	
+
+		// check if wave is over. If so, reset and prepare to initialize next wave
+		if(allEnemiesAdded && enemies.size() == 0) {
+			cout << "All enemies on wave " << wave << " have been defeated!" << endl;
+			wave++;
+			if(wave > nWaves) {
+				cout << "You have defeated all of the waves!" << endl;
+				quit = true;
+				continue;	// game should be over
+			}
+			enemies.clear();
+			curWaveEnemies = split(waveEnemies[wave], ',');
+			allEnemiesAdded = false;
+			nEnemiesAdded = 0;
+		}
+		
 		// set timing to correctly space enemies
 		if(!allEnemiesAdded) {
 			gettimeofday(&tp, NULL);
 			clockTime = tp.tv_sec * 1000 + tp.tv_usec / 1000; //get current timestamp in milliseconds
 		}
 		// check if it is time for another enemy to be added
-		if(!allEnemiesAdded && nEnemiesAdded < nEnemies && (clockTime - lastAddTime) >= ENEMY_TIME_DELAY) {
-    		addEnemies(mapDirections, &nEnemiesAdded);
+		if(!allEnemiesAdded && nEnemiesAdded < curWaveEnemies.size() && (clockTime - lastAddTime) >= ENEMY_TIME_DELAY) {
+    		addEnemies(mapDirections, &curWaveEnemies, &nEnemiesAdded);
     		lastAddTime = clockTime;
-    		if(enemies.size() == nEnemies) allEnemiesAdded = true;
+    		if(nEnemiesAdded == curWaveEnemies.size()) allEnemiesAdded = true;
 		}
 
 		moveEnemies(&lives);	// moves all enemies in enemies vector (updates position)
@@ -173,7 +201,7 @@ int main( int argc, char* args[] )
 
 		// render everything: background, towers, towerspaces, enemies, on-screen text
 		render(total_points, lives, wave);
-
+		
 		// if player has lost all lives, GAME OVER
 		if(lives == 0){
 			/*
@@ -197,23 +225,19 @@ int main( int argc, char* args[] )
 			if (towerSpaces[i]->dispDropDown(x,y)){
 				if(SDL_PollEvent(&tower_choice) != 0) {;
 					if(tower_choice.type == SDL_KEYDOWN ){
-		               // if(tower_choice.type == SDL_KEYDOWN){
-		                    if( towerSpaces[i]->handleKeyPress(tower_choice, &total_points)) break;
-		               // }
+		                if( towerSpaces[i]->handleKeyPress(tower_choice, &total_points)) break;
 		            }
 		        }
 	        }
 		}
-		//TODO: implement a more functional loop
+
+		// find enemies that are Towers' range, and attack them
 		for (int i=0;i<towers.size();i++){
 			if (towers[i]->inRange()){
-//				cout << "Enemy is in range!" << endl;
 				towers[i]->attack(&total_points);
 			}
 		}
 
-		//render text on screen
-		//render();
 		//Update screen
 		SDL_RenderPresent( gRenderer );
 
@@ -247,35 +271,24 @@ void render(int total_points, int lives, int wave) {
 	renderText(total_points, lives, wave);
 }
 
-// adds enemies every ____seconds
-void addEnemies(MapDirections mapDirections, int *nEnemiesAdded) {
-	// create a new enemy randomly
-	int random = rand() % 4;
-	switch(random) {
-		case 0:
-		{
-			Goblin* goblin = new Goblin(&gRenderer, mapDirections);
-			enemies.push_back(goblin);
-			break;
-		}
-		case 1:
-		{
-			Troll* troll = new Troll(&gRenderer, mapDirections);
-			enemies.push_back(troll);
-			break;
-		}
-		case 2:
-		{
-			Dragon* dragon = new Dragon(&gRenderer, mapDirections);
-			enemies.push_back(dragon);
-			break;
-		}
-		case 3:
-		{
-			Wizard* wizard = new Wizard(&gRenderer, mapDirections);
-			enemies.push_back(wizard);
-			break;
-		}
+// adds enemies every ____seconds, based on a predefined vector of enemies
+void addEnemies(MapDirections mapDirections, vector<string> * curWaveEnemies, int *nEnemiesAdded) {
+	string enemyCode = (*curWaveEnemies)[*nEnemiesAdded]; // save code for next enemy to be added
+
+	if(enemyCode == "g") {
+		Goblin* goblin = new Goblin(&gRenderer, mapDirections);
+		enemies.push_back(goblin);
+	} else if(enemyCode == "t") {
+		Troll* troll = new Troll(&gRenderer, mapDirections);
+		enemies.push_back(troll);
+	} else if(enemyCode == "w") {
+		Wizard* wizard = new Wizard(&gRenderer, mapDirections);
+		enemies.push_back(wizard);
+	} else if(enemyCode == "d") {
+		Dragon* dragon = new Dragon(&gRenderer, mapDirections);
+		enemies.push_back(dragon);
+	} else {
+		cout << "Attempted to add invalid enemy" << endl;
 	}
 	(*nEnemiesAdded)++;	// incremement nEnemiesAdded counter
 }
@@ -319,6 +332,17 @@ void renderText(int total_points, int lives, int wave) {
 	SDL_Rect waveRect {WAVE_X, WAVE_Y, TEXT_WIDTH, TEXT_HEIGHT};
 	SDL_RenderCopy(gRenderer, waveTexture, NULL, &waveRect);
 	SDL_DestroyTexture(waveTexture);
+}
+
+// given a string with delimiter delim, returns a vector of the chars in the string
+vector<string> split(const string &s, char delim) {
+    stringstream ss(s);
+    vector<string> elems;
+    string item;
+    while (getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
 }
 
 // converts an int to a string and returns it
