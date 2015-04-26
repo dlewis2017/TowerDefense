@@ -34,6 +34,7 @@ class TowerSpace : public Object {
 		void createRects(); //creates rects for each img loaded
 		bool dispDropDown(double xclick, double yclick);//displays the dropdown menu of options
 		bool handleKeyPress(SDL_Event tower_choice, int*);
+		SDL_Rect getSDL_Rect( SDL_Texture* texture, int height, int x, int y); 	// returns an SDL_Rect container based on the texture's width and the specified height
 		void render();
 
 	private:

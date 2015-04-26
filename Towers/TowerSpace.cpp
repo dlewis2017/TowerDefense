@@ -28,30 +28,23 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace*> *towerSp
     FreezeCost = 150;	
 
 	// create textures for each tower type
-	gWizardTower = loadTexture("img/wizardTower.png");
-	gArcherTower = loadTexture("img/archerTower.png");
-	gCannonTower = loadTexture("img/cannonTower.png");
-	gFreezeTower = loadTexture("img/freezeTower.png");
-	gW = loadTexture("img/W.png");
-	gA = loadTexture("img/A.png");
-	gC = loadTexture("img/C.png");
-	gF = loadTexture("img/F.png");
-
+	gWizardTower = loadTexture("img/wizardTowerDetails.png");
+	gArcherTower = loadTexture("img/archerTowerDetails.png");
+	gCannonTower = loadTexture("img/cannonTowerDetails.png");
+	gFreezeTower = loadTexture("img/freezeTowerDetails.png");
+	
 	//create rects for each image
 	createRects();
 }
 
 // delete allocated memory
 TowerSpace::~TowerSpace() {
+	
 	SDL_DestroyTexture(towerTexture);
 	SDL_DestroyTexture(gArcherTower);
 	SDL_DestroyTexture(gCannonTower);
 	SDL_DestroyTexture(gFreezeTower);
-	SDL_DestroyTexture(gWizardTower);
-	SDL_DestroyTexture(gW);
-	SDL_DestroyTexture(gA);
-	SDL_DestroyTexture(gC);
-	SDL_DestroyTexture(gF);
+	SDL_DestroyTexture(gWizardTower);	
 }
 
 // redisplays/renders the TowerSpace object on the screen
@@ -62,25 +55,16 @@ void TowerSpace::render() {
 void TowerSpace::createRects()
 {
 	if(towerY < 500){
-		gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY+TOWER_MAX_DIMENSION );
-		gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY+2*TOWER_MAX_DIMENSION );
-		gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY+3*TOWER_MAX_DIMENSION );
-		gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY+4*TOWER_MAX_DIMENSION );
-		gWRect = getRect(gW, TOWER_MAX_DIMENSION/4,towerX-TOWER_MAX_DIMENSION/4,towerY+5*TOWER_MAX_DIMENSION/4);
-		gARect = getRect(gA, TOWER_MAX_DIMENSION/4,towerX-TOWER_MAX_DIMENSION/4,towerY+9*TOWER_MAX_DIMENSION/4);
-		gCRect = getRect(gC, TOWER_MAX_DIMENSION/4,towerX-TOWER_MAX_DIMENSION/4,towerY+13*TOWER_MAX_DIMENSION/4);
-		gFRect = getRect(gF, TOWER_MAX_DIMENSION/4,towerX-TOWER_MAX_DIMENSION/4,towerY+17*TOWER_MAX_DIMENSION/4);
+		gArcherTowerRect = getSDL_Rect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY+2*TOWER_MAX_DIMENSION );
+		gWizardTowerRect = getSDL_Rect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY+TOWER_MAX_DIMENSION );
+		gCannonTowerRect = getSDL_Rect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY+3*TOWER_MAX_DIMENSION );
+		gFreezeTowerRect = getSDL_Rect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY+4*TOWER_MAX_DIMENSION );
 	} else {
-		gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY-TOWER_MAX_DIMENSION );
-		gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY-2*TOWER_MAX_DIMENSION );
-		gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY-3*TOWER_MAX_DIMENSION );
-		gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY-4*TOWER_MAX_DIMENSION );
-		gWRect = getRect(gW, TOWER_MAX_DIMENSION/4,towerX-TOWER_MAX_DIMENSION/4,towerY-5*TOWER_MAX_DIMENSION/4);
-		gARect = getRect(gA, TOWER_MAX_DIMENSION/4,towerX-TOWER_MAX_DIMENSION/4,towerY-9*TOWER_MAX_DIMENSION/4);
-		gCRect = getRect(gC, TOWER_MAX_DIMENSION/4,towerX-TOWER_MAX_DIMENSION/4,towerY-13*TOWER_MAX_DIMENSION/4);
-		gFRect = getRect(gF, TOWER_MAX_DIMENSION/4,towerX-TOWER_MAX_DIMENSION/4,towerY-17*TOWER_MAX_DIMENSION/4);
+		gArcherTowerRect = getSDL_Rect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY-2*TOWER_MAX_DIMENSION);
+		gWizardTowerRect = getSDL_Rect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY-TOWER_MAX_DIMENSION );
+		gCannonTowerRect = getSDL_Rect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY-3*TOWER_MAX_DIMENSION );
+		gFreezeTowerRect = getSDL_Rect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY-4*TOWER_MAX_DIMENSION );
 	}
-
 }
 
 bool TowerSpace::dispDropDown(double xclick, double yclick)
@@ -91,11 +75,7 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
 		SDL_RenderCopy( *gRenderer, gWizardTower, NULL, &gWizardTowerRect);
 		SDL_RenderCopy( *gRenderer, gArcherTower, NULL, &gArcherTowerRect);
 		SDL_RenderCopy( *gRenderer, gCannonTower, NULL, &gCannonTowerRect);
-		SDL_RenderCopy( *gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);
-		SDL_RenderCopy( *gRenderer, gW, NULL, &gWRect);
-		SDL_RenderCopy( *gRenderer, gA, NULL, &gARect);
-		SDL_RenderCopy( *gRenderer, gC, NULL, &gCRect);
-		SDL_RenderCopy( *gRenderer, gF, NULL, &gFRect);
+		SDL_RenderCopy( *gRenderer, gFreezeTower, NULL, &gFreezeTowerRect);	
 		return true;	
 	} else return false;
 }
@@ -183,4 +163,17 @@ bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 		}
 	}
 	return true;
+}
+
+SDL_Rect TowerSpace::getSDL_Rect(SDL_Texture* texture, int height, int x, int y) {
+	SDL_Rect container;
+	int originalWidth, originalHeight;
+	SDL_QueryTexture(texture, NULL, NULL, &originalWidth, &originalHeight);
+	double scalingFactor = originalHeight / height;
+
+  	container.x = x - .5*TOWER_MAX_DIMENSION;	// will be updated before rendered. doesn't matter what value is given
+  	container.y = y - .5*TOWER_MAX_DIMENSION;
+  	container.w = originalWidth / scalingFactor;
+  	container.h = height;
+  	return container;
 }
