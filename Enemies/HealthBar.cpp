@@ -16,8 +16,8 @@ HealthBar::HealthBar(SDL_Renderer** gRendererPtr, int maxDimension) : Object (gR
 }
 
 HealthBar::~HealthBar() {
-	//delete gGreenBar;
-	//delete gRedBar;
+	SDL_DestroyTexture(gGreenBar);
+	SDL_DestroyTexture(gRedBar);
 }
 
 // updates health bar based on proportion of Enemy life left and Enemy's position

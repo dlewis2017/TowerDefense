@@ -24,9 +24,10 @@ Enemy::Enemy(SDL_Renderer** gRendererPtr, MapDirections pathInfo) : Object(gRend
 
 // delete allocated memory
 Enemy::~Enemy() {
-    //delete healthBar;
-    //delete gEnemy;
+    delete healthBar;
+    SDL_DestroyTexture(gEnemy);
 }
+
 
 /* Move the enemy. Return false if the enemy is done moving (reached end of path)
  * Movement instructions come from MapDirections object

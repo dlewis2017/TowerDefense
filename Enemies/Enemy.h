@@ -24,7 +24,7 @@ class Enemy : public Object
 		static const double ENEMY_VEL = 3;		// different computers seem to require a different velocity
 
 		Enemy(SDL_Renderer **gRenderer, MapDirections pathInfo);  // constructor
-		virtual ~Enemy();	// deconstructor
+		~Enemy();	// deconstructor
 		void render();		// Repositions the the enemy on the screen after gRenderer is updated
 		bool move();		// move the enemy on the screen according to map positions
 		double getPosX();	// return current x coordinate of enemy
