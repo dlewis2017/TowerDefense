@@ -146,8 +146,6 @@ bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 			return false;
 	}
 
-	cout << "Number of points remaining: " << *points << endl;
-
 	// if valid key was selected (a new tower was created), remove the TowerSpace
 	if (e.key.keysym.sym == SDLK_w || e.key.keysym.sym == SDLK_a || e.key.keysym.sym == SDLK_c || e.key.keysym.sym == SDLK_f) {
 		//removes the specific towerSpace that was selected

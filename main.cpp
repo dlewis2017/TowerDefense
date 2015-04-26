@@ -1,4 +1,4 @@
-//Using SDL, SDL_image, standard IO, and strings
+//Using SDL, SDL_image, SDL_ttf
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -8,6 +8,7 @@
 #include <vector>
 #include <sys/time.h>
 #include <ctime>
+#include <unistd.h> // usleep
 #include <stdlib.h>	// srand
 #include "Towers/Tower.h"
 #include "Towers/TowerSpace.h"
@@ -30,12 +31,13 @@ const double MAX_DISTORTION = .57;		// decimal of max percentage
 const int ENEMY_TIME_DELAY = 4500;		// delay between enemies traversing the path, milliseconds
 
 //Text palcement
-const int TITLE_X = 300;
 const int TITLE_Y = 0;
 const int COIN_X = 5;
-const int COIN_Y = 650;
+const int COIN_Y = 620;
 const int LIVES_X = 5;
-const int LIVES_Y = 700;
+const int LIVES_Y = 660;
+const int WAVE_X = 5;
+const int WAVE_Y = 700;
 
 // methods
 bool init();		//Starts up SDL and creates window
@@ -46,8 +48,8 @@ void moveEnemies(int *);	// moves all enemies in the enemies vector
 void addEnemies(MapDirections mapDirections, int * nEnemiesAdded);		// add enemies until max # reached
 SDL_Texture* renderText(const std::string &message);
 string toString(int);	// converts integer to string
-void renderText(int total_points);		// render all text textures to the screen (title, # coins, # lives)
-void render(int total_points);		// render everything that needs to be rendered, in the correct order
+void renderText(int total_points, int lives, int wave);	// render all text textures to the screen (title, # coins, # lives)
+void render(int total_points, int lives, int wave);		// render everything that needs to be rendered, in the correct order
 
 // global varsF
 SDL_Texture* loadTexture( std::string path );	//Loads individual image as texture
@@ -124,15 +126,10 @@ int main( int argc, char* args[] )
 	towerSpaces.push_back(tower7);
 	towerSpaces.push_back(tower8);
 
-
-	//instatiate object in class that generates text
-	//LTexture gTextTexture;
-	//Render current frame
-	//gTextTexture.render( ( SCREEN_WIDTH - gTextTexture.getWidth() ) / 2, ( SCREEN_HEIGHT - gTextTexture.getHeight() ) / 2 );
-
 	//While application is running
 	int total_points = 400;
 	int lives = 3;
+	int wave = 1;
 	while( !quit )
 	{
 		int x,y;	// x and y locations of mouseclick 
@@ -175,10 +172,21 @@ int main( int argc, char* args[] )
 		SDL_RenderClear( gRenderer );
 
 		// render everything: background, towers, towerspaces, enemies, on-screen text
-		render(total_points);
+		render(total_points, lives, wave);
 
+		// if player has lost all lives, GAME OVER
 		if(lives == 0){
-			cout<<"GAME OVER!!!!"<<endl;
+			/*
+			int extraWidth = 200;
+			int extraHeight = 150;
+			SDL_Texture *gameOverTexture = renderText("GAME OVER!");
+			SDL_Rect gameOverRect {.5*SCREEN_WIDTH - .5*(TEXT_WIDTH +extraWidth), \
+				.5*(SCREEN_HEIGHT + extraHeight), TEXT_WIDTH + extraWidth, TEXT_HEIGHT + extraHeight};
+			SDL_RenderCopy(gRenderer, gameOverTexture, NULL, &gameOverRect);
+			SDL_DestroyTexture(gameOverTexture);
+			sleep(5);	// wait for 5 seconds, displaying "GAME OVER", before continuing
+			*/
+			cout << "GAME OVER!" << endl;
 			quit = true;
 		}
 
@@ -216,8 +224,11 @@ int main( int argc, char* args[] )
 	return 0;
 }
 
-void render(int total_points) {
-	//Render texture to screen
+/* Render background, Towers, TowerSpaces, Enemies, and text labels
+ * Order of rendering matters. Most recently rendered will be on top
+ */
+void render(int total_points, int lives, int wave) {
+	//Render background to screen
 	SDL_RenderCopy( gRenderer, gBackground, NULL, NULL );	// MUST BE FIRST: render background, automatically fills the window
 		
 	// render each TowerSpace
@@ -233,7 +244,7 @@ void render(int total_points) {
 		enemies[i]->render();
 	}
 
-	renderText(total_points);
+	renderText(total_points, lives, wave);
 }
 
 // adds enemies every ____seconds
@@ -277,7 +288,6 @@ void moveEnemies(int* life) {
 	for(int i = 0; i < enemies.size(); i++) {
 		if(enemies[i]->move() == false) {			// if enemy has reached end of path
 			*life -= 1;
-			cout<<"Lives remain: "<<*life<<endl;
 			enemies.erase(enemies.begin() + i);
 		}
 	}
@@ -286,7 +296,7 @@ void moveEnemies(int* life) {
 /* Render the title, number of coins, and number of lives as text to the screen
  * Destroys the SDL_Textures after they are rendered
  */
-void renderText(int total_points) {
+void renderText(int total_points, int lives, int wave) {
 	int extraTitleWidth = 150;
 	int extraTitleHeight = 70;
 	SDL_Texture *titleTexture = renderText("Tower Defense");
@@ -300,10 +310,15 @@ void renderText(int total_points) {
 	SDL_RenderCopy(gRenderer, coinTexture, NULL, &coinsRect);
 	SDL_DestroyTexture(coinTexture);
 
-	SDL_Texture *livesTexture = renderText("Lives: ");
+	SDL_Texture *livesTexture = renderText("Lives: " + toString(lives));
 	SDL_Rect livesRect {LIVES_X, LIVES_Y, TEXT_WIDTH, TEXT_HEIGHT};
 	SDL_RenderCopy(gRenderer, livesTexture, NULL, &livesRect);
 	SDL_DestroyTexture(livesTexture);
+
+	SDL_Texture *waveTexture = renderText("Wave: " + toString(wave));
+	SDL_Rect waveRect {WAVE_X, WAVE_Y, TEXT_WIDTH, TEXT_HEIGHT};
+	SDL_RenderCopy(gRenderer, waveTexture, NULL, &waveRect);
+	SDL_DestroyTexture(waveTexture);
 }
 
 // converts an int to a string and returns it
