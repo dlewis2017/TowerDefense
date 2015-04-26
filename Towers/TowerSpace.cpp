@@ -33,12 +33,18 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace*> *towerSp
 	gCannonTower = loadTexture("img/cannonTower.png");
 	gFreezeTower = loadTexture("img/freezeTower.png");
 
-	//create containers for each image which specifies its size and location
-	gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY+TOWER_MAX_DIMENSION );
-	gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY+2*TOWER_MAX_DIMENSION );
-	gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY+3*TOWER_MAX_DIMENSION );
-	gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY+4*TOWER_MAX_DIMENSION );
-
+	//create containers for each image which specifies its size and location based on tower y-coordinate
+	if(towerY < 500){
+		gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY+TOWER_MAX_DIMENSION );
+		gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY+2*TOWER_MAX_DIMENSION );
+		gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY+3*TOWER_MAX_DIMENSION );
+		gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY+4*TOWER_MAX_DIMENSION );
+	} else {
+		gWizardTowerRect = getRect(gWizardTower, TOWER_MAX_DIMENSION,towerX,towerY-TOWER_MAX_DIMENSION );
+		gArcherTowerRect = getRect(gArcherTower, TOWER_MAX_DIMENSION,towerX,towerY-2*TOWER_MAX_DIMENSION );
+		gCannonTowerRect = getRect(gCannonTower, TOWER_MAX_DIMENSION,towerX,towerY-3*TOWER_MAX_DIMENSION );
+		gFreezeTowerRect = getRect(gFreezeTower, TOWER_MAX_DIMENSION,towerX,towerY-4*TOWER_MAX_DIMENSION );
+	}
 }
 
 // delete allocated memory
