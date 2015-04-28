@@ -45,6 +45,8 @@ const int WAVE_Y = 700;
 bool init();		//Starts up SDL and creates window
 bool loadMedia();	//Loads media
 void close();		//Frees media and shuts down SDL
+void renderWin();
+void renderLose();
 SDL_Rect getRect(SDL_Texture* texture, int maxDimension, int x, int y);
 void moveEnemies(int *);						// moves all enemies in the enemies vector
 void addEnemies(MapDirections mapDirections, vector<string> *, int * nEnemiesAdded);		// add enemies until max # reached based on a vector of predefined enemies
@@ -59,6 +61,8 @@ SDL_Texture* loadTexture( std::string path );	//Loads individual image as textur
 SDL_Window* gWindow = NULL;			//The window we'll be rendering to
 SDL_Renderer* gRenderer = NULL;		//The window renderer
 SDL_Texture* gBackground = NULL;		//Current displayed texture
+SDL_Texture* gYouWin = NULL; //winner screen
+SDL_Texture* gYouLose = NULL; //loser screen
 vector<Enemy*> enemies;				// stores all enemies
 vector<TowerSpace*> towerSpaces;
 vector<Tower*> towers;
@@ -179,6 +183,7 @@ int main( int argc, char* args[] )
 			if(wave > nWaves) {
 				cout << "You have defeated all of the waves!" << endl;
 				quit = true;
+
 				continue;	// game should be over
 			}
 			enemies.clear();
@@ -247,12 +252,33 @@ int main( int argc, char* args[] )
 		SDL_RenderPresent( gRenderer );
 
 	}
+	
+	if(wave > nWaves){
+		renderWin(); //display you win! on screen
+	}
+	if(lives == 0){
+		renderLose(); //display you lose on screen
+	}
+
+	SDL_RenderPresent( gRenderer ); //update screen one last time
+
+	usleep(1000000); //allow you win/lose title to display before closing window
+
 	//Free resources and close SDL
 	close();
+
 
 	return 0;
 }
 
+void renderWin()
+{
+	SDL_RenderCopy( gRenderer, gYouWin, NULL, NULL); //render you win texture
+}
+void renderLose()
+{
+	SDL_RenderCopy( gRenderer, gYouLose, NULL, NULL); //render you lose texture
+}
 /* Render background, Towers, TowerSpaces, Enemies, and text labels
  * Order of rendering matters. Most recently rendered will be on top
  */
@@ -408,8 +434,10 @@ bool loadMedia()
 
 	//Load PNG texture
 	gBackground = loadTexture("img/towerDefenseBackground.bmp");
+	gYouWin = loadTexture("img/YouWin.bmp");
+	gYouLose = loadTexture("img/YouLose.bmp");
 
-	if(gBackground==NULL)
+	if(gBackground==NULL || gYouWin==NULL || gYouLose==NULL)
 	{
 		printf( "Failed to a load background texture image!\n" );
 		success = false;
@@ -453,7 +481,11 @@ void close()
 {
 	//Free loaded image
 	SDL_DestroyTexture( gBackground );
+	SDL_DestroyTexture( gYouWin );
+	SDL_DestroyTexture( gYouLose );
 	gBackground = NULL;
+	gYouWin = NULL;
+	gYouLose = NULL;
 	for(int i = 0; i < towers.size(); i++) {	// delete all Towers (living in the heap)
 		delete towers[i];
 	}
