@@ -23,12 +23,11 @@ The goal is simple; beat all of the waves of enemies by buying/placing towers wi
 
 Below is an image of the tower defense game in action. There are tower icons, a couple towers, a drop-down menu for a tower and enemies moving across the path.
 
-https://cloud.githubusercontent.com/assets/8836029/7363031/730f7570-ed41-11e4-803a-137666bec571.png
+![towerdefensewave2](https://cloud.githubusercontent.com/assets/8836029/7363031/730f7570-ed41-11e4-803a-137666bec571.png)
+
 
 Below is an image of the final wave of enemies, all towers placed, and an unknown ending.
 
 ![towerdefensewavefinal](https://cloud.githubusercontent.com/assets/8836029/7363021/4db4f110-ed41-11e4-866c-4412b5516db9.png)
 
-
-https://cloud.githubusercontent.com/assets/8836029/7363021/4db4f110-ed41-11e4-866c-4412b5516db9.png
 
