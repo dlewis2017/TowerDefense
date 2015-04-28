@@ -13,7 +13,7 @@ CannonTower::CannonTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
         //initialize fields
     towerX = xpos;
     towerY = ypos;
-    damage = 50;
+    damage = 100;
     attackDelay = 3;    //number of times it attacks per minute
     range = 180;
 

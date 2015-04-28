@@ -14,8 +14,8 @@ FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
     towerX = xpos;
     towerY = ypos;
     attackDelay = 2;    //number of times it attacks per minute
-    range = 140;
-    damage = 75;
+    range = 120;
+    damage = 90;
 
     gTower = loadTexture("img/freezeTower.png");
 	gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);

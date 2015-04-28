@@ -13,7 +13,7 @@ ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
 	//initialize properties (many are Tower protected variables)
 	towerX = xpos;
 	towerY = ypos;
-	damage = 50;
+	damage = 40;
 	attackDelay = 2;	//number of times it attacks per minute
 	range = 195;
 	

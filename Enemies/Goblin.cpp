@@ -9,7 +9,7 @@ Goblin::Goblin(SDL_Renderer** gRendererPtr, MapDirections pathInfo) : Enemy(gRen
 	// load enemy img
 	gEnemy = NULL;
 	gEnemy = loadTexture("img/goblin.png");	// utilizes Enemy class method
-	health = 200;	// sets protected variable in Enemy class
+	health = 500;	// sets protected variable in Enemy class
     maxHealth = health; 
 
 

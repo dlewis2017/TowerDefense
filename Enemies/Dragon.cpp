@@ -9,7 +9,7 @@ Dragon::Dragon(SDL_Renderer** gRendererPtr, MapDirections pathInfo) : Enemy(gRen
 	// load enemy img
 	gEnemy = NULL;
 	gEnemy = loadTexture("img/dragon.png");	// utilizes Enemy class method
-	health = 400;	// sets protected variable in Enemy class
+	health = 1800;	// sets protected variable in Enemy class
     maxHealth = health; 
 
 

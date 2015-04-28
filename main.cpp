@@ -131,6 +131,8 @@ int main( int argc, char* args[] )
 	TowerSpace *tower6 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 500, 590);
 	TowerSpace *tower7 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 400, 200);
 	TowerSpace *tower8 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 160, 120);
+	TowerSpace *tower9 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 220, 435);
+	TowerSpace *tower10 = new TowerSpace(&gRenderer, &towerSpaces, &towers, &enemies, 500, 360);
 	towerSpaces.push_back(tower1);
 	towerSpaces.push_back(tower2);
 	towerSpaces.push_back(tower3);
@@ -139,6 +141,9 @@ int main( int argc, char* args[] )
 	towerSpaces.push_back(tower6);
 	towerSpaces.push_back(tower7);
 	towerSpaces.push_back(tower8);
+	towerSpaces.push_back(tower9);
+	towerSpaces.push_back(tower10);
+
 
 	//While application is running
 
