@@ -17,8 +17,8 @@ begin to move along a path, and tower icons appear to represent where one can pl
 When someone clicks on a tower icon, a list of all the possible towers that can be placed is displayed
 in the form of a drop-down menu. Next to each tower in the drop-down menu is the tower's specific
 range of fire, attack damage, attack frequency, how much it cost to build that tower, and letter to press in order to place the tower.The player must choose where to place each of their towers wisely because the game starts off with only 400 coins and 3 lives. Once an enemy is destroyed by a tower, 30 coins are given to the player.
-However, if an enemy happens to make it to the end of the path, the player looses a life.
-The goal is simple; beat all of the waves of enemies by buying/placing towers without loosing all 3 lives.
+However, if an enemy happens to make it to the end of the path, the player loses a life.
+The goal is simple; beat all of the waves of enemies by buying/placing towers without losing all 3 lives.
 
 
 Below is an image of the tower defense game in action. There are tower icons, a couple towers, a drop-down menu for a tower and enemies moving across the path.
