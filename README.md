@@ -20,5 +20,12 @@ range of fire, attack damage, attack frequency, how much it cost to build that t
 However, if an enemy happens to make it to the end of the path, the player looses a life.
 The goal is simple; beat all of the waves of enemies by buying/placing towers without loosing all 3 lives.
 
+
+Below is an image of the tower defense game in action. There are tower icons, a couple towers, a drop-down menu for a tower and enemies moving across the path.
+
+https://cloud.githubusercontent.com/assets/8836029/7363031/730f7570-ed41-11e4-803a-137666bec571.png
+
+Below is an image of the final wave of enemies, all towers placed, and an unknown ending.
+
 https://cloud.githubusercontent.com/assets/8836029/7363021/4db4f110-ed41-11e4-866c-4412b5516db9.png
 
