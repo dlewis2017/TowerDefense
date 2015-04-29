@@ -22,7 +22,7 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace*> *towerSp
 	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
 	
 	// initialize timing to prevent being spammed with the same error message
-	errorWait = 500; // wait 1/4 of a second
+	errorWait = 1500; // wait 1/4 of a second
 	gettimeofday(&timeStruct, NULL);	// get current time of day
 	lastErrorTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - errorWait;   // will make errorMessage available immediately
 

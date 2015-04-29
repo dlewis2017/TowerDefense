@@ -150,19 +150,18 @@ int main( int argc, char* args[] )
 
 	bool mouseClick = false;	// flag in case mouseclick occurs during execution in another part of main
 	int x,y;	// x and y locations of mouseclick 
-	SDL_Event e2;
+	
+	
 
 
 	//While application is running
 
 	while( !quit )
 	{
-		
+		SDL_Event e2;
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
-			
-
 			//User requests quit
 			if( e.type == SDL_QUIT )
 			{
@@ -177,7 +176,6 @@ int main( int argc, char* args[] )
 					towers[i]->handleMouseClick(x, y);
 				}
 				mouseClick = false; 	// reset flag
-				//cout << "x: " << x << ", y:" << y << endl;
 				break;
 			}
 			else if(mouseClick) {
@@ -186,7 +184,9 @@ int main( int argc, char* args[] )
 					towers[i]->handleMouseClick(x, y);
 				}
 				mouseClick = false; 	// reset flag
-
+				break;
+			} else if(e.type == SDL_KEYDOWN) {
+				mouseClick = false;
 				break;
 			}
 			
@@ -254,14 +254,20 @@ int main( int argc, char* args[] )
 		}
 
 		for(int i=0;i<towerSpaces.size();i++){
+			if(mouseClick) break;
 			if (towerSpaces[i]->dispDropDown(x,y)){
 				if(e2.type == SDL_KEYDOWN ){
-					if( towerSpaces[i]->handleKeyPress(e2, &total_points)) break;
+					//cout << "e2" << endl;
+					if( towerSpaces[i]->handleKeyPress(e2, &total_points)) {
+						break;
+					}
 				} else if(e.type == SDL_KEYDOWN) {
-		            	// also check if other SDL_Event received a keypress
-					if( towerSpaces[i]->handleKeyPress(e, &total_points)) break;
-
-				}
+		            // also check if other SDL_Event received a keypress
+					if( towerSpaces[i]->handleKeyPress(e, &total_points)) {
+						e = e2;
+						break;
+					}
+				} 				
 	        }
 		}
 

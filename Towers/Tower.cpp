@@ -118,7 +118,7 @@ void Tower::resetTarget(Enemy* enemy) {
 void Tower::handleMouseClick( int x, int y ) {
 	// check if the recent mouseclick was on the image or not
     if(x < towerX + .5*gTowerRect.w && x > towerX - .5*gTowerRect.w 
-    	&& y < towerY + .5*gTowerRect.y && y > towerY - .5*gTowerRect.h) 
+    	&& y < towerY + .5*gTowerRect.h && y > towerY - .5*gTowerRect.h) 
     {
     	// if tower was clicked AND it renderRange was already true, turn it back off
     	if(renderRange) {
