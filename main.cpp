@@ -149,15 +149,20 @@ int main( int argc, char* args[] )
 	towerSpaces.push_back(tower10);
 
 	bool mouseClick = false;	// flag in case mouseclick occurs during execution in another part of main
+	int x,y;	// x and y locations of mouseclick 
+	SDL_Event e2;
+
 
 	//While application is running
 
 	while( !quit )
 	{
-		int x,y;	// x and y locations of mouseclick 
+		
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
+			
+
 			//User requests quit
 			if( e.type == SDL_QUIT )
 			{
@@ -171,14 +176,19 @@ int main( int argc, char* args[] )
 				for(int i = 0; i < towers.size(); i++) {
 					towers[i]->handleMouseClick(x, y);
 				}
+				mouseClick = false; 	// reset flag
+				//cout << "x: " << x << ", y:" << y << endl;
+				break;
 			}
 			else if(mouseClick) {
 				// pass x and y mouse click coordinates Towers
 				for(int i = 0; i < towers.size(); i++) {
 					towers[i]->handleMouseClick(x, y);
 				}
+				mouseClick = false; 	// reset flag
+
+				break;
 			}
-			mouseClick = false; 	// reset flag
 			
 		}	
 
@@ -235,18 +245,18 @@ int main( int argc, char* args[] )
 		}
 
 		//iterates through the towers and calls the inRange to sense if enemies are in range
-		SDL_Event tower_choice;
-		SDL_PollEvent(&tower_choice);
-		// try to update coordinates of last mouseclick again
-		if(tower_choice.type == SDL_MOUSEBUTTONDOWN){
-			SDL_GetMouseState(&x,&y);
-			mouseClick = true;
+		if(SDL_PollEvent(&e2) != 0) {
+			// try to update coordinates of last mouseclick again
+			if(e2.type == SDL_MOUSEBUTTONDOWN){
+				SDL_GetMouseState(&x,&y);
+				mouseClick = true;
+			}
 		}
 
 		for(int i=0;i<towerSpaces.size();i++){
 			if (towerSpaces[i]->dispDropDown(x,y)){
-				if(tower_choice.type == SDL_KEYDOWN ){
-					if( towerSpaces[i]->handleKeyPress(tower_choice, &total_points)) break;
+				if(e2.type == SDL_KEYDOWN ){
+					if( towerSpaces[i]->handleKeyPress(e2, &total_points)) break;
 				} else if(e.type == SDL_KEYDOWN) {
 		            	// also check if other SDL_Event received a keypress
 					if( towerSpaces[i]->handleKeyPress(e, &total_points)) break;

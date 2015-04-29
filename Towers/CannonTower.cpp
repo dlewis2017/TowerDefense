@@ -21,6 +21,7 @@ CannonTower::CannonTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
     gTowerRect = getRect(gTower, MAX_DIMENSION, towerX, towerY);
     gRange = loadTexture("img/range.png");                          // load in range radius image
     gRangeRect = getRect(gRange, 2*range, towerX, towerY);          // container for range radius with correct sizing
+
    
 }
 
