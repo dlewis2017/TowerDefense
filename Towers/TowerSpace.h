@@ -14,8 +14,6 @@
 #include <string>
 #include <sys/time.h>
 #include <vector>
-#include "../MapDirections.h"
-#include "Tower.h"
 #include "WizardTower.h"
 #include "ArcherTower.h"
 #include "CannonTower.h"
@@ -49,6 +47,10 @@ class TowerSpace : public Object {
 		SDL_Rect towerRect;
 		SDL_Renderer** gRenderer;
 		double TOWER_MAX_DIMENSION;
+
+		struct timeval timeStruct;   // allows for milliseconds of current time
+        long long lastErrorTime;    // last time that "not enough coins to buy" error was displayed
+        long errorWait;				// time to wait before displaying error message again
 
 		vector<TowerSpace*> *towerSpaces;
 		vector<Tower*> *towers;

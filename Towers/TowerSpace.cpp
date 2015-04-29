@@ -21,6 +21,11 @@ TowerSpace::TowerSpace(SDL_Renderer** gRendererPtr, vector<TowerSpace*> *towerSp
 	towerRect = getRect(towerTexture, TOWER_MAX_DIMENSION, towerX, towerY);
 	SDL_RenderCopy(*gRenderer, towerTexture, NULL, &towerRect);
 	
+	// initialize timing to prevent being spammed with the same error message
+	errorWait = 500; // wait 1/4 of a second
+	gettimeofday(&timeStruct, NULL);	// get current time of day
+	lastErrorTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - errorWait;   // will make errorMessage available immediately
+
 	// set cost for each type of tower
     WizardCost = 80;
     ArcherCost = 100;
@@ -86,6 +91,7 @@ bool TowerSpace::dispDropDown(double xclick, double yclick)
  */
 bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 {
+	bool displayError = false;
 	// adds a specific type of tower to the towers vector
 	// objects are instantiated using operator new, adding the object to the HEAP
 	// this means the Towers will need to be explicitely deleted later to prevent a memory leak.
@@ -101,7 +107,12 @@ bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 				*points -= ArcherCost;
             }
 			else {
-				cout << "You do not have enough points to buy this tower!" << endl;
+				gettimeofday(&timeStruct, NULL);	// get current time of day
+				long currentTime = timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000;
+				if(currentTime - lastErrorTime >= errorWait) {
+					lastErrorTime = currentTime;
+					cout << "You do not have enough points to buy this tower!" << endl;
+				}
 				return false;
 			}	
 			break;
@@ -115,7 +126,12 @@ bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 				*points -= CannonCost;
 			}
 			else {
-				cout << "You do not have enough points to buy this tower!" << endl;
+				gettimeofday(&timeStruct, NULL);	// get current time of day
+				long currentTime = timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000;
+				if(currentTime - lastErrorTime >= errorWait) {
+					lastErrorTime = currentTime;
+					cout << "You do not have enough points to buy this tower!" << endl;
+				}
 				return false;
 			}
             break;
@@ -129,7 +145,12 @@ bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 				*points -= FreezeCost;
 			}
 			else {
-				cout << "You do not have enough points to buy this tower!" << endl;
+				gettimeofday(&timeStruct, NULL);	// get current time of day
+				long currentTime = timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000;
+				if(currentTime - lastErrorTime >= errorWait) {
+					lastErrorTime = currentTime;
+					cout << "You do not have enough points to buy this tower!" << endl;
+				}
 				return false;
 			}
             break;
@@ -143,7 +164,12 @@ bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 				*points -= WizardCost;
 			}
 			else {
-				cout << "You do not have enough points to buy this tower!" << endl;
+				gettimeofday(&timeStruct, NULL);	// get current time of day
+				long currentTime = timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000;
+				if(currentTime - lastErrorTime >= errorWait) {
+					lastErrorTime = currentTime;
+					cout << "You do not have enough points to buy this tower!" << endl;
+				}
 				return false;
 			}
 			break;

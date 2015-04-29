@@ -148,6 +148,7 @@ int main( int argc, char* args[] )
 	towerSpaces.push_back(tower9);
 	towerSpaces.push_back(tower10);
 
+	bool mouseClick = false;	// flag in case mouseclick occurs during execution in another part of main
 
 	//While application is running
 
@@ -166,13 +167,18 @@ int main( int argc, char* args[] )
 			//If mouse click occurs, place image where mouse was clicked
 			if(e.type == SDL_MOUSEBUTTONDOWN){
 				SDL_GetMouseState(&x,&y);
-				cout << "x: " << x << ", y: " << y << endl;
 				// pass x and y mouse click coordinates Towers
 				for(int i = 0; i < towers.size(); i++) {
 					towers[i]->handleMouseClick(x, y);
 				}
-
 			}
+			else if(mouseClick) {
+				// pass x and y mouse click coordinates Towers
+				for(int i = 0; i < towers.size(); i++) {
+					towers[i]->handleMouseClick(x, y);
+				}
+			}
+			mouseClick = false; 	// reset flag
 			
 		}	
 
@@ -234,6 +240,7 @@ int main( int argc, char* args[] )
 		// try to update coordinates of last mouseclick again
 		if(tower_choice.type == SDL_MOUSEBUTTONDOWN){
 			SDL_GetMouseState(&x,&y);
+			mouseClick = true;
 		}
 
 		for(int i=0;i<towerSpaces.size();i++){
