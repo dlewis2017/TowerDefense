@@ -15,11 +15,7 @@ Enemy::Enemy(SDL_Renderer** gRendererPtr, MapDirections pathInfo) : Object(gRend
     gettimeofday(&tp, NULL);
     lastMoveTime = (tp.tv_sec * 1000 + tp.tv_usec / 1000) - moveInterval;   // will trigger movement immediately
 
-    //HealthBar healthBar(gRendererPtr);
-
-    //healthBar(gRendererPtr);  
-
-    healthBar = new HealthBar(gRendererPtr, ENEMY_MAX_DIMENSION); 
+    healthBar = new HealthBar(gRendererPtr, ENEMY_MAX_DIMENSION);
 }
 
 // delete allocated memory
@@ -93,7 +89,6 @@ double Enemy::getPosY() {
 // reduce Enemy's health by the amount of damage given by the tower
 void Enemy::takeDamage(int damage) {
     health -= damage;
-    cout << "health remaining: " << health << endl;
 }
 
 // return true if enemy has run out of health

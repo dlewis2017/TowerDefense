@@ -45,7 +45,7 @@ bool Tower::inRange()
 		if(distance <= range) {
 			return true; // return true if already locked onto enemy && the enemy is still in range
 		} else {
-			cout << "target now out of range: " << target << endl;
+			//cout << "target now out of range: " << target << endl;
 			target = NULL;
 		}
 	}
