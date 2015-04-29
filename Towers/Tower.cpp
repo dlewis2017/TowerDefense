@@ -21,7 +21,7 @@ Tower::Tower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTemp, \
 
 	// initialize timing so that towers know when they can attack	
 	gettimeofday(&timeStruct, NULL);	// get current time of day
-	lastAttackTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - (attackDelay*1000);   // will make attack eligible immediatley
+	lastAttackTime = (timeStruct.tv_sec * 1000 + timeStruct.tv_usec / 1000) - (2*attackDelay*1000);   // will make attack eligible immediatley
 }
 
 // deallocate memory
@@ -129,4 +129,13 @@ void Tower::handleMouseClick( int x, int y ) {
     } else {
     	renderRange = false;
     }
+}
+
+// render the tower image to the screen
+void Tower::render() {
+	// only render Range radius if the flag is set (from handleMouseClick())
+	if(renderRange) {
+		SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
+	}
+	SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
 }

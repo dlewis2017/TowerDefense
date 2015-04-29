@@ -24,11 +24,3 @@ ArcherTower::ArcherTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
 
 }
 
-// render the tower image to the screen
-void ArcherTower::render() {
-	// only render Range radius if the flag is set (from handleMouseClick())
-	if(renderRange) {
-		SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
-	}
-	SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
-}

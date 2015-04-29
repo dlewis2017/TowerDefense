@@ -21,7 +21,7 @@ class Tower : public Object {
 		Tower(SDL_Renderer **gRendererPtr, vector<Enemy*> *, vector<Tower*> *);
         ~Tower();                      // deconstructor frees allocated memory
     	void attack(int*);             // function to begin attacking (decreasing health) of target
-    	virtual void render() = 0;     // makes Tower class abstract
+    	void render();     // makes Tower class abstract
 		bool inRange();                // senses if any enemy is in the specific tower's range
         void resetTarget(Enemy *);
         void handleMouseClick(int x, int y);

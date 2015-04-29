@@ -23,12 +23,3 @@ FreezeTower::FreezeTower(SDL_Renderer** gRendererPtr, vector<Enemy*> * enemiesTe
     gRangeRect = getRect(gRange, 2*range, towerX, towerY);          // container for range radius with correct sizing
 
 }
-
-// render the tower image to the screen
-void FreezeTower::render() {
-    // only render Range radius if the flag is set (from handleMouseClick())
-    if(renderRange) {
-        SDL_RenderCopy(*gRenderer, gRange, NULL, &gRangeRect);
-    }
-    SDL_RenderCopy(*gRenderer, gTower, NULL, &gTowerRect);
-}

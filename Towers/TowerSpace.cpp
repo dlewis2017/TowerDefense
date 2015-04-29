@@ -124,6 +124,8 @@ bool TowerSpace::handleKeyPress(SDL_Event e, int* points)
 				CannonTower* cannon = new CannonTower(gRenderer, enemies, towers, towerX, towerY);
             	towers->push_back(cannon);
 				*points -= CannonCost;
+				cout << "successfully added" << endl;
+				cout << "length of towers vec: " << towers->size() << endl;
 			}
 			else {
 				gettimeofday(&timeStruct, NULL);	// get current time of day

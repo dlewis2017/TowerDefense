@@ -14,7 +14,6 @@ using namespace std;
 class CannonTower : public Tower {
 public:
     CannonTower(SDL_Renderer** gRenderer, vector<Enemy*> *, vector<Tower*> *, int xpos, int ypos);  //default constructor
-    void render();      // render tower image to screen 
 
 private:
 
