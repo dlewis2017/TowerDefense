@@ -230,14 +230,21 @@ int main( int argc, char* args[] )
 
 		//iterates through the towers and calls the inRange to sense if enemies are in range
 		SDL_Event tower_choice;
+		SDL_PollEvent(&tower_choice);
+		// try to update coordinates of last mouseclick again
+		if(tower_choice.type == SDL_MOUSEBUTTONDOWN){
+			SDL_GetMouseState(&x,&y);
+		}
 
 		for(int i=0;i<towerSpaces.size();i++){
 			if (towerSpaces[i]->dispDropDown(x,y)){
-				if(SDL_PollEvent(&tower_choice) != 0) {;
-					if(tower_choice.type == SDL_KEYDOWN ){
-		                if( towerSpaces[i]->handleKeyPress(tower_choice, &total_points)) break;
-		            }
-		        }
+				if(tower_choice.type == SDL_KEYDOWN ){
+					if( towerSpaces[i]->handleKeyPress(tower_choice, &total_points)) break;
+				} else if(e.type == SDL_KEYDOWN) {
+		            	// also check if other SDL_Event received a keypress
+					if( towerSpaces[i]->handleKeyPress(e, &total_points)) break;
+
+				}
 	        }
 		}
 
@@ -255,14 +262,18 @@ int main( int argc, char* args[] )
 	
 	if(wave > nWaves){
 		renderWin(); //display you win! on screen
+		SDL_RenderPresent( gRenderer ); //update screen one last time
+		sleep(6); //allow you win/lose title to display before closing window
+		quit = true;
 	}
 	if(lives == 0){
 		renderLose(); //display you lose on screen
+		SDL_RenderPresent( gRenderer ); //update screen one last time
+		sleep(6); //allow you win/lose title to display before closing window
+		quit = true;
 	}
 
 	SDL_RenderPresent( gRenderer ); //update screen one last time
-
-	usleep(1000000); //allow you win/lose title to display before closing window
 
 	//Free resources and close SDL
 	close();
